@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Memo from './Main_Menu';
-import Login from './Signin';
 import ContentContainer from './ContentContainer';
 
 class Header extends Component {

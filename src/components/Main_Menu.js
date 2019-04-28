@@ -91,9 +91,11 @@ const styles = theme => ({
 
 
 class CustomizedTabs extends React.Component {
+
     state = {
         value: 0,
         search_val: "Search",
+        keyword:""
     };
 
     handleChange = (event, value) => {
@@ -102,6 +104,7 @@ class CustomizedTabs extends React.Component {
     handleChangeIndex = index => {
         this.setState({ value: index });
     };
+
 
     render() {
         const { classes,theme } = this.props;
@@ -132,8 +135,8 @@ class CustomizedTabs extends React.Component {
                     index={this.state.value}
                     onChangeIndex={this.handleChangeIndex}
                 >
-                    <TabContainer dir={theme.direction}><Content_Memo/></TabContainer>
-                    <TabContainer dir={theme.direction}><Content_Bookmark/></TabContainer>
+                    <TabContainer dir={theme.direction}><Content_Memo keyword={this.state.keyword}/></TabContainer>
+                    <TabContainer dir={theme.direction}><Content_Bookmark keyword={this.state.keyword}/></TabContainer>
                 </SwipeableViews>
                  <SearchBar
                      // value={this.state.search_val}
@@ -147,7 +150,7 @@ class CustomizedTabs extends React.Component {
                          //searchBarColor:'#2c323c',
                      }}
                      // 나중에 아래의 코드를 사용해야할듯
-                     // onChange={(newValue) => this.setState({ value: newValue })}
+                     onChange={(keyword) => this.setState({ keyword })}
                      // onRequestSearch={() => doSomethingWith(this.state.value)}
                  />
              </div>
