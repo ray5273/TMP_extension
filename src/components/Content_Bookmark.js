@@ -51,7 +51,7 @@ function Bookmarks(props) {
     return (
         <main className={classes.main}>
             <Typography component="h1" variant="h5">
-                Bookmark Contents pages
+                xxxbnvbnvn
             </Typography>
         </main>
     );
