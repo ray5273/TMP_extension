@@ -1,24 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Redirect,
-    withRouter
-} from "react-router-dom";
+
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import * as firebaseui from 'firebaseui'
+
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyB_d7o3MIvbgpLik2LPy7Mze_sQ2Or4NgE",
+    authDomain: "jsp-tmp.firebaseapp.com",
+    databaseURL: "https://jsp-tmp.firebaseio.com",
+    projectId: "jsp-tmp",
+    storageBucket: "jsp-tmp.appspot.com",
+    messagingSenderId: "161790863624"
+};
+// Firebase App is always required and must be first
+firebase.initializeApp(config);
 
 const styles = theme => ({
     main: {
@@ -65,39 +68,8 @@ function SignIn(props) {
                 <Typography component="h1" variant="h5">
                     Trendy Memo Project
                 </Typography>
-                <form className={classes.form} action="">
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">Email Address</InputLabel>
-                        <Input id="email" name="email" autoComplete="email" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <Input name="password" type="password" id="password" autoComplete="current-password" />
-                    </FormControl>
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
-                    <Button
-                        //type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-
-                    >
-                        Sign in
-                    </Button>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.submit}
-                    >
-                        Sign up
-                    </Button>
-                </form>
+                <div id="firebaseui-auth-container">
+                </div>
             </Paper>
         </main>
     );
@@ -107,4 +79,21 @@ SignIn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
+// FirebaseUI config.
+var uiConfig = {
+    signInFlow: "popup",
+    signInSuccessUrl: "main.html",
+    signInOptions: [
+        // Leave the lines as is for the providers you want to offer your users.
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    ],
+};
+
 export default withStyles(styles)(SignIn);
+
+// Initialize the FirebaseUI Widget using Firebase.
+var ui = new firebaseui.auth.AuthUI(firebase.auth());
+// The start method will wait until the DOM is loaded.
+ui.start('#firebaseui-auth-container', uiConfig);
+
