@@ -6,22 +6,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-
-import * as firebase from "firebase/app";
+import firebase from './../Firebase.js'
 import "firebase/auth";
 import * as firebaseui from 'firebaseui'
-
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyB_d7o3MIvbgpLik2LPy7Mze_sQ2Or4NgE",
-    authDomain: "jsp-tmp.firebaseapp.com",
-    databaseURL: "https://jsp-tmp.firebaseio.com",
-    projectId: "jsp-tmp",
-    storageBucket: "jsp-tmp.appspot.com",
-    messagingSenderId: "161790863624"
-};
-// Firebase App is always required and must be first
-firebase.initializeApp(config);
 
 const styles = theme => ({
     main: {
@@ -82,7 +69,7 @@ SignIn.propTypes = {
 // FirebaseUI config.
 var uiConfig = {
     signInFlow: "popup",
-    signInSuccessUrl: "main.html",
+    signInSuccessUrl: "index.html",
     signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -90,10 +77,9 @@ var uiConfig = {
     ],
 };
 
-export default withStyles(styles)(SignIn);
-
 // Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
 // The start method will wait until the DOM is loaded.
 ui.start('#firebaseui-auth-container', uiConfig);
 
+export default withStyles(styles)(SignIn);

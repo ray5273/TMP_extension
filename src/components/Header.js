@@ -1,33 +1,43 @@
 import React, { Component } from 'react';
 import ContentContainer from './ContentContainer';
+import firebase from './../Firebase.js'
 
 class Header extends Component {
-    constructor (props) {
-        super(props);
-        this.state={
-            test:2
-        }
+    constructor() {
+        super();
+        this.state = {
+            user: 0,
+        };
     }
+
     shouldComponentUpdate () {
         return true;
-    }   
-    clickMemo = () => {
-        this.setState({
-            test:1
-        })
     }
-    clickLogin = () => {
-        this.setState({
-            test:2
-        })
+
+    clickSignOut = () => {
+        firebase.auth().signOut()
+            .then(() => {
+            this.setState({
+                user: 0
+            });
+        });
+    }
+
+    componentDidMount() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({
+                    user: 1
+                });
+            }
+        });
     }
 
     render() {
         return (
             <div>
-                <button onClick={this.clickMemo} >메모</button>
-                <button onClick={this.clickLogin}>로그인</button>
-                <ContentContainer num={this.state.test}/>
+                <button onClick={this.clickSignOut}>Sign Out</button>
+                <ContentContainer num={this.state.user}/>
             </div>
         );
     }
