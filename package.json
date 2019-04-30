@@ -1,5 +1,5 @@
 {
-  "name": "my-extension",
+  "name": "tmp-extension",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -31,5 +31,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "main": "index.js",
+  "repository": "https://github.com/ray5273/TMP_extension.git",
+  "author": "Sunghyun Hwang <zailbreak@gmail.com>",
+  "license": "MIT"
 }
