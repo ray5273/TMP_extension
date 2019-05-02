@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -42,44 +42,51 @@ const styles = theme => ({
     },
 });
 
-function SignIn(props) {
-    const { classes } = props;
+class SignIn extends Component {
+    render() {
+        return (
+            <main className={this.props.classes.main}>
+                <CssBaseline/>
+                <Paper className={this.props.classes.paper}>
+                    <Avatar className={this.props.classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Trendy Memo Project
+                    </Typography>
+                    <div id="firebaseui-auth-container">
+                    </div>
+                </Paper>
+            </main>
+        );
+    }
 
-    return (
-        <main className={classes.main}>
-            <CssBaseline />
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Trendy Memo Project
-                </Typography>
-                <div id="firebaseui-auth-container">
-                </div>
-            </Paper>
-        </main>
-    );
+    componentDidMount() {
+        const uiConfig = {
+            signInFlow: "popup",
+            signInSuccessUrl: "index.html",
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            ],
+        };
+
+        if (firebaseui.auth.AuthUI.getInstance() == null) {
+            // Initialize the FirebaseUI Widget using Firebase.
+            var ui = new firebaseui.auth.AuthUI(firebase.auth());
+            // The start method will wait until the DOM is loaded.
+            ui.start('#firebaseui-auth-container', uiConfig);
+        }
+        else {
+            firebaseui.auth.AuthUI.getInstance().start('#firebaseui-auth-container', uiConfig);
+        }
+
+    }
 }
 
 SignIn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-
-// FirebaseUI config.
-var uiConfig = {
-    signInFlow: "popup",
-    signInSuccessUrl: "index.html",
-    signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
-};
-
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
-ui.start('#firebaseui-auth-container', uiConfig);
 
 export default withStyles(styles)(SignIn);

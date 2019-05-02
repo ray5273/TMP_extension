@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import ContentContainer from './ContentContainer';
+import {Link} from 'react-router-dom';
 import firebase from './../Firebase.js'
+import MainMenu from './Main_Menu';
+import SignIn from './Signin';
+import Route from "react-router-dom/es/Route";
 
 class Header extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            user: 0,
+            user: null,
         };
     }
 
@@ -18,31 +21,37 @@ class Header extends Component {
         firebase.auth().signOut()
             .then(() => {
             this.setState({
-                user: 0
+                user: null
             });
         });
-    }
+    };
 
     componentDidMount() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.setState({
-                    user: 1
-                });
+                this.setState({ user: user });
+            } else {
+                this.props.history.push('index.html');
             }
         });
     }
 
     render() {
-        return (
-            <div>
-                <button onClick={this.clickSignOut}>Sign Out</button>
-                <ContentContainer num={this.state.user}/>
-            </div>
-        );
+        if (this.state.user == null) {
+            return (
+                <div>
+                    <SignIn />
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <button onClick={this.clickSignOut}>Sign Out</button>
+                    <MainMenu />
+                </div>
+            );
+        }
     }
 }
 
 export default Header;
-
-
