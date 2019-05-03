@@ -5,3 +5,6 @@ chrome.browserAction.onClicked.addListener(function(){
         console.log("toggle message sent");
     })
 });
+
+
+

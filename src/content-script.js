@@ -1,11 +1,22 @@
 /*global chrome*/
+
+var textval = window.getSelection();//이런식으로도 인식이 되네
 chrome.runtime.onMessage.addListener(function(msg, sender){
     console.log(msg+" is accepted");
+    console.log(textval.toString()+" is scrolled");
     if(msg == "toggle"){
         toggle();
     }
-})
 
+});
+
+
+// text selection시 tooltip 추가 하는 runtime message
+chrome.runtime.onMessage.addListener(function(msg,sender) {
+    if (msg == "getSelection")
+        console.log("get selection completed!");
+
+});
 var iframe = document.createElement('iframe');
 iframe.style.background = "white";
 iframe.style.height = "100%";
