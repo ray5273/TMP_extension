@@ -21,13 +21,6 @@
         "http://*/*"
       ],
       "js": ["pdf-button-script.js"]
-    },
-    {
-      "matches": [
-        "https://*/*",
-        "http://*/*"
-      ],
-      "js": ["jquery-3.3.1.js","text-selection-script.js"]
     }
 
   ],
@@ -36,6 +29,6 @@
   },
   "web_accessible_resources" : ["*.html"],
   "permissions": [
-    "tabs", "http://*/*","https://*/*","activeTab"
+    "tabs", "http://*/*","https://*/*"
   ]
 }
