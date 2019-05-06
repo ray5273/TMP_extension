@@ -13,14 +13,8 @@
         "https://*/*",
         "http://*/*"
       ],
-      "js": ["content-script.js"]
-    },
-    {
-      "matches": [
-        "https://*/*",
-        "http://*/*"
-      ],
-      "js": ["pdf-button-script.js"]
+      "js": ["/static/js/content.js"],
+      "css": ["/static/css/app.css"]
     }
 
   ],
@@ -29,6 +23,6 @@
   },
   "web_accessible_resources" : ["*.html"],
   "permissions": [
-    "tabs", "http://*/*","https://*/*"
+    "tabs", "http://*/*","https://*/*", "storage"
   ]
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import firebase from './../Firebase.js'
-import MainMenu from './Main_Menu';
+import MainMenu from './MainMenu';
 import SignIn from './Signin';
 import Route from "react-router-dom/es/Route";
 
