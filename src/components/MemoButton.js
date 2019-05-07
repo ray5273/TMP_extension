@@ -1,7 +1,11 @@
+/*
+지금은 클릭만해도 input이 생김 mouseup을 잘 다루거나 대안을 찾아야할듯
+input에 뭐 치려면 마우스 꾹 누른상태로 해야함 이건 querySelectorAll을 잘 봐야할듯
+*/
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './MemoButton.css';
-import '../content.css';
+
 
 class MemoButton extends Component {
     constructor(props) {
@@ -10,12 +14,12 @@ class MemoButton extends Component {
             clicked: 0,
             t: 0
         }
+        this.addHighlight=this.addHighlight.bind(this);
     }
 
-    testf = (temp) => {
-        ReactDOM.render(<Input />, document.getElementById(`this-${temp}`))
-    }
 
+    // 드래그 출처: https://codepen.io/nickmoreton/pen/ogryWa
+    /* 
     dragTest = () => {
         const elements = document.querySelectorAll('h3');
         this.setState({
@@ -66,43 +70,66 @@ class MemoButton extends Component {
         })
         console.log("end");
     };
+*/
 
-    addMemo = () => {
+    //메모추가
+    addMemo = (x) => {
         console.log("in addMemo")
         this.setState({
             t: this.state.t + 1
         })
-        var q = document.createElement('div');
-        q.setAttribute('id', `li${this.state.t}`);
-        console.log(q);
-        document.body.insertBefore(q, document.body.firstChild);
-        ReactDOM.render(<Input />, document.getElementById(`li${this.state.t}`));
+        var memo_box = document.createElement('div');
+        memo_box.setAttribute('id', `li${this.state.t}`);
+        memo_box.setAttribute('class', 'memo-before-render');
+        console.log(memo_box);
+
+        //새로만든 memo_box 를 드래그한애 전에 추가
+        x.parentElement.insertBefore(memo_box, x);
+        ReactDOM.render(<Input />, document.getElementById(`li${this.state.t}`))
+        /* 
+        //네모박스 뜨고 클릭하면 거기에 인풋 render
+        memo_box.addEventListener('click', ReactDOM.render(<Input />, document.getElementById(`li${this.state.t}`)));
+        */  
     }
 
+    //하이라이트 추가
     addHighlight = () => {
         var selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
         this.setState({
-            latestDragged: selRange
+            latestDragged: selObj
         })
+        
         console.log("selobj:",selObj);
         console.log("selRange:", selRange);
+        console.log("parent of selRange:", selRange.parentElement);
         var newNode = document.createElement("span");
         newNode.setAttribute(
             "style",
             "background-color: #FBD6C6; display: inline;"
         );
        
-            newNode.appendChild(selRange.extractContents());
-            selRange.insertNode(newNode);
+        newNode.appendChild(selRange.extractContents());
+        selRange.insertNode(newNode);
+        console.log("parent of newNode: ", newNode.parentElement);
+        this.addMemo(newNode.parentElement);
 
-        // do stuff with the range
         //var selectedText = selObj.toString();
         //console.log(selectedText);
     }
 
+    //이 컴포넌트가 처음 render될 때 아래의 셀렉터들에게 추가한거
     componentDidMount() {
+        //node list를 반환해서 하나씩 추가해주는거.. 지금안됨
+        /*var arr = document.querySelectorAll("p,h1,h2,h3,h4,h5,h6,span,li,ui,em,div");
+        Array.prototype.forEach.call(arr, function(x) {
+            x.addEventListener('mouseup', this.addHighlight);
+        });*/
+
+        //바디 전체에 추가하기
         document.body.addEventListener('mouseup', this.addHighlight);
+    
+    
     }
     render() {
 
@@ -119,6 +146,7 @@ class MemoButton extends Component {
 }
 
 
+//메모 인풋
 class Input extends Component {
     constructor(props) {
         super(props);
@@ -140,21 +168,20 @@ class Input extends Component {
     }
     render() {
         return (
-            <div>
-
-                {this.state.submitted ? null : <button className="btn" onClick={this.handleSubmit}>확인</button>}
-
+            <React.Fragment className="memo-input-wrapper">
                 {this.state.submitted
                     ?
-                    <div>
+                    <div className="memo-text">
                         {this.state.test}
                     </div>
                     :
-                    <input
+                    <textarea
                         onChange={this.handleChange}
                         name="test"
+                        className="memo-input"
                     />}
-            </div>
+                    {this.state.submitted ? null : <button className="submit-btn" onClick={this.handleSubmit}>확인</button>}
+            </React.Fragment>
         );
     }
 }
