@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './MemoButton.css';
+import '../content.css';
 
 class MemoButton extends Component {
     constructor(props) {
@@ -20,16 +21,13 @@ class MemoButton extends Component {
         this.setState({
             zet: 1
         })
-
         // Bind functions to events
         for (var i = 0; i < elements.length; i++) {
             elements[i].addEventListener('mousedown', this.drag);
             elements[i].addEventListener('mouseup', this.end);
         };
-
         // Destroy drag on mouse up
     }
-
     // Drag function
     drag = (event) => {
         console.log("drag 함수 시작");
@@ -84,6 +82,11 @@ class MemoButton extends Component {
     addHighlight = () => {
         var selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
+        this.setState({
+            latestDragged: selRange
+        })
+        console.log("selobj:",selObj);
+        console.log("selRange:", selRange);
         var newNode = document.createElement("span");
         newNode.setAttribute(
             "style",
@@ -92,7 +95,6 @@ class MemoButton extends Component {
        
             newNode.appendChild(selRange.extractContents());
             selRange.insertNode(newNode);
-
 
         // do stuff with the range
         //var selectedText = selObj.toString();
@@ -105,11 +107,12 @@ class MemoButton extends Component {
     render() {
 
         return (
-            <div>
-                <div class="box"> 드래그 테스트!</div>
-                <div onClick={this.addMemo}>메모 추가하기</div>
-                <div>하이라이트</div>
-            </div>
+            <React.Fragment>
+                <div className="menus"> <p>북마크</p></div>
+                <div className="menus"> <p>PDF</p></div>
+                <div className="menus" onClick={this.addMemo}><p>메모 추가</p></div>
+                <div className="menus"><p>하이라이트</p></div>
+            </React.Fragment>
         );
     }
 
