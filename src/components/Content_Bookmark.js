@@ -72,7 +72,7 @@ class Bookmarks extends Component {
     };
 
     handleSubmit = (data) => {
-        /* 파이어베이스에 보낼 코드 */
+        /* 파이어베이스에 보낼 코드  */
 
         const {bookmarks} = this.state;
 
