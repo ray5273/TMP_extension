@@ -71,6 +71,71 @@ class MemoButton extends Component {
         console.log("end");
     };
 */
+    //툴팁 클릭 테스트 함수
+    highlight_func = ()=> {
+        window.alert("alert!");
+    }
+
+    //툴팁 띄우기 추가
+    //텍스트 드래그시 마우스 좌표에 툴팁 띄우기
+    addTooltip = ()=> {
+        if(document.getElementById('toolTipDiv')==null) {
+            var toolTipDiv = document.createElement('div');
+            toolTipDiv.setAttribute('id', 'toolTipDiv');
+            toolTipDiv.style.visibility = 'hidden';
+            toolTipDiv.style.position = 'absolute';
+            toolTipDiv.style.top = '0px';
+            toolTipDiv.style.left = '0px';
+            var highlight = document.createElement('a');
+            highlight.text="Highlight_text";
+            highlight.setAttribute('id','Highlight');
+
+            //href attribute test 코드
+            //highlight.setAttribute('href','https://google.com');
+
+
+            //highlight_func으로 해당 text를 highlight 해야함
+            //현재는 하이라이트와 메모구조를 정확히 이해 못해서 적용 시켜
+            highlight.onclick = this.highlight_func;
+            toolTipDiv.appendChild(highlight);
+
+            // highlight.addEventListener('')
+
+            document.body.appendChild(toolTipDiv);
+        }
+
+        // Lets listen to mouseup DOM events.
+        document.addEventListener('mouseup', function (e) {
+            var selection = window.getSelection().toString();
+            var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
+
+            // console.log(selection_pos.top+": is top position");
+
+            //선택된 text가 있을시 text 오른쪽 아래에 highlight <a> 태그를 표시
+            if (selection.length > 0 ) {
+                //var selected = document.createTextNode(selection);
+                // toolTipDiv.style.top = e.clientY + "px";
+                // toolTipDiv.style.visibility = "visible";
+                // toolTipDiv.style.left = e.clientX + "px";
+                toolTipDiv.style.top = selection_pos.top + 40 + "px";
+                toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
+                toolTipDiv.style.visibility = "visible";
+                toolTipDiv.style.display="block";
+            }
+        }, false);
+
+
+       // Close the bubble when we click on the screen.
+        document.addEventListener('mousedown', function (e) {
+            //hidden시 a태그를 클릭해도 a tag가 실행이 안되는 문제
+            //settimeout을 통해서 해결!
+            setTimeout(function(){
+                toolTipDiv.style.display='none';
+            },200);
+
+        }, false);
+
+    }
 
     //메모추가
     addMemo = (x) => {
@@ -119,7 +184,7 @@ class MemoButton extends Component {
     }
 
     //이 컴포넌트가 처음 render될 때 아래의 셀렉터들에게 추가한거
-    componentDidMount() {
+    componentDidMount(){
         //node list를 반환해서 하나씩 추가해주는거.. 지금안됨
         /*var arr = document.querySelectorAll("p,h1,h2,h3,h4,h5,h6,span,li,ui,em,div");
         Array.prototype.forEach.call(arr, function(x) {
@@ -127,8 +192,8 @@ class MemoButton extends Component {
         });*/
 
         //바디 전체에 추가하기
-        document.body.addEventListener('mouseup', this.addHighlight);
-    
+        // document.body.addEventListener('mouseup', this.addHighlight);
+        document.body.addEventListener('mouseup',this.addTooltip);
     
     }
     render() {
@@ -185,6 +250,5 @@ class Input extends Component {
         );
     }
 }
-
 
 export default MemoButton;
