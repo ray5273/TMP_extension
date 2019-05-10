@@ -5,14 +5,16 @@ input에 뭐 치려면 마우스 꾹 누른상태로 해야함 이건 querySelec
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import Draggable from 'react-draggable-component';
 
 class MemoButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
             clicked: 0,
-            t: 0
+            t: 0,
+            MemoTop :0,
+            MemoLeft :0
         }
         this.addHighlight=this.addHighlight.bind(this);
     }
@@ -135,11 +137,42 @@ class MemoButton extends Component {
 
         }, false);
 
-    }
+    };
+    //sticky memo 추가하는 method
+    addStickyMemo = (x) => {
+        window.alert("sticky memo!");
+        this.setState({
+            t: this.state.t + 1,
+            MemoTop:this.state.MemoTop ,
+            MemoLeft :this.state.MemoLeft +50
 
+        });
+        if(document.getElementById(`stickyMemo${this.state.t}`)==null) {
+            var stickyMemo = document.createElement('div');
+            stickyMemo.setAttribute('id', `stickyMemo${this.state.t}`);
+            stickyMemo.style.position = 'absolute';
+            //sticky memo 생성위치 조정
+            stickyMemo.style.top = `${this.state.MemoTop}px`;
+            stickyMemo.style.left = `${this.state.MemoLeft}px`;
+            //stickymemo를 z-index 통해 최상위로 올려줌
+            stickyMemo.style.zIndex=2147483647;
+            stickyMemo.setAttribute('class', 'memo-before-render');
+
+            // var testbtn = document.createElement('input');
+            // testbtn.text = 'button';
+            // stickyMemo.appendChild(testbtn);
+            console.log(stickyMemo);
+           // console.log("stickymemo top pos : "+stickyMemo.style.top.toString());
+            //console.log("stickymemo left pos : "+stickyMemo.style.left.toString());
+            document.body.appendChild(stickyMemo);
+            // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
+            ReactDOM.render(<DragText />, document.getElementById(`stickyMemo${this.state.t}`));
+
+        }
+    };
     //메모추가
     addMemo = (x) => {
-        console.log("in addMemo")
+        console.log("in addMemo");
         this.setState({
             t: this.state.t + 1
         })
@@ -202,12 +235,47 @@ class MemoButton extends Component {
             <React.Fragment>
                 <div className="menus"> <p>북마크</p></div>
                 <div className="menus"> <p>PDF</p></div>
-                <div className="menus" onClick={this.addMemo}><p>메모 추가</p></div>
+                <div className="menus" onClick={this.addStickyMemo}><p>메모 추가</p></div>
                 <div className="menus"><p>하이라이트</p></div>
             </React.Fragment>
         );
     }
 
+}
+
+//이 부분을 따로 javascript 파일로 바꾸는게 좋을듯
+//draggable test
+class DragText extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            test: ""
+        }
+    }
+    eventLogger = (e: MouseEvent, data: Object) => {
+        console.log('Event: ', e);
+        console.log('Data: ', data);
+    };
+
+    render() {
+        return (
+            <Draggable
+                axis="x"
+                handle=".handle"
+                defaultPosition={{x: 0, y: 0}}
+                position={null}
+                grid={[25, 25]}
+                scale={1}
+                onStart={this.handleStart}
+                onDrag={this.handleDrag}
+                onStop={this.handleStop}>
+                <div>
+                    <div className="handle">Drag from here</div>
+                    <Input/>
+                </div>
+            </Draggable>
+        );
+    }
 }
 
 

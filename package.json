@@ -53,6 +53,8 @@
     "react-app-polyfill": "^1.0.0",
     "react-dev-utils": "^9.0.0",
     "react-dom": "^16.8.6",
+    "react-draggable-component": "^6.0.0",
+    "react-frame-component": "^4.1.0",
     "react-router-dom": "^4.3.1",
     "react-swipeable-views": "^0.13.1",
     "resolve": "1.10.0",
