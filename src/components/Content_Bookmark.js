@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import bookmarkItem from './Bookmarks/BookmarkItem';
+import BookmarkItem from './Bookmarks/BookmarkItem';
 import SearchBar from 'material-ui-search-bar';
-import bookmark_Add_Form from "./Bookmarks/Bookmark_Item_Form";
+import Bookmark_Add_Form from "./Bookmarks/Bookmark_Item_Form";
 
 const styles = theme => ({
     main: {
@@ -97,7 +97,7 @@ class Bookmarks extends Component {
         return (
             <main className={classes.main}>
                 <div>
-                    <bookmark_Add_Form
+                    <Bookmark_Add_Form
                         id={this.id}
                         title = {this.title}
                         url = {this.url}
@@ -110,7 +110,7 @@ class Bookmarks extends Component {
                 <div>
                     {this.state.bookmarks.map(
                         ({id, title, url, summary, tag }) => (
-                            <bookmarkItem
+                            <BookmarkItem
                                 id={id}
                                 title={title}
                                 url={url}
