@@ -83,17 +83,17 @@ class MemoButton extends Component {
 
             
             var selection = window.getSelection().toString();
-            var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
+            // var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
             // console.log(selection_pos.top+": is top position");
 
             //선택된 text가 있을시 text 오른쪽 아래에 highlight <a> 태그를 표시
             if (selection.length > 0 ) {
                 //var selected = document.createTextNode(selection);
-                // toolTipDiv.style.top = e.clientY + "px";
+                toolTipDiv.style.top = window.scrollY+ e.clientY + "px";
                 // toolTipDiv.style.visibility = "visible";
-                // toolTipDiv.style.left = e.clientX + "px";
-                toolTipDiv.style.top = selection_pos.top + 40 + "px";
-                toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
+                toolTipDiv.style.left = window.scrollX+ e.clientX + "px";
+                // toolTipDiv.style.top = selection_pos.top + 40 + "px";
+                // toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
                 toolTipDiv.style.visibility = "visible";
                 toolTipDiv.style.display="block";
             }
