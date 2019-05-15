@@ -25,7 +25,6 @@ class Bookmark_Add_Form extends Component {
             summary:'',
             tag:''
         });
-
     };
 
     render() {
@@ -35,8 +34,7 @@ class Bookmark_Add_Form extends Component {
         };
 
         return (
-            <div>
-                <form className = "BookmarkItem" onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit}>
                     <p>
                         <label  style = {labelStyle}> Title </label><br/>
                         <input name="title" value = {this.state.title} size = "20"  onChange={this.handleChange} />
@@ -57,7 +55,6 @@ class Bookmark_Add_Form extends Component {
                         <button type="submit">저장</button>
                     </p>
                 </form>
-            </div>
 
         );
     };

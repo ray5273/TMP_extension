@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import BookmarkItem from './Bookmarks/BookmarkItem';
 import SearchBar from 'material-ui-search-bar';
+
 import BookmarkAddForm from "./Bookmarks/Bookmark_Item_Form";
+
 
 const styles = theme => ({
     main: {
@@ -98,6 +100,7 @@ class Bookmarks extends Component {
             <main className={classes.main}>
                 <div>
                     <BookmarkAddForm
+
                         id={this.id}
                         title = {this.title}
                         url = {this.url}

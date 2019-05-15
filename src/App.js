@@ -1,10 +1,9 @@
 /*global chrome*/
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import Header from './components/Header';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import Header from './components/Header/Header';
 import Signin from './components/Signin';
-import Memo_test from './components/Content_Memo';
 import MainMenu from './components/MainMenu';
 
 class App extends Component {
@@ -13,13 +12,16 @@ class App extends Component {
       <Router>
         
         <div>
-          <Header />
-          <div>
-            <Switch>
-                <Route exact path="/" component="Home"/>
-                <Route path="/signin" component={Signin}/>
-            </Switch>
-          </div>
+            <div>
+                <Header />
+            </div><br/><br/><br/>
+            <div>
+                <Switch>
+                    <Route exact path="/" component="home"/>
+                    <Route path="/signin" component={Signin}/>
+                    <Route path="/mainMenu" component={MainMenu}/>
+                </Switch>
+            </div>
         </div>
         
         

@@ -3,6 +3,14 @@ import Button from '@material-ui/core/Button/index';
 
 
 class BookmarkItem extends Component {
+    constructor(props) {
+        super(props);
+
+    }
+    handleClick = () => {
+        window.location.href = this.props.url;
+    }
+
     render() {
         const labelStyle = {
             backgroundColor: '#EEE',
@@ -10,37 +18,23 @@ class BookmarkItem extends Component {
         };
 
         const {id, title, url, summary, tag, handleRemove} = this.props;
+
         return (
             <div>
-                <form className="bookmark-item">
-                    <p>
-                        <label  style={labelStyle}>id</label> <br/>
-                        {id}
-                    </p>
-                    <p>
-                        <label  style = {labelStyle}> Title </label><br/>
-                        {title}
-                    </p>
-                    <p>
-                        <label  style = {labelStyle}>Url</label> <br/>
-                        {url}
-                    </p>
-                    <p>
-                        <label style = {labelStyle}>Summary</label> <br/>
-                        {summary}
-                    </p>
-                    <p>
-                        <label style = {labelStyle}>Tags</label> <br/>
-                        {tag}
-                    </p>
-                    <p>
+                <fieldset className="bookmark-item" onClick={this.handleClick}>
+                    <legend>북마크 정보 {id} : {title} </legend>
+                        <label  style = {labelStyle}>Url : </label>
+                        {url} <br/>
+                        <label style = {labelStyle}>Summary : </label>
+                        {summary}n<br/>
+                        <label style = {labelStyle}>Tags : </label>
+                        {tag} <br/>
                         <Button onClick={(e)=> {
                             e.stopPropagation();
                             handleRemove(id);}}>
                             삭제하기
                         </Button>
-                    </p>
-                </form>
+                </fieldset>
             </div>
         );
     }
