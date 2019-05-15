@@ -154,7 +154,7 @@ module.exports = function(webpackEnv) {
       // changing JS code would still trigger a refresh.
     ].filter(Boolean),
     content: './src/content.js',
-    asd: './src/Firebase.js'
+    //simSearch: './src/SimSearch.js'
     },
     output: {
       // The build folder.

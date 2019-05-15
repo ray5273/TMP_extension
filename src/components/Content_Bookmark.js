@@ -134,3 +134,4 @@ Bookmarks.propTypes = {
 };
 
 export default withStyles(styles)(Bookmarks);
+

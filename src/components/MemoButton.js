@@ -6,6 +6,7 @@ input에 뭐 치려면 마우스 꾹 누른상태로 해야함 이건 querySelec
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable-component';
+import Palette from './Palette';
 
 class MemoButton extends Component {
     constructor(props) {
@@ -14,16 +15,18 @@ class MemoButton extends Component {
             clicked: 0,
             t: 0,
             MemoTop :0,
-            MemoLeft :0
+            MemoLeft :0,
+            color:''
         }
         this.latestDragged=null;
         this.addHighlight=this.addHighlight.bind(this);
     }
 
+
     //툴팁 클릭 테스트 함수
     highlight_func = ()=> {
-        window.alert("alert!");
-
+        window.alert("in highlight func");
+        this.addHighlight();
         //highlightNode는 하이라이트할 항목을 감쌀 새로운 엘리먼트
         var highlightNode = document.createElement("span");
         highlightNode.setAttribute(
@@ -37,7 +40,16 @@ class MemoButton extends Component {
 
     //툴팁 띄우기 추가
     //텍스트 드래그시 마우스 좌표에 툴팁 띄우기
+    //Palette에 전달할 현재color스테이트 바꿀 함수
+    changeColor = (e) => {
+        this.setState({
+            color: e.target.id
+        });
+        console.log("now color: ", this.state.color);
+        this.addHighlight();
+    }
     addTooltip = ()=> {
+        
         if(document.getElementById('toolTipDiv')==null) {
             var toolTipDiv = document.createElement('div');
             toolTipDiv.setAttribute('id', 'toolTipDiv');
@@ -45,9 +57,9 @@ class MemoButton extends Component {
             toolTipDiv.style.position = 'absolute';
             toolTipDiv.style.top = '0px';
             toolTipDiv.style.left = '0px';
-            var highlight = document.createElement('a');
-            highlight.text="Highlight_text";
-            highlight.setAttribute('id','Highlight');
+            //var highlight = document.createElement('a');
+            //highlight.text="Highlight_text";
+            //highlight.setAttribute('id','Highlight');
 
             //href attribute test 코드
             //highlight.setAttribute('href','https://google.com');
@@ -55,19 +67,20 @@ class MemoButton extends Component {
 
             //highlight_func으로 해당 text를 highlight 해야함
             //현재는 하이라이트와 메모구조를 정확히 이해 못해서 적용 시켜
-            highlight.onclick = this.highlight_func;
-            toolTipDiv.appendChild(highlight);
-
+            toolTipDiv.onclick = this.highlight_func;
+            //toolTipDiv.appendChild(highlight);
+        
             // highlight.addEventListener('')
 
             document.body.appendChild(toolTipDiv); 
+            ReactDOM.render(<Palette change={this.changeColor}/>, toolTipDiv);
         }
       
         // Lets listen to mouseup DOM events.
         document.addEventListener('mouseup', function (e) {
             
             this.latestDragged = window.getSelection().getRangeAt(0);
-            console.log("can i",this.latestDragged);
+
             
             var selection = window.getSelection().toString();
             var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
@@ -122,7 +135,7 @@ class MemoButton extends Component {
             // var testbtn = document.createElement('input');
             // testbtn.text = 'button';
             // stickyMemo.appendChild(testbtn);
-            console.log(stickyMemo);
+            //console.log(stickyMemo);
            // console.log("stickymemo top pos : "+stickyMemo.style.top.toString());
             //console.log("stickymemo left pos : "+stickyMemo.style.left.toString());
             document.body.appendChild(stickyMemo);
@@ -133,14 +146,14 @@ class MemoButton extends Component {
     };
     //메모추가
     addMemo = (x) => {
-        console.log("in addMemo");
+        //console.log("in addMemo");
         this.setState({
             t: this.state.t + 1
         })
         var memo_box = document.createElement('div');
         memo_box.setAttribute('id', `li${this.state.t}`);
         memo_box.setAttribute('class', 'memo-before-render');
-        console.log(memo_box);
+        //console.log(memo_box);
 
         //새로만든 memo_box 를 드래그한애 전에 추가
         x.parentElement.insertBefore(memo_box, x);
@@ -165,13 +178,13 @@ class MemoButton extends Component {
         var newNode = document.createElement("span");
         newNode.setAttribute(
             "style",
-            "background-color: #FBD6C6; display: inline;"
+            `background-color: ${this.state.color}; display: inline;`
         );
        
         newNode.appendChild(selRange.extractContents());
         selRange.insertNode(newNode);
-        console.log("parent of newNode: ", newNode.parentElement);
-        this.addMemo(newNode.parentElement);
+        //console.log("parent of newNode: ", newNode.parentElement);
+        //this.addMemo(newNode.parentElement);
 
         //var selectedText = selObj.toString();
         //console.log(selectedText);
