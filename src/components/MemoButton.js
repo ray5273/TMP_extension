@@ -204,7 +204,6 @@ class MemoButton extends Component {
     
     }
     render() {
-
         return (
             <React.Fragment>
                 <div className="menus"> <p>북마크</p></div>
@@ -232,7 +231,12 @@ class DragText extends Component {
         console.log('Data: ', data);
     };
 
+    myCallback = (dataFromChild) => {
+        this.setState({ test: dataFromChild });
+    };
+
     render() {
+        var listname = this.state.test;
         return (
             <Draggable
                 axis="x"
@@ -246,8 +250,11 @@ class DragText extends Component {
                 onStop={this.handleStop}>
                 <div className="input-wrapper">
                     <div className="handle">Drag from here</div>
-                    <div className="to-move" onClick={()=>this.setState({open:!this.state.open})}>Toggle from here
-                    {this.state.open?<Input/>:<div className="memo-closed">closed</div>}
+                    <div className="to-move" onClick={()=>this.setState({open:!this.state.open})}>
+                        Toggle from here
+                    </div>
+                    <div>
+                        {this.state.open?<Input callbackFromParent={this.myCallback}/>:<div className="memo-closed">closed</div>}
                     </div>
                 </div>
             </Draggable>
@@ -269,13 +276,23 @@ class Input extends Component {
         this.setState({
             [e.target.name]: e.target.value
         })
-    }
+    };
     handleSubmit = () => {
         console.log("handleSubmit clicked");
         this.setState({
             submitted: true
         })
-    }
+    };
+    handleRevise = ()=>{
+        console.log("handleRevise Mode");
+        this.setState({
+            submitted :false,
+        })
+
+    };
+    someFn = () => {
+        this.props.callbackFromParent(this.states.test);
+    };
     render() {
         return (
             <React.Fragment className="memo-input-wrapper">
@@ -289,8 +306,11 @@ class Input extends Component {
                         onChange={this.handleChange}
                         name="test"
                         className="memo-input"
-                    />}
-                    {this.state.submitted ? null : <button className="submit-btn" onClick={this.handleSubmit}>확인</button>}
+                    >
+                        {this.state.test}
+                    </textarea>}
+                    {this.state.submitted ? <button className="submit-btn" onClick={this.handleRevise}>수정</button>
+                        : <button className="submit-btn" onClick={this.handleSubmit}>확인</button>}
             </React.Fragment>
         );
     }
