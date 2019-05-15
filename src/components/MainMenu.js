@@ -118,16 +118,19 @@ class CustomizedTabs extends React.Component {
                     onChange={this.handleChange}
                     classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                     variant="fullWidth"
+                    className="header-button-div"
                 >
                     <Tab
                         disableRipple
                         classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
                         label="MEMO"
+                        className="header-button"
                     />
                     <Tab
                         disableRipple
                         classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
                         label="BOOKMARK"
+                        className="header-button"
                     />
                 </Tabs>
                 <SwipeableViews

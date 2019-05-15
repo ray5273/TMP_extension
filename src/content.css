@@ -1,10 +1,19 @@
-.my-extension {
-    padding: 20px;
- }
+
  .my-extension h1 {
      color: #000;
  }
 
-button {
-    background-color: green;
+.my-extension {
+    padding: 10px;
+    background-color:#F9F9F9;
+}
+
+.header-button {
+    width:50%;
+    height:20px;
+    background-color:#93CC8D;
+    border:1px solid white;
+}
+.header-button-div {
+    width:100%;
 }

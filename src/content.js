@@ -18,8 +18,7 @@ class Main extends Component {
                    ({document, window}) => {
                       // Render Children
                       return (
-                         <div className={'my-extension'}>
-                            
+                         <div className={'my-extension'}>                           
                             <MainMenu />
                          </div>
                       )

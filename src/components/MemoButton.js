@@ -223,7 +223,7 @@ class DragText extends Component {
         super(props);
         this.state = {
             test: "",
-            open:false
+            open:true
         }
     }
     eventLogger = (e: MouseEvent, data: Object) => {
@@ -295,7 +295,7 @@ class Input extends Component {
     };
     render() {
         return (
-            <React.Fragment className="memo-input-wrapper">
+            <div className="memo-input-wrapper">
                 {this.state.submitted
                     ?
                     <div className="memo-text">
@@ -311,7 +311,7 @@ class Input extends Component {
                     </textarea>}
                     {this.state.submitted ? <button className="submit-btn" onClick={this.handleRevise}>수정</button>
                         : <button className="submit-btn" onClick={this.handleSubmit}>확인</button>}
-            </React.Fragment>
+            </div>
         );
     }
 }
