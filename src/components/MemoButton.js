@@ -109,7 +109,6 @@ class MemoButton extends Component {
             },200);
 
         }, false);
-
     };
     //sticky memo 추가하는 method
     addStickyMemo = (x) => {
@@ -223,7 +222,8 @@ class DragText extends Component {
         super(props);
         this.state = {
             test: "",
-            open:false
+            open:false,
+            submit:false
         }
     }
     eventLogger = (e: MouseEvent, data: Object) => {
@@ -232,11 +232,22 @@ class DragText extends Component {
     };
 
     myCallback = (dataFromChild) => {
-        this.setState({ test: dataFromChild });
+        var childList = dataFromChild;
+        var text_data = childList[0];
+        var submit_data = childList[1];
+        console.log("get submit data : "+submit_data);
+        this.setState({
+             test:text_data,
+             submit:submit_data
+        });
+        // this.setState({ test: dataFromChild });
     };
 
     render() {
-        var listname = this.state.test;
+        var text_submit = [];
+        text_submit[0] = this.state.test;
+        text_submit[1] = this.state.submit;
+        console.log("listname:"+text_submit);
         return (
             <Draggable
                 axis="x"
@@ -254,7 +265,7 @@ class DragText extends Component {
                         Toggle from here
                     </div>
                     <div>
-                        {this.state.open?<Input callbackFromParent={this.myCallback}/>:<div className="memo-closed">closed</div>}
+                        {this.state.open?<Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>:<div className="memo-closed">closed</div>}
                     </div>
                 </div>
             </Draggable>
@@ -267,9 +278,17 @@ class DragText extends Component {
 class Input extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            test: "",
-            submitted: false
+        var parentData = this.props.stateFromParent;
+        if(parentData==null){
+            this.state = {
+                test:"",
+                submitted:false
+            }
+        }else {
+            this.state = {
+                test: parentData[0],
+                submitted: parentData[1]
+            }
         }
     }
     handleChange = (e) => {
@@ -281,17 +300,21 @@ class Input extends Component {
         console.log("handleSubmit clicked");
         this.setState({
             submitted: true
-        })
+        });
+        var toParent =[];
+        toParent[0] = this.state.test;
+        toParent[1] = true;
+        this.props.callbackFromParent(toParent);
     };
     handleRevise = ()=>{
         console.log("handleRevise Mode");
         this.setState({
             submitted :false,
         })
-
-    };
-    someFn = () => {
-        this.props.callbackFromParent(this.states.test);
+        var toParent =[];
+        toParent[0] = this.state.test;
+        toParent[1] = false;
+        this.props.callbackFromParent(toParent);
     };
     render() {
         return (
