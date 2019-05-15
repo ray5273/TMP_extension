@@ -16,66 +16,23 @@ class MemoButton extends Component {
             MemoTop :0,
             MemoLeft :0
         }
+        this.latestDragged=null;
         this.addHighlight=this.addHighlight.bind(this);
     }
 
-
-    // 드래그 출처: https://codepen.io/nickmoreton/pen/ogryWa
-    /* 
-    dragTest = () => {
-        const elements = document.querySelectorAll('h3');
-        this.setState({
-            zet: 1
-        })
-        // Bind functions to events
-        for (var i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('mousedown', this.drag);
-            elements[i].addEventListener('mouseup', this.end);
-        };
-        // Destroy drag on mouse up
-    }
-    // Drag function
-    drag = (event) => {
-        console.log("drag 함수 시작");
-        // Set variable to true on mousedown
-        this.setState({
-            moving: true
-        })
-        // Increase z-index so last clicked always on top
-        this.setState({
-            zet: this.state.zet + 1
-        })
-        // Select the item that was clicked
-
-        // Positions cursor in center of element when being dragged, as oposed to the top left
-        const widt = event.target.offsetWidth / 2;
-        const heigh = event.target.offsetHeight / 2;
-        // Element follows mouse cursor
-        document.addEventListener('mousemove', function (e) {
-            // Only run if variable is true (this is destroyed on mouseup)
-            if (this.state.moving === true) {
-                // Postion element, minus half width/height as above
-                var x = e.clientX - widt;
-                var y = e.clientY - heigh;
-
-                // Store left, top, and z-index in variable
-                var position = 'left:' + x + 'px;top:' + y + 'px;z-index:' + this.state.zet + ';cursor:move;';
-                // Set style
-                event.target.setAttribute('style', position);
-            };
-        });
-    };
-
-    end = () => {
-        this.setState({
-            moving: false
-        })
-        console.log("end");
-    };
-*/
     //툴팁 클릭 테스트 함수
     highlight_func = ()=> {
         window.alert("alert!");
+
+        //highlightNode는 하이라이트할 항목을 감쌀 새로운 엘리먼트
+        var highlightNode = document.createElement("span");
+        highlightNode.setAttribute(
+            "style",
+            "background-color: #FBD6C6; display: inline;"
+        );
+        
+        highlightNode.appendChild(this.latestDragged.extractContents());
+        this.latestDragged.insertNode(highlightNode);
     }
 
     //툴팁 띄우기 추가
@@ -103,14 +60,17 @@ class MemoButton extends Component {
 
             // highlight.addEventListener('')
 
-            document.body.appendChild(toolTipDiv);
+            document.body.appendChild(toolTipDiv); 
         }
-
+      
         // Lets listen to mouseup DOM events.
         document.addEventListener('mouseup', function (e) {
+            
+            this.latestDragged = window.getSelection().getRangeAt(0);
+            console.log("can i",this.latestDragged);
+            
             var selection = window.getSelection().toString();
             var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
-
             // console.log(selection_pos.top+": is top position");
 
             //선택된 text가 있을시 text 오른쪽 아래에 highlight <a> 태그를 표시
@@ -151,6 +111,7 @@ class MemoButton extends Component {
             var stickyMemo = document.createElement('div');
             stickyMemo.setAttribute('id', `stickyMemo${this.state.t}`);
             stickyMemo.style.position = 'absolute';
+            stickyMemo.style.width="300px";
             //sticky memo 생성위치 조정
             stickyMemo.style.top = `${this.state.MemoTop}px`;
             stickyMemo.style.left = `${this.state.MemoLeft}px`;
@@ -249,7 +210,8 @@ class DragText extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            test: ""
+            test: "",
+            open:false
         }
     }
     eventLogger = (e: MouseEvent, data: Object) => {
@@ -269,9 +231,11 @@ class DragText extends Component {
                 onStart={this.handleStart}
                 onDrag={this.handleDrag}
                 onStop={this.handleStop}>
-                <div>
+                <div className="input-wrapper">
                     <div className="handle">Drag from here</div>
-                    <Input/>
+                    <div className="to-move" onClick={()=>this.setState({open:!this.state.open})}>Toggle from here
+                    {this.state.open?<Input/>:<div className="memo-closed">closed</div>}
+                    </div>
                 </div>
             </Draggable>
         );
