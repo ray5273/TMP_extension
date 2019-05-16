@@ -125,6 +125,7 @@ class CustomizedTabs extends React.Component {
                         classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
                         label="MEMO"
                         className="header-button"
+                        
                     />
                     <Tab
                         disableRipple
@@ -141,7 +142,7 @@ class CustomizedTabs extends React.Component {
                     <TabContainer dir={theme.direction}><Content_Memo keyword={this.state.keyword}/></TabContainer>
                     <TabContainer dir={theme.direction}><Content_Bookmark keyword={this.state.keyword}/></TabContainer>
                 </SwipeableViews>
-                 <SearchBar
+                 {/*<SearchBar
                      // value={this.state.search_val}
                      onChange={() => console.log('onChange')}
                      onRequestSearch={() => console.log('onRequestSearch')}
@@ -155,7 +156,13 @@ class CustomizedTabs extends React.Component {
                      // 나중에 아래의 코드를 사용해야할듯
                      onChange={(keyword) => this.setState({ keyword })}
                      // onRequestSearch={() => doSomethingWith(this.state.value)}
-                 />
+                    />*/}
+                 <input 
+                    onChange={(keyword) => this.setState({ keyword })}
+                    placeholder="검색하세요.."
+                    className="search-input"
+                    />
+
              </div>
            </MuiThemeProvider>
         );

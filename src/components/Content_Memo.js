@@ -101,22 +101,27 @@ class Memos extends Component {
                             value={this.state.name}
                             placeholder="메모 제목"
                             onChange={this.handleChange}
+                            className="memo-title-input"
                             
                         />
-                        <input
+                        <textarea
                             name="content"
                             value={this.state.content}
                             placeholder="메모 내용"
                             onChange={this.handleChange}
+                            className="memo-content-input"
                             
                         />
+                        <div className="tag-and-button-wrapper">
                         <input
                             name="tag"
                             placeholder="태그"
                             value={this.state.tag}
                             onChange={this.handleChange}
+                            className="memo-content-tag"
                         />
-                        <button type="submit" onClick={this.handleSubmit}>등록하기</button>
+                        <button type="submit" onClick={this.handleSubmit} className="iframe-buttons submit-memo-button">등록</button>
+                        </div>
                     </form>
                     <br/>
                     <div>
