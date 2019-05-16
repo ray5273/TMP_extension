@@ -7,6 +7,7 @@ import Header from './components/Header';
 import MainMenu from './components/MainMenu';
 import MemoButton from './components/MemoButton';
 import { testNameToKey } from 'jest-snapshot/build/utils';
+import SimSearch from "./components/SimSearch";
 
 class Main extends Component {
     render() {
