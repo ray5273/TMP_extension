@@ -11,7 +11,6 @@ class BookmarkItem1 extends  Component {
     }
     handleClick = () => {
         window.location.href = this.props.url;
-        console.log("item click. show bookmark" + this.props.url);
     }
     render() {
 

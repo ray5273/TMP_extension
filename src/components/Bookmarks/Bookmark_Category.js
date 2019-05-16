@@ -10,6 +10,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import styled from "styled-components";
 import {instanceOf} from "prop-types";
+import BookmarkItem1 from "./BookmarkItem1";
 
 const ChangeTitle = styled.input`
     border: none;
@@ -72,9 +73,9 @@ class Bookmark_Category extends  Component {
     render() {
         return (
             <div>
-
                 <ListItem button onClick={this.handleClick} id='list' onContextMenu={this.handleContextMenu}>
-                    <ListItemIcon><InboxIcon />
+                    <ListItemIcon>
+                        <InboxIcon />
                     </ListItemIcon>
                     {this.state.title !== "" || !this.state.isChangingName ?
                         <ListItemText inset primary={this.state.categoryName} />
@@ -85,11 +86,16 @@ class Bookmark_Category extends  Component {
                 <Collapse in={this.state.open} timeout = "auto" unmountOnExit>
                     <List component="div" disablePadding >
                         {this.props.bookmarkList.map( (item) => (
-                            <ListItem button>
+                            <ListItem button onClick={() => {window.location.href = item.bookmark.url }}>
                                 <ListItemIcon>
                                     <StarBorder/>
                                 </ListItemIcon>
-                                { item.bookmark }
+                                <BookmarkItem1
+                                    url={item.bookmark.url}
+                                    title={item.bookmark.title}
+                                    summary={item.bookmark.summary}
+                                    tag={item.bookmark.tag}
+                                    />
                             </ListItem>
                         ))}
                     </List>

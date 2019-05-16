@@ -44,21 +44,24 @@ class Bookmarks extends Component {
             categories: [
                 {   categoryName: '기본카테고리',
                     bookmarks: [
-                        {"id": this.id++,
-                            bookmark: <BookmarkItem1
-                            url={'http://www.naver.com'}
-                            title={'네이버'}
-                            summary={'testing....'}
-                            tag={'#연습'}
-
-                        />},
-                        {"id": this.id++,
-                            bookmark: <BookmarkItem1
-                            url={'http://www.google.com'}
-                            title={'구글'}
-                            summary={'testing....'}
-                            tag={'#연습2'}
-                        />}]
+                        {
+                            "id": this.id++,
+                            bookmark: {
+                                url: 'http://www.naver.com',
+                                title: '네이버',
+                                summary: 'testing....',
+                                tag: '#연습',
+                            }
+                        },
+                        {
+                            "id": this.id++,
+                            bookmark: {
+                                url: 'http://www.goole.com',
+                                title: "구글",
+                                summary: 'testing....',
+                                tag: '#연습',
+                            }
+                        }]
                 }],
             searched: [],
             addBookmark: false,
@@ -108,7 +111,6 @@ class Bookmarks extends Component {
         this.state.categories.map( (category) =>(
             console.log("event : handleCreateFolder" + category)
         ));
-        
 
     };
 
@@ -149,13 +151,12 @@ class Bookmarks extends Component {
                 console.log(category.bookmarks)
                 category.bookmarks = category.bookmarks.concat({
                     "id": this.id++,
-                    bookmark: <BookmarkItem1
-                        url={data.url}
-                        title={data.title}
-                        summary={'testing....'}
-                        tag={data.tag}
-                    />
-                })
+                    bookmark: {
+                        url: data.url,
+                        title: data.title,
+                        summary: data.summary,
+                        tag: data.tag,
+                }});
                 return category;
             }
         });
@@ -195,9 +196,10 @@ class Bookmarks extends Component {
     showCategories() {
         console.log(this.state.categories[0].bookmarks);
         return this.state.categories.map((item) => {
-                console.log("imem : " + item.categoryName + " " + item.bookmarks);
+                console.log("imem : " + item.categoryName + " " + item.bookmarks[0].bookmark);
+
                 return <Bookmark_Category categoryName={item.categoryName} bookmarkList={item.bookmarks}/>
-            }
+    }
         )
 
     }
