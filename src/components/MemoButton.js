@@ -18,24 +18,26 @@ class MemoButton extends Component {
             MemoLeft :0,
             color:''
         }
+
         this.latestDragged=null;
         this.addHighlight=this.addHighlight.bind(this);
     }
-
 
     //툴팁 클릭 테스트 함수
     highlight_func = ()=> {
         window.alert("in highlight func");
         this.addHighlight();
-        //highlightNode는 하이라이트할 항목을 감쌀 새로운 엘리먼트
-        var highlightNode = document.createElement("span");
-        highlightNode.setAttribute(
-            "style",
-            "background-color: #FBD6C6; display: inline;"
-        );
-        
-        highlightNode.appendChild(this.latestDragged.extractContents());
-        this.latestDragged.insertNode(highlightNode);
+        // var selRange = this.latestDragged;
+        // //highlightNode는 하이라이트할 항목을 감쌀 새로운 엘리먼트
+        //
+        // var highlightNode = document.createElement("span");
+        // highlightNode.setAttribute(
+        //     "style",
+        //     `background-color: ${this.state.color}; display: inline;`
+        // );
+        // console.log("selected range: "+this.getSelected.toString());
+        // highlightNode.appendChild(selRange.extractContents());
+        //selRange.insertNode(highlightNode);
     }
 
     //툴팁 띄우기 추가
@@ -57,12 +59,6 @@ class MemoButton extends Component {
             toolTipDiv.style.position = 'absolute';
             toolTipDiv.style.top = '0px';
             toolTipDiv.style.left = '0px';
-            //var highlight = document.createElement('a');
-            //highlight.text="Highlight_text";
-            //highlight.setAttribute('id','Highlight');
-
-            //href attribute test 코드
-            //highlight.setAttribute('href','https://google.com');
 
 
             //highlight_func으로 해당 text를 highlight 해야함
@@ -81,8 +77,8 @@ class MemoButton extends Component {
             
             this.latestDragged = window.getSelection().getRangeAt(0);
 
-            
             var selection = window.getSelection().toString();
+
             // var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
             // console.log(selection_pos.top+": is top position");
 
@@ -115,9 +111,6 @@ class MemoButton extends Component {
         window.alert("sticky memo!");
         this.setState({
             t: this.state.t + 1,
-            MemoTop:this.state.MemoTop ,
-            MemoLeft :this.state.MemoLeft +50
-
         });
         if(document.getElementById(`stickyMemo${this.state.t}`)==null) {
             var stickyMemo = document.createElement('div');
@@ -125,8 +118,10 @@ class MemoButton extends Component {
             stickyMemo.style.position = 'absolute';
             stickyMemo.style.width="300px";
             //sticky memo 생성위치 조정
-            stickyMemo.style.top = `${this.state.MemoTop}px`;
-            stickyMemo.style.left = `${this.state.MemoLeft}px`;
+            stickyMemo.style.top = window.scrollY+'px';
+            stickyMemo.style.left = window.scrollX + this.state.t*50+'px';
+            // stickyMemo.style.top = `${this.state.MemoTop}px`;
+            // stickyMemo.style.left = `${this.state.MemoLeft}px`;
             //stickymemo를 z-index 통해 최상위로 올려줌
             stickyMemo.style.zIndex=2147483647;
             stickyMemo.setAttribute('class', 'memo-before-render');
