@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import firebase from '../../Firebase.js'
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import oc from 'open-color';
-import {shadow, media } from './HeaderStyle';
-import MainMenu from '../MainMenu';
 import { Redirect } from 'react-router-dom';
 
 import LoginButton from "./LoginButton";
+
+const shadow = (weight) => {
+    const shadows = [
+        css`box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);`,
+        css`box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);`,
+        css`box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);`,
+        css`box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);`,
+        css`box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);`
+    ];
+
+    return shadows[weight];
+};
 
 // 상단 고정, 그림자
 const Positioner = styled.div`
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 0px;
     width: 100%;
     ${shadow(1)}
 `;
@@ -24,10 +32,11 @@ const WhiteBackground = styled.div`
     display: flex;
     justify-content: center;
     height: auto;
+    width: 100%;
 `;
 
 const HeaderContents = styled.div`
-    width: 1200px;
+    width: 100%;
     height: 55px;
     display: flex;
     flex-direction: row;
@@ -35,13 +44,6 @@ const HeaderContents = styled.div`
 
     padding-right: 1rem;
     padding-left: 1rem;
-    ${media.wide`
-        width: 992px;
-    `}
-
-    ${media.tablet`
-        width: 100%;
-    `}
 `;
 // 로고
 const Logo = styled.div`
@@ -96,7 +98,6 @@ class Header extends Component {
             return (
                 <div>
                     <Redirect to='/'/>
-                    <div>
                         <Positioner>
                             <WhiteBackground>
                                 <HeaderContents>
@@ -107,25 +108,23 @@ class Header extends Component {
                             </WhiteBackground>
                             <GradientBorder/>
                         </Positioner>
-                    </div>
                 </div>
             );
         } else {
             return(
                 <div>
-                    <Redirect to='/mainMenu'/>
-                    <div>
-                        <Positioner>
-                            <WhiteBackground>
-                                <HeaderContents>
-                                    <Logo>Trendy Memo Project</Logo>
-                                    <Spacer/>
-                                    <LoginButton types="out" clickSignOut={this.clickSignOut}/>
-                                </HeaderContents>
-                            </WhiteBackground>
-                            <GradientBorder/>
-                        </Positioner>
-                    </div> <br/>
+                    <Redirect to ='/mainMenu'/>
+                    <Positioner>
+                        <WhiteBackground>
+                            <HeaderContents>
+                                <Logo>Trendy Memo Project</Logo>
+                                <Spacer/>
+                                <LoginButton types="out" clickSignOut={this.clickSignOut}/>
+                            </HeaderContents>
+                        </WhiteBackground>
+
+                        <GradientBorder/>
+                    </Positioner>
                 </div>
 
             );

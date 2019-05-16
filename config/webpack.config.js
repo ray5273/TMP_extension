@@ -154,7 +154,7 @@ module.exports = function(webpackEnv) {
       // changing JS code would still trigger a refresh.
     ].filter(Boolean),
     content: './src/content.js',
-    //simSearch: './src/SimSearch.js'
+    SimSearch: './src/components/SimSearch.js'
     },
     output: {
       // The build folder.

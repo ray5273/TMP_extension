@@ -4,6 +4,7 @@ class Bookmark_Add_Form extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            categoryName: props.categories[0].categoryName,
             title: '',
             url: document.location.href,
             summary:'',
@@ -12,12 +13,17 @@ class Bookmark_Add_Form extends Component {
     };
 
     handleChange = (e) => {
+        console.log("change : : " + e.target.name +' : '+ e.target.value);
         this.setState({
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
         });
-    };
+        console.log("after change: : " + this.state.categoryName);
+};
+
     handleSubmit = (e) => {
         e.preventDefault();
+        console.log('form: ' + this.state.categoryName);
+
         this.props.handleSubmit(this.state);
         this.setState({
             title: '',
@@ -35,6 +41,14 @@ class Bookmark_Add_Form extends Component {
 
         return (
                 <form onSubmit={this.handleSubmit}>
+                    <p>
+                        <label style = {labelStyle}> category</label><br/>
+                        <select id='aa' name="categoryName" onChange={this.handleChange}>
+                            {this.props.categories.map((category) => (
+                                <option key={category.categoryName} value= {category.categoryName}> {category.categoryName} </option>
+                            ))}
+                        </select>
+                    </p>
                     <p>
                         <label  style = {labelStyle}> Title </label><br/>
                         <input name="title" value = {this.state.title} size = "20"  onChange={this.handleChange} />

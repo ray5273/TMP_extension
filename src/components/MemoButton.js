@@ -18,24 +18,26 @@ class MemoButton extends Component {
             MemoLeft :0,
             color:''
         }
+
         this.latestDragged=null;
         this.addHighlight=this.addHighlight.bind(this);
     }
-
 
     //툴팁 클릭 테스트 함수
     highlight_func = ()=> {
         window.alert("in highlight func");
         this.addHighlight();
-        //highlightNode는 하이라이트할 항목을 감쌀 새로운 엘리먼트
-        var highlightNode = document.createElement("span");
-        highlightNode.setAttribute(
-            "style",
-            "background-color: #FBD6C6; display: inline;"
-        );
-        
-        highlightNode.appendChild(this.latestDragged.extractContents());
-        this.latestDragged.insertNode(highlightNode);
+        // var selRange = this.latestDragged;
+        // //highlightNode는 하이라이트할 항목을 감쌀 새로운 엘리먼트
+        //
+        // var highlightNode = document.createElement("span");
+        // highlightNode.setAttribute(
+        //     "style",
+        //     `background-color: ${this.state.color}; display: inline;`
+        // );
+        // console.log("selected range: "+this.getSelected.toString());
+        // highlightNode.appendChild(selRange.extractContents());
+        //selRange.insertNode(highlightNode);
     }
 
     //툴팁 띄우기 추가
@@ -57,12 +59,6 @@ class MemoButton extends Component {
             toolTipDiv.style.position = 'absolute';
             toolTipDiv.style.top = '0px';
             toolTipDiv.style.left = '0px';
-            //var highlight = document.createElement('a');
-            //highlight.text="Highlight_text";
-            //highlight.setAttribute('id','Highlight');
-
-            //href attribute test 코드
-            //highlight.setAttribute('href','https://google.com');
 
 
             //highlight_func으로 해당 text를 highlight 해야함
@@ -81,19 +77,19 @@ class MemoButton extends Component {
             
             this.latestDragged = window.getSelection().getRangeAt(0);
 
-            
             var selection = window.getSelection().toString();
-            var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
+
+            // var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
             // console.log(selection_pos.top+": is top position");
 
             //선택된 text가 있을시 text 오른쪽 아래에 highlight <a> 태그를 표시
             if (selection.length > 0 ) {
                 //var selected = document.createTextNode(selection);
-                // toolTipDiv.style.top = e.clientY + "px";
+                toolTipDiv.style.top = window.scrollY+ e.clientY + "px";
                 // toolTipDiv.style.visibility = "visible";
-                // toolTipDiv.style.left = e.clientX + "px";
-                toolTipDiv.style.top = selection_pos.top + 40 + "px";
-                toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
+                toolTipDiv.style.left = window.scrollX+ e.clientX + "px";
+                // toolTipDiv.style.top = selection_pos.top + 40 + "px";
+                // toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
                 toolTipDiv.style.visibility = "visible";
                 toolTipDiv.style.display="block";
             }
@@ -109,16 +105,12 @@ class MemoButton extends Component {
             },200);
 
         }, false);
-
     };
     //sticky memo 추가하는 method
     addStickyMemo = (x) => {
         window.alert("sticky memo!");
         this.setState({
             t: this.state.t + 1,
-            MemoTop:this.state.MemoTop ,
-            MemoLeft :this.state.MemoLeft +50
-
         });
         if(document.getElementById(`stickyMemo${this.state.t}`)==null) {
             var stickyMemo = document.createElement('div');
@@ -126,8 +118,10 @@ class MemoButton extends Component {
             stickyMemo.style.position = 'absolute';
             stickyMemo.style.width="300px";
             //sticky memo 생성위치 조정
-            stickyMemo.style.top = `${this.state.MemoTop}px`;
-            stickyMemo.style.left = `${this.state.MemoLeft}px`;
+            stickyMemo.style.top = window.scrollY+'px';
+            stickyMemo.style.left = window.scrollX + this.state.t*50+'px';
+            // stickyMemo.style.top = `${this.state.MemoTop}px`;
+            // stickyMemo.style.left = `${this.state.MemoLeft}px`;
             //stickymemo를 z-index 통해 최상위로 올려줌
             stickyMemo.style.zIndex=2147483647;
             stickyMemo.setAttribute('class', 'memo-before-render');
@@ -223,7 +217,8 @@ class DragText extends Component {
         super(props);
         this.state = {
             test: "",
-            open:true
+            open:true,
+            submit:false
         }
     }
     eventLogger = (e: MouseEvent, data: Object) => {
@@ -232,11 +227,22 @@ class DragText extends Component {
     };
 
     myCallback = (dataFromChild) => {
-        this.setState({ test: dataFromChild });
+        var childList = dataFromChild;
+        var text_data = childList[0];
+        var submit_data = childList[1];
+        console.log("get submit data : "+submit_data);
+        this.setState({
+             test:text_data,
+             submit:submit_data
+        });
+        // this.setState({ test: dataFromChild });
     };
 
     render() {
-        var listname = this.state.test;
+        var text_submit = [];
+        text_submit[0] = this.state.test;
+        text_submit[1] = this.state.submit;
+        console.log("listname:"+text_submit);
         return (
             <Draggable
                 axis="x"
@@ -254,7 +260,7 @@ class DragText extends Component {
                         Toggle from here
                     </div>
                     <div>
-                        {this.state.open?<Input callbackFromParent={this.myCallback}/>:<div className="memo-closed">closed</div>}
+                        {this.state.open?<Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>:<div className="memo-closed">closed</div>}
                     </div>
                 </div>
             </Draggable>
@@ -267,9 +273,17 @@ class DragText extends Component {
 class Input extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            test: "",
-            submitted: false
+        var parentData = this.props.stateFromParent;
+        if(parentData==null){
+            this.state = {
+                test:"",
+                submitted:false
+            }
+        }else {
+            this.state = {
+                test: parentData[0],
+                submitted: parentData[1]
+            }
         }
     }
     handleChange = (e) => {
@@ -281,17 +295,21 @@ class Input extends Component {
         console.log("handleSubmit clicked");
         this.setState({
             submitted: true
-        })
+        });
+        var toParent =[];
+        toParent[0] = this.state.test;
+        toParent[1] = true;
+        this.props.callbackFromParent(toParent);
     };
     handleRevise = ()=>{
         console.log("handleRevise Mode");
         this.setState({
             submitted :false,
         })
-
-    };
-    someFn = () => {
-        this.props.callbackFromParent(this.states.test);
+        var toParent =[];
+        toParent[0] = this.state.test;
+        toParent[1] = false;
+        this.props.callbackFromParent(toParent);
     };
     render() {
         return (

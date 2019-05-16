@@ -163,3 +163,59 @@ textarea {
 .palette-container {
   display: flex;
 }
+
+/*SimSearch*/
+.search1 {
+  width: 456px;
+  background-color: #89D7F6;
+  border: 1px solid #89D7F6;
+  text-align: center;
+}
+
+.search2 {
+  max-height: 214px;
+  width: 456px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid #6789C1;
+}
+
+.search3 {
+  overflow: hidden;
+  padding: 6px 10px 6px 10px;
+  word-break:normal;
+  margin: 8px 7px 8px 7px;
+  flex-grow: 1;
+  display: inline-block;
+  border: 1px solid #282c34;
+  height: 176px;
+  width: 30%;
+}
+
+.search4 {
+  font-weight: bold;
+  margin-bottom: 5px;
+  width: 104px;
+  height: 38px;
+
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  -webkit-line-clamp: 2;
+  visibility: visible;
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+}
+
+.search5 {
+  width: 104px;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  -webkit-line-clamp: 6;
+  visibility: visible;
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+}
