@@ -22,7 +22,7 @@
   "background": {
     "scripts": ["background.js"]
   },
-  "web_accessible_resources" : ["*.html","/static/css/content.css"],
+  "web_accessible_resources" : ["*.html","/static/css/content.css", "/static/css/app.css"],
   "permissions": [
     "tabs", "http://*/*","https://*/*", "storage"
   ]

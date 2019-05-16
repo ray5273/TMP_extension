@@ -126,9 +126,12 @@ textarea {
     width:20%;
 }
 
-.tag-and-button-wrapper, .memo-top-wrapper{
+.tag-and-button-wrapper, .memo-top-wrapper {
     display:flex;
     justify-content: space-between;
+}
+.temp-text-wrapper {
+    display:flex;
 }
 
 .memo-item {
@@ -145,4 +148,8 @@ textarea {
     border-radius: 25px;
     margin: 3px;
     padding: 3px 3px;
+}
+
+svg {
+    width:50px;
 }

@@ -7,6 +7,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable-component';
 import Palette from './Palette';
+import Input from './MemoInput';
+import MemoIcon from '../assets/Memo-icon.png';
 
 class MemoButton extends Component {
     constructor(props) {
@@ -217,7 +219,7 @@ class DragText extends Component {
         super(props);
         this.state = {
             test: "",
-            open:true,
+            open:false,
             submit:false
         }
     }
@@ -255,12 +257,19 @@ class DragText extends Component {
                 onDrag={this.handleDrag}
                 onStop={this.handleStop}>
                 <div className="input-wrapper">
-                    <div className="handle">Drag from here</div>
-                    <div className="to-move" onClick={()=>this.setState({open:!this.state.open})}>
-                        Toggle from here
+                    <div className="temp-text-wrapper">
+                        <div className="tmp-btn">Drag</div>
+                        <div className="tmp-btn" onClick={()=>this.setState({open:!this.state.open})}>
+                            Toggle
+                        </div>
                     </div>
                     <div>
-                        {this.state.open?<Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>:<div className="memo-closed">closed</div>}
+                        { this.state.open ?
+                        <Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>
+                        :
+                        <div className="memo-closed">
+                        <img alt="" onClick={()=>this.setState({open:!this.state.open})} src={MemoIcon} className="memo-closed-icon"/>
+                        </div>}
                     </div>
                 </div>
             </Draggable>
@@ -269,69 +278,6 @@ class DragText extends Component {
 }
 
 
-//메모 인풋
-class Input extends Component {
-    constructor(props) {
-        super(props);
-        var parentData = this.props.stateFromParent;
-        if(parentData==null){
-            this.state = {
-                test:"",
-                submitted:false
-            }
-        }else {
-            this.state = {
-                test: parentData[0],
-                submitted: parentData[1]
-            }
-        }
-    }
-    handleChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    };
-    handleSubmit = () => {
-        console.log("handleSubmit clicked");
-        this.setState({
-            submitted: true
-        });
-        var toParent =[];
-        toParent[0] = this.state.test;
-        toParent[1] = true;
-        this.props.callbackFromParent(toParent);
-    };
-    handleRevise = ()=>{
-        console.log("handleRevise Mode");
-        this.setState({
-            submitted :false,
-        })
-        var toParent =[];
-        toParent[0] = this.state.test;
-        toParent[1] = false;
-        this.props.callbackFromParent(toParent);
-    };
-    render() {
-        return (
-            <div className="memo-input-wrapper">
-                {this.state.submitted
-                    ?
-                    <div className="memo-text">
-                        {this.state.test}
-                    </div>
-                    :
-                    <textarea
-                        onChange={this.handleChange}
-                        name="test"
-                        className="memo-input"
-                    >
-                        {this.state.test}
-                    </textarea>}
-                    {this.state.submitted ? <button className="submit-btn" onClick={this.handleRevise}>수정</button>
-                        : <button className="submit-btn" onClick={this.handleSubmit}>확인</button>}
-            </div>
-        );
-    }
-}
+
 
 export default MemoButton;

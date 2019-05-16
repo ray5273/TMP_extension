@@ -120,7 +120,7 @@ textarea {
   height: 50px;
   overflow-wrap: break-word;
   overflow:auto;
-  background-color:#FAF4C0;
+  background-color:#F6F6F6;
 }
 
 .submit-btn {
@@ -144,11 +144,6 @@ textarea {
   display:flex;
 }
 
-.memo-closed {
-  width:50px;
-  height: 50px;
-  background-color:yellow;
-}
 
 .input-wrapper {
   width:300px;
@@ -218,4 +213,12 @@ textarea {
   visibility: visible;
   /* autoprefixer: ignore next */
   -webkit-box-orient: vertical;
+}
+
+.memo-closed-icon {
+  width:50px;
+}
+
+.tmp-btn {
+  height:20px;
 }
