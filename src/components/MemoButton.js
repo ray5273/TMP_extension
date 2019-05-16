@@ -5,11 +5,18 @@ input에 뭐 치려면 마우스 꾹 누른상태로 해야함 이건 querySelec
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Draggable from 'react-draggable-component';
+import DragText from './DragText';
 import Palette from './Palette';
 import Input from './MemoInput';
-import MemoIcon from '../assets/Memo-icon.png';
 
+
+class TT extends Component {
+    render() {
+        return(
+            <div onClick={this.props.please}>테스트테스트테스트<br />테스트테스트테스트</div>
+        );
+    }
+}
 class MemoButton extends Component {
     constructor(props) {
         super(props);
@@ -21,7 +28,7 @@ class MemoButton extends Component {
             color:''
         }
 
-        this.latestDragged=null;
+        window.latestDragged="ttt";
         this.addHighlight=this.addHighlight.bind(this);
     }
 
@@ -52,6 +59,25 @@ class MemoButton extends Component {
         console.log("now color: ", this.state.color);
         this.addHighlight();
     }
+
+
+    please=()=> {
+        console.log("drageed  please?", window.latestDragged);
+        console.log(" and its extractConte", window.latestDragged.extractContents());
+        var selObj = window.getSelection();
+        var selRange = selObj.getRangeAt(0);
+        console.log("original:::", selRange.extractContents);
+        var newNode = document.createElement("span");
+        newNode.setAttribute(
+            "style",
+            `background-color: black; display: inline;`
+        );
+       
+        newNode.appendChild(window.latestDragged.extractContents());
+        window.latestDragged.insertNode(newNode);
+    }
+
+
     addTooltip = ()=> {
         
         if(document.getElementById('toolTipDiv')==null) {
@@ -65,20 +91,21 @@ class MemoButton extends Component {
 
             //highlight_func으로 해당 text를 highlight 해야함
             //현재는 하이라이트와 메모구조를 정확히 이해 못해서 적용 시켜
-            toolTipDiv.onclick = this.highlight_func;
+            //toolTipDiv.onclick = this.highlight_func;
             //toolTipDiv.appendChild(highlight);
         
             // highlight.addEventListener('')
 
             document.body.appendChild(toolTipDiv); 
             ReactDOM.render(<Palette change={this.changeColor}/>, toolTipDiv);
+            //ReactDOM.render(<TT please={this.please}/>, toolTipDiv);
         }
       
         // Lets listen to mouseup DOM events.
         document.addEventListener('mouseup', function (e) {
             
-            this.latestDragged = window.getSelection().getRangeAt(0);
-
+            window.latestDragged = window.getSelection().getRangeAt(0);
+            //console.log("latestDragged!", window.latestDragged);
             var selection = window.getSelection().toString();
 
             // var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
@@ -214,68 +241,7 @@ class MemoButton extends Component {
 
 //이 부분을 따로 javascript 파일로 바꾸는게 좋을듯
 //draggable test
-class DragText extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            test: "",
-            open:false,
-            submit:false
-        }
-    }
-    eventLogger = (e: MouseEvent, data: Object) => {
-        console.log('Event: ', e);
-        console.log('Data: ', data);
-    };
 
-    myCallback = (dataFromChild) => {
-        var childList = dataFromChild;
-        var text_data = childList[0];
-        var submit_data = childList[1];
-        console.log("get submit data : "+submit_data);
-        this.setState({
-             test:text_data,
-             submit:submit_data
-        });
-        // this.setState({ test: dataFromChild });
-    };
-
-    render() {
-        var text_submit = [];
-        text_submit[0] = this.state.test;
-        text_submit[1] = this.state.submit;
-        console.log("listname:"+text_submit);
-        return (
-            <Draggable
-                axis="x"
-                handle=".handle"
-                defaultPosition={{x: 0, y: 0}}
-                position={null}
-                grid={[25, 25]}
-                scale={1}
-                onStart={this.handleStart}
-                onDrag={this.handleDrag}
-                onStop={this.handleStop}>
-                <div className="input-wrapper">
-                    <div className="temp-text-wrapper">
-                        <div className="tmp-btn">Drag</div>
-                        <div className="tmp-btn" onClick={()=>this.setState({open:!this.state.open})}>
-                            Toggle
-                        </div>
-                    </div>
-                    <div>
-                        { this.state.open ?
-                        <Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>
-                        :
-                        <div className="memo-closed">
-                        <img alt="" onClick={()=>this.setState({open:!this.state.open})} src={MemoIcon} className="memo-closed-icon"/>
-                        </div>}
-                    </div>
-                </div>
-            </Draggable>
-        );
-    }
-}
 
 
 
