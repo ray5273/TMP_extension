@@ -9,15 +9,9 @@
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
-      "js": ["/static/js/content.js"],
+      "js": ["/static/js/content.js", "/static/js/SimSearch.js"],
       "css": ["/static/css/app.css","/static/css/content.css"]
-    },
-    {
-      "matches": ["https://www.google.com/"],
-      "js": ["/static/js/SimSearch.js"],
-      "css": []
     }
-
   ],
   "background": {
     "scripts": ["background.js"]
