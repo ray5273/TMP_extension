@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import firebase from '../../Firebase.js'
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 import oc from 'open-color';
 import { Redirect } from 'react-router-dom';
 
 import LoginButton from "./LoginButton";
+import MainMenu from "../MainMenu";
+import Signin from '../Signin';
 
 const shadow = (weight) => {
     const shadows = [
@@ -17,7 +19,28 @@ const shadow = (weight) => {
 
     return shadows[weight];
 };
+const BorderedButton = styled.div`
+    font-weight: 600;
+    color: ${oc.cyan[6]};
+    border: 1px solid ${oc.cyan[6]};
+    padding: 0.5rem;
+    padding-bottom: 0.4rem;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: .2s all;
+    
+    &:hover {
+        background: ${oc.cyan[6]};
+        color: white;
+        ${shadow(1)}
+    }
 
+    &:active {
+        /* 마우스 클릭시 아래로 미세하게 움직임 */
+        transform: translateY(3px);
+    }
+`;
 // 상단 고정, 그림자
 const Positioner = styled.div`
     display: flex;
@@ -70,7 +93,7 @@ class Header extends Component {
         };
     }
 
-    shouldComponentUpdate () {
+    shouldComponentUpdate() {
         return true;
     }
 
@@ -94,41 +117,37 @@ class Header extends Component {
     }
 
     render() {
-        if(this.state.user == null) {
-            return (
-                <div>
-                    <Redirect to='/'/>
-                        <Positioner>
-                            <WhiteBackground>
-                                <HeaderContents>
-                                    <Logo>Trendy Memo Project</Logo>
-                                    <Spacer/>
-                                    <LoginButton types ="in" />
-                                </HeaderContents>
-                            </WhiteBackground>
-                            <GradientBorder/>
-                        </Positioner>
-                </div>
-            );
-        } else {
-            return(
-                <div>
-                    <Redirect to ='/mainMenu'/>
-                    <Positioner>
-                        <WhiteBackground>
-                            <HeaderContents>
-                                <Logo>Trendy Memo Project</Logo>
-                                <Spacer/>
-                                <LoginButton types="out" clickSignOut={this.clickSignOut}/>
-                            </HeaderContents>
-                        </WhiteBackground>
+        return (
+            <div>
 
-                        <GradientBorder/>
-                    </Positioner>
-                </div>
 
-            );
-        }
+                <Positioner>
+                    <WhiteBackground>
+                        <HeaderContents>
+                            <Logo>Trendy Memo Project</Logo>
+                            <Spacer />
+                            {this.state.user == null ?
+                           null
+                            
+                            :
+                                <BorderedButton types="out" onClick={this.clickSignOut}>로그아웃</BorderedButton>
+                               
+                                
+                            }
+                        </HeaderContents>
+                    </WhiteBackground>
+
+                    <GradientBorder />
+                </Positioner>
+
+                {this.state.user == null ?
+                    <Signin />
+                    :
+                    <MainMenu />
+                }
+            </div>
+        )
+
     }
 }
 

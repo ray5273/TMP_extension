@@ -15,13 +15,6 @@ class App extends Component {
             <div>
                 <Header />
             </div><br/><br/><br/>
-            <div>
-                <Switch>
-                    <Route exact path="/" component="home"/>
-                    <Route path="/signin" component={Signin}/>
-                    <Route path="/mainMenu" component={MainMenu}/>
-                </Switch>
-            </div>
         </div>
         
         

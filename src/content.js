@@ -6,6 +6,7 @@ import "./content.css";
 import Header from './components/Header';
 import MainMenu from './components/MainMenu';
 import MemoButton from './components/MemoButton';
+import App from './App';
 import { testNameToKey } from 'jest-snapshot/build/utils';
 
 class Main extends Component {

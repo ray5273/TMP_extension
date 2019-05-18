@@ -112,7 +112,6 @@ textarea {
     height: 20px;
     width: 80%;
     border: 1px solid black;
-    border-top:none;
 }
 
 .iframe-buttons {
@@ -139,12 +138,14 @@ textarea {
     border: 1px solid white;
     margin-bottom:3px;
 }
-.iframe-memo-tag {
-    background-color: #E7E7E7;
-    width:auto;
+.iframe-memo-content {
+    overflow: auto;
+    word-break: break-word;
 }
 
 .iframe-memo-tag {
+    background-color: #E7E7E7;
+    width:auto;
     border-radius: 25px;
     margin: 3px;
     padding: 3px 3px;

@@ -19,6 +19,7 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import SwipeableViews from 'react-swipeable-views';
 import SearchBar from 'material-ui-search-bar'
+import '../content.css';
 
 //이쪽 UI 제대로 바꾸기 search , button , icons 얘네들 다 추가하기
 //material-ui appbar로 검색하면 될듯
@@ -42,22 +43,22 @@ TabContainer.propTypes = {
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        backgroundColor: '#2c323c',
+        backgroundColor: '#F9F9F9',
     },
     tabsRoot: {
     //    borderBottom: '1px solid #e2315a',
-        borderBottom: '1px solid #3f54af',
+        borderBottom: '1px solid #6B9900',
 
     },
     tabsIndicator: {
-        backgroundColor: '#2c323c',
+        backgroundColor: '#6B9900',
     },
     tabRoot: {
         textTransform: 'initial',
         minWidth: 100,
         fontWeight: theme.typography.fontWeightMedium,
        // background: '#e2315a',
-        background:'#3f54af',
+        background:'#93CC8D',
         fontFamily: [
             '-apple-system',
             'BlinkMacSystemFont',
@@ -104,7 +105,7 @@ class CustomizedTabs extends React.Component {
     handleChangeIndex = index => {
         this.setState({ value: index });
     };
-
+ 
 
     render() {
         const { classes,theme } = this.props;
