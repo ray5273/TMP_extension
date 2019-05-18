@@ -10,13 +10,6 @@ import Palette from './Palette';
 import Input from './MemoInput';
 
 
-class TT extends Component {
-    render() {
-        return(
-            <div onClick={this.props.please}>테스트테스트테스트<br />테스트테스트테스트</div>
-        );
-    }
-}
 class MemoButton extends Component {
     constructor(props) {
         super(props);
@@ -25,10 +18,9 @@ class MemoButton extends Component {
             t: 0,
             MemoTop :0,
             MemoLeft :0,
-            color:''
+            color:'black'
         }
 
-        window.latestDragged="ttt";
         this.addHighlight=this.addHighlight.bind(this);
     }
 
@@ -51,32 +43,6 @@ class MemoButton extends Component {
 
     //툴팁 띄우기 추가
     //텍스트 드래그시 마우스 좌표에 툴팁 띄우기
-    //Palette에 전달할 현재color스테이트 바꿀 함수
-    changeColor = (e) => {
-        this.setState({
-            color: e.target.id
-        });
-        console.log("now color: ", this.state.color);
-        this.addHighlight();
-    }
-
-
-    please=()=> {
-        console.log("drageed  please?", window.latestDragged);
-        console.log(" and its extractConte", window.latestDragged.extractContents());
-        var selObj = window.getSelection();
-        var selRange = selObj.getRangeAt(0);
-        console.log("original:::", selRange.extractContents);
-        var newNode = document.createElement("span");
-        newNode.setAttribute(
-            "style",
-            `background-color: black; display: inline;`
-        );
-       
-        newNode.appendChild(window.latestDragged.extractContents());
-        window.latestDragged.insertNode(newNode);
-    }
-
 
     addTooltip = ()=> {
         
@@ -96,16 +62,15 @@ class MemoButton extends Component {
         
             // highlight.addEventListener('')
 
-            document.body.appendChild(toolTipDiv); 
-            ReactDOM.render(<Palette change={this.changeColor}/>, toolTipDiv);
-            //ReactDOM.render(<TT please={this.please}/>, toolTipDiv);
+            document.body.appendChild(toolTipDiv);
+            //this.addHighlight();
+            ReactDOM.render(<Palette />, toolTipDiv);
+            //ReactDOM.render(<TT />, toolTipDiv);
         }
       
         // Lets listen to mouseup DOM events.
         document.addEventListener('mouseup', function (e) {
-            
-            window.latestDragged = window.getSelection().getRangeAt(0);
-            //console.log("latestDragged!", window.latestDragged);
+
             var selection = window.getSelection().toString();
 
             // var selection_pos =window.getSelection().getRangeAt(0).getBoundingClientRect();
@@ -191,21 +156,28 @@ class MemoButton extends Component {
     addHighlight = () => {
         var selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
-        this.setState({
-            latestDragged: selObj
-        })
+
         
-        console.log("selobj:",selObj);
-        console.log("selRange:", selRange);
-        console.log("parent of selRange:", selRange.parentElement);
+        
         var newNode = document.createElement("span");
-        newNode.setAttribute(
-            "style",
-            `background-color: ${this.state.color}; display: inline;`
-        );
-       
+        if (selRange) {
+            console.log("selobj:",selObj);
+            console.log("selRange:", selRange);
+            console.log("selRange.extractContents:::", selRange.extractContents);
+            console.log("parent of selRange:", selRange.parentElement);
+            newNode.setAttribute(
+                "style",
+                `background-color: ${this.state.color}; display: inline;`
+            );
+            selRange.surroundContents(newNode);
+        } 
+        else {
+            console.log("else else else");
+        }
+        /* 
         newNode.appendChild(selRange.extractContents());
         selRange.insertNode(newNode);
+        */
         //console.log("parent of newNode: ", newNode.parentElement);
         //this.addMemo(newNode.parentElement);
 
@@ -222,7 +194,7 @@ class MemoButton extends Component {
         });*/
 
         //바디 전체에 추가하기
-        // document.body.addEventListener('mouseup', this.addHighlight);
+       // document.body.addEventListener('mouseup', this.addHighlight);
         document.body.addEventListener('mouseup',this.addTooltip);
     
     }
