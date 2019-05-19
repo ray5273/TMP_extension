@@ -9,9 +9,17 @@ const Button = styled.button`
 class Palette extends Component {
     constructor(props) {
         super(props);
+        this.state={
+            hlNum: 0
+        }
+
+        this.setState({
+            hlNum: this.state.hlNum + 1,
+        });
+    }
+    removeHighlight = (id) => {
 
     }
-
     addHighlight = (e, color) => {
         var selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
@@ -21,18 +29,23 @@ class Palette extends Component {
             console.log("selRange:", selRange);
             console.log("selRange.extractContents:::", selRange.extractContents);
             console.log("parent of selRange:", selRange.parentElement);
+        
             newNode.setAttribute(
                 "style",
                 `background-color: ${color}; display: inline;`
             );
-            newNode.appendChild(selRange.extractContents());
-            selRange.insertNode(newNode);
-            //위의 두줄을 대체가능-> selRange.surroundContents(newNode);
+            newNode.setAttribute('id', `highlight${this.state.hlNum}`);
+            newNode.addEventListener('click', ()=> {newNode.replaceWith(selObj.toString())} );
+            //newNode.appendChild(selRange.extractContents());
+            //selRange.insertNode(newNode);
+            selRange.surroundContents(newNode);
         } 
         else {
             console.log("else else else");
         }
     }
+
+    
     render() {
         const colors=["#FBD6C6","#FF9090", "#FFDF24", "#FFFF7E","#7ED2FF", "#BCFFB5", "#C5C0FF", "#FFD9FA",
         "#B8B8B8" ]
