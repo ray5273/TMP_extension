@@ -5,8 +5,7 @@ import Frame, { FrameContextConsumer }from 'react-frame-component';
 import "./content.css";
 import Header from './components/Header';
 import MainMenu from './components/MainMenu';
-import MemoButton from './components/MemoButton';
-import App from './App';
+import MenuBar from './components/MenuBar';
 import { testNameToKey } from 'jest-snapshot/build/utils';
 
 class Main extends Component {
@@ -40,7 +39,7 @@ ReactDOM.render(<Main />, app);
 const test = document.createElement('div');
 test.setAttribute("id",'menu-bar');
 document.body.insertBefore(test, document.body.firstChild);
-ReactDOM.render(<MemoButton />, test);
+ReactDOM.render(<MenuBar />, test);
 
 app.style.display = "none";
 

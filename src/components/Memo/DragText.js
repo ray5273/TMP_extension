@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Draggable from 'react-draggable-component';
 import Input from './MemoInput';
-import MemoIcon from '../assets/Memo-icon.png';
+import MemoIcon from 'assets/Memo-icon.png';
 
 class DragText extends Component {
     constructor(props) {
