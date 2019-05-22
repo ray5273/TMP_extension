@@ -43,11 +43,18 @@ ReactDOM.render(<MenuBar />, test);
 
 app.style.display = "none";
 
+//여기서 background script의 메세지를 받고
+//위에 MemoButton을 DB에서 가져와서 띄워주는 형식으로 해야할것 같다.
 chrome.runtime.onMessage.addListener(
    function(request, sender, sendResponse) {
       if( request.message === "clicked_browser_action") {
         toggle();
+        chrome.runtime.sendMessage({
+            contentScriptQuery:"queryPrice"
+        });
+        console.log("browser action ended");
       }
+      //
    }
 );
 function toggle(){
@@ -57,3 +64,4 @@ function toggle(){
      app.style.display = "none";
    }
 }
+
