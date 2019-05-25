@@ -48,7 +48,7 @@
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "painterro": "^0.2.75",
     "painterro_revised": "^0.2.8",
-    "painterro_tmp": "^0.2.81",
+    "painterro_tmp": "^0.2.83",
     "pnp-webpack-plugin": "1.2.1",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",

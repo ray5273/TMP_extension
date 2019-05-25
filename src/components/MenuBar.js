@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DomMemo from './Memo/DomMemo';
 import HighLight from './Highlight/Tooltip';
-
+import DrawingTool from './Memo/DrawingTool'
 class MenuBar extends Component {
     render() {
         return (
@@ -9,6 +9,7 @@ class MenuBar extends Component {
                 <div className="menus"> <p>북마크</p></div>
                 <div className="menus"> <p>PDF</p></div>
                 <DomMemo />
+                <DrawingTool/>
                 <HighLight />
             </React.Fragment>
         );
