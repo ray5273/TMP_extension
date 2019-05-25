@@ -39,8 +39,8 @@ class DomMemo extends Component {
             //console.log("stickymemo left pos : "+stickyMemo.style.left.toString());
             document.body.appendChild(stickyMemo);
             // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
-            //ReactDOM.render(<DragText />, document.getElementById(`stickyMemo${this.state.t}`));
-            Painterro().show();
+            ReactDOM.render(<DragText />, document.getElementById(`stickyMemo${this.state.t}`));
+            //Painterro().show();
         }
     };
     
