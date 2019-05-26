@@ -3,8 +3,8 @@ const fs = require("fs-extra");
 const updateBackgroundFile = buildPath => {
     const backgroundJS = `${buildPath}/background.js`;
     const backgroundJS_original = './src/background.js';
-    const contentscriptJS = `${buildPath}/content-script.js`;
-    const contentscriptJS_original = './src/content-script.js';
+    const contentscriptJS = `${buildPath}/content.js`;
+    const contentscriptJS_original = './src/content.js';
     const pdfscriptJS = `${buildPath}/pdf-button-script.js`;
     const pdfscriptJS_original = './src/pdf-button-script.js';
 

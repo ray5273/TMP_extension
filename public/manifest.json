@@ -3,33 +3,21 @@
   "manifest_version": 2,
   "version": "1.0",
   "name": "TMP Test App 0.1",
-  "content_security_policy": "script-src 'self' 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://apis.google.com https://www.googleapis.com https://www.gstatic.com/ https://cdn.firebase.com https://*.firebaseio.com 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'",
   "browser_action": {
   },
   "content_scripts": [
     {
-
-      "matches": [
-        "https://*/*",
-        "http://*/*"
-      ],
-      "js": ["content-script.js"]
-    },
-    {
-      "matches": [
-        "https://*/*",
-        "http://*/*"
-      ],
-      "js": ["pdf-button-script.js"]
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["/static/js/content.js"],
+      "css": ["/static/css/app.css","/static/css/content.css"]
     }
-
   ],
   "background": {
     "scripts": ["background.js"]
   },
-  "web_accessible_resources" : ["*.html"],
+  "web_accessible_resources" : ["*.html","/static/css/content.css", "/static/css/app.css"],
   "permissions": [
-    "tabs", "http://*/*","https://*/*"
+    "tabs", "http://*/*","https://*/*", "storage"
   ]
-
 }
