@@ -141,9 +141,9 @@ class Header extends Component {
                 </Positioner>
 
                 {this.state.user == null ?
-                    <Signin />
+                    <div><Signin /></div>
                     :
-                    <MainMenu />
+                    <div><MainMenu /></div>
                 }
             </div>
         )
