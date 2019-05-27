@@ -7,99 +7,111 @@ import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import {Bookmark, Category} from './BookmarkStructures';
 import styled from "styled-components";
-import {instanceOf} from "prop-types";
-import BookmarkItem1 from "./BookmarkItem1";
+import { BookmarkItem1 } from './BookmarkItem1';
+import {EditForm} from './EditForm';
 
 const ChangeTitle = styled.input`
     border: none;
     border-bottom: 20px;
+    width: 100%;
+    font-size: 15px;
 `;
-
-const menu = styled.div`
-    display:none;
-    position:fixed;
-    width:150px; 
-    height:200px; 
-    background: #fff;
-    box-shadow:1px 1px 5px 0 rgba(0, 0, 0, 0.54);
-`;
-
 
 class Bookmark_Category extends  Component {
     constructor(props) {
-        super(props)
-        console.log(props)
+        super(props);
         // 차 후 DB 에서 목록을 가져오는 것을 추가해야한다.
         this.state = {
             isChangingName: false,
             categoryName : props.categoryName,
+            changedCategoryName: props.categoryName,
             bookmarkList: props.bookmarkList,
             open: false,
 
         };
     }
 
-    componentDidMount(): void {
-
-    };
-
+    // 클릭마다, 북마크 리스트 open / close
     handleClick = () => {
         this.setState(state => ({ open: !state.open }));
     };
 
-    handleRightClick = (event) => {
-        event.preventDefault();
+    // 카테고리명 변경 해들링. (아직 미완성.)
+    handleEditCategoryName = (e) => {
+        e.stopPropagation();
 
-
-        /*
-        this.setState({
-            [e.target.name]: e.target.value,
-            }
-        );
-         */
-    };
-    handleContextMenu = (e) => {
-        console.log(this.state.isChangingName);
-        e.preventDefault();
         this.setState({
             isChangingName: !this.state.isChangingName,
         })
 
-        return false;
+        //
+        if(!this.state.isChangingName) {
+           this.props.handleChange(this.state);
+        }
+
+    };
+
+    // 북마크 내용 편집 핸들링.
+    handleEditBookmark = (bookmark) => {
+
+        this.setState({
+            // eslint-disable-next-line array-callback-return
+                 bookmarkList: this.state.bookmarkList.map( (item)=>{
+                     if(bookmark.url !== item.url) {
+                         return item;
+                     }
+                     else {
+                         item.title = bookmark.title;
+                         item.summary = bookmark.summary;
+                         item.tag = bookmark.tag;
+                         return item;
+                     }
+                 })
+        });
+        this.props.handleChange(this.state);
+    };
+
+    // 북마크 삭제 핸들링.
+    handleRemoveBookmark = (url) => {
+        this.setState({
+            bookmarkList: this.state.bookmarkList.filter( bookmark => bookmark.url !== url)
+        });
+        this.props.handleRemove(new Category(0, this.state.categoryName, this.state.bookmarkList));
     };
 
     render() {
         return (
             <div>
-                <ListItem button onClick={this.handleClick} id='list' onContextMenu={this.handleContextMenu}>
+                <ListItem button onClick={this.handleClick} id='list' >
                     <ListItemIcon>
                         <InboxIcon />
                     </ListItemIcon>
-                    {this.state.title !== "" || !this.state.isChangingName ?
-                        <ListItemText inset primary={this.state.categoryName} />
-                        : <ChangeTitle type='text' id='changeTitle' name='title11111' value="" placeholder='카테고리명을 입력하세요.'/>}
+                        {!this.state.isChangingName ?
+                            <ListItemText insert primary={this.state.changedCategoryName} />
+                            : <ChangeTitle type='text' id='changedCategoryName' value={ this.state.changedCategoryName } onChange={(e)=>{this.setState({[e.target.id]: e.target.value})}} autoFocus placeholder='카테고리명을 입력하세요.'/>}
+                    <IconButton aria-label="Edit" onClick={this.handleEditCategoryName}>
+                        <EditIcon/>
+                    </IconButton>
 
                     {this.state.open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={this.state.open} timeout = "auto" unmountOnExit>
                     <List component="div" disablePadding >
-                        {this.props.bookmarkList.map( (item) => (
-                            <ListItem button onClick={() => {window.location.href = item.bookmark.url }}>
-                                <ListItemIcon>
-                                    <StarBorder/>
-                                </ListItemIcon>
-                                <BookmarkItem1
-                                    url={item.bookmark.url}
-                                    title={item.bookmark.title}
-                                    summary={item.bookmark.summary}
-                                    tag={item.bookmark.tag}
-                                    />
-                            </ListItem>
+                        {this.props.bookmarkList.map( (bookmark) => (
+                            <BookmarkItem1
+                                bookmark = { bookmark }
+                                handleRemoveBookmark={this.handleRemoveBookmark}
+                                handleEditBookmark = {this.handleEditBookmark}/>
                         ))}
                     </List>
                 </Collapse>
+
             </div>
         )
     }

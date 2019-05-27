@@ -75,7 +75,8 @@
     "webpack-dev-server": "3.2.1",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "4.2.0",
-    "yarn": "^1.16.0"
+    "yarn": "^1.16.0",
+    "@material-ui/styles": "latest"
   },
   "scripts": {
     "start": "cross-env NODE_PATH=src node scripts/start.js",
