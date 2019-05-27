@@ -1,3 +1,4 @@
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -47,8 +48,8 @@ class Bookmarks extends Component {
 
     // Content_Bookmark 초기 생성 시 fb에서 리스트를 가져옴.
     getCategoryListFromFirebase = () => {
-        var b1 = new Bookmark('http://www.naver.com', '네이버','testing....', '#연습');
-        var b2 = new Bookmark('http://www.google.com', '구글','testing....', "#연습");
+        var b1 = new Bookmark('https://www.naver.com', '네이버','testing....', '#연습');
+        var b2 = new Bookmark('https://www.google.com', '구글','testing....', "#연습");
         const bookmarklist = [b1, b2];
 
         return [].concat(new Category(this.categoryId++, '기본카테고리', bookmarklist))
@@ -84,6 +85,7 @@ class Bookmarks extends Component {
         });
     };
 
+    // 카테고리의 변화를 핸들링.
     handleChange = (changedCategory) => {
         this.setState({
             categories: this.state.categories.map((category)=> {
@@ -99,29 +101,25 @@ class Bookmarks extends Component {
     };
 
     // 카테고리의 삭제 변화를 다룬다. 예를 들어, 북마크의 삭제 혹은 카테고리의 삭제.
-    handleRemove = (changedCategory) => {
-        if(typeof(changedCategory) !== 'string') {
-            this.setState({
-                categories: this.state.categories.map((category) => {
-                    if (category.categoryName === changedCategory.categoryName) {
-                        changedCategory.id = category.id;
-                        return changedCategory;
-                    } else
-                        return category;
-                })
-            });
-        }
-        else {
-            this.setState({
-                categories: this.state.categories.filter( category => category.categoryName !== changedCategory)
+    handleRemove = (categoryName, list) => {
+        list.map( (item) => {
+            console.log("remove from Content_Bookmark : " + item.title);
+        });
+
+        this.setState({
+            categories: this.state.categories.map((category) => {
+                if (category.categoryName === categoryName) {
+                    category.categoryName = categoryName;
+                    category.bookmarkList = list;
+                    return category;
+                } else
+                    return category;
             })
-        }
+        });
     };
 
     handleSubmit = (data) => {
-
         var bookmark = new Bookmark(data.url, data.title, data.summary, data.tag);
-
         var newCategories = this.state.categories.map( (category) => {
             if(data.categoryName === category.categoryName) {
                 category.bookmarkList = (category.bookmarkList).concat(bookmark);
@@ -141,7 +139,11 @@ class Bookmarks extends Component {
 
     showCategories() {
         return this.state.categories.map((item) => {
-                return <Bookmark_Category categoryName={item.categoryName} bookmarkList={item.bookmarkList} handleRemove={this.handleRemove} handleChange={this.handleChange}/>
+                return <Bookmark_Category
+                    categoryName={item.categoryName}
+                    bookmarkList={item.bookmarkList}
+                    handleRemove={this.handleRemove}
+                    handleChange={this.handleChange}/>
         })
     }
 

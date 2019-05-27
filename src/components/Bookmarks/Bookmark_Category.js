@@ -48,13 +48,12 @@ class Bookmark_Category extends  Component {
 
         this.setState({
             isChangingName: !this.state.isChangingName,
-        })
+        });
 
         //
-        if(!this.state.isChangingName) {
+        if(this.state.categoryName !== this.state.changedCategoryName) {
            this.props.handleChange(this.state);
         }
-
     };
 
     // 북마크 내용 편집 핸들링.
@@ -78,12 +77,24 @@ class Bookmark_Category extends  Component {
     };
 
     // 북마크 삭제 핸들링.
-    handleRemoveBookmark = (url) => {
-        this.setState({
-            bookmarkList: this.state.bookmarkList.filter( bookmark => bookmark.url !== url)
-        });
-        this.props.handleRemove(new Category(0, this.state.categoryName, this.state.bookmarkList));
+    handleRemoveBookmark = (bookmark) => {
+        const { handleRemove } = this.props;
+
+        var newList = this.state.bookmarkList.filter( (book) => {
+            if(book.title !== bookmark.title)
+                return book;
+            });
+
+        handleRemove(this.state.categoryName, newList);
     };
+
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        this.setState({
+            bookmarkList: nextProps.bookmarkList,
+            categoryName: nextProps.categoryName,
+        });
+    }
 
     render() {
         return (
@@ -111,7 +122,6 @@ class Bookmark_Category extends  Component {
                         ))}
                     </List>
                 </Collapse>
-
             </div>
         )
     }

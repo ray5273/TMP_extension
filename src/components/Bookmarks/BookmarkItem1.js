@@ -19,13 +19,13 @@ export class BookmarkItem1 extends  Component {
         };
     };
 
-    handleClick = () => {
-        window.location.href = this.props.url;
+    // 북마크 삭제 핸들링.
+    handleRemoveBookmark = (bookmark) => {
+        console.log("remove from BookmarkItem1 : " + bookmark.title);
+        this.props.handleRemoveBookmark(bookmark);
     };
 
-    handleRemoveBookmark = (url) => {
-        this.props.handleRemoveBookmark(url);
-    };
+    // 북마크 편집 창 visible 핸들링.
     handleEditBookmark = () => {
         this.setState({
             isEdit: !this.state.isEdit,
@@ -43,13 +43,10 @@ export class BookmarkItem1 extends  Component {
     render() {
         const { bookmark } = this.props;
         return (
-            <ListItem  key={bookmark.title} button onClick={() => {window.location.href = bookmark.url }} >
+            <ListItem  key={bookmark.title} button onClick={() => {window.parent.location.href = bookmark.url }} >
                 {// 북마크의 편집 버튼을 눌렀을 때, 편집을 할 수 있는 창을 생성.
                     !this.state.isEdit?
                         <div>
-                            <ListItemIcon>
-                                <StarBorder/>
-                            </ListItemIcon>
                             < ListItemText insert primary={bookmark.title} secondary={bookmark.summary} />
                             <ListItemSecondaryAction>
                                 <IconButton aria-label="Edit" onClick={(e) => {
@@ -60,7 +57,7 @@ export class BookmarkItem1 extends  Component {
                                 </IconButton>
                                 <IconButton aria-label="Delete" onClick={(e) => {
                                     e.stopPropagation();
-                                    this.handleRemoveBookmark(bookmark.url);
+                                    this.handleRemoveBookmark(bookmark);
                                 }}>
                                     <DeleteIcon/>
                                 </IconButton>
