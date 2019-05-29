@@ -56,8 +56,13 @@ class Tooltip extends Component {
 
         //이미지 hover시 이미지 옆에 툴팁 띄우기
         onMouseOver=(index)=>{
+            var e = window.event;
             var toolTipDiv = document.getElementById(`toolTipDivForImage${index}`)
-            toolTipDiv.style.display="block";
+            if(toolTipDiv.style.display=="none") {
+                toolTipDiv.style.top = window.scrollY + e.clientY + 'px';
+                toolTipDiv.style.left = window.scrollX + e.clientX + 'px';
+                toolTipDiv.style.display = "block";
+            }
 
         }
         //이미지 밖으로 나가면 툴팁 없애기
@@ -65,13 +70,12 @@ class Tooltip extends Component {
             setTimeout(function(){
                 var toolTipDiv = document.getElementById(`toolTipDivForImage${index}`)
                 toolTipDiv.style.display="none";
-            },1000);
+
+            },2000);
 
         }
         componentDidMount(){
            document.body.addEventListener('mouseup',this.addTooltip);
-
-
             var image = document.getElementsByTagName('img');
              for(var i = 0 ; i< image.length;i++){
                  var toolTipDiv = document.createElement('div');
@@ -86,8 +90,8 @@ class Tooltip extends Component {
                  var clientRect = image[i].getBoundingClientRect();
                  var clientTop = clientRect.top;
                  var clientLeft = clientRect.left;
-                 toolTipDiv.style.top = window.scrollY+ image[i].height+clientTop+'px';
-                 toolTipDiv.style.left = window.scrollX+ image[i].width+clientLeft-25+'px';
+                 toolTipDiv.style.top = '0px';
+                 toolTipDiv.style.left = '0px';
                  document.body.appendChild(toolTipDiv);
 
                  //여기서 component에 i 값을 넘겨주고 paint.js에서 i값을 받아서 onclick에 사용하자.
