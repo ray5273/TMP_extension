@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 //import Icon from '../../assets/marker-icon.png';
 import Icon from '../../assets/hlicon.png';
+import ReactDOM from 'react-dom';
+import HighlightMenu from './HighlightMenu';
 
 const Button = styled.button`
     background-color: ${props => props.color};
@@ -11,39 +13,82 @@ class Palette extends Component {
     constructor(props) {
         super(props);
         this.state={
-            hlNum: 0
+            hlNum: 0,
+            nowNode: '',
+            modifying: false,
+            toModify:''
         }
+    }
 
+    /* 수정할색깔이 바뀌면 현재 state node의 색을 바꾸려 시도중
+    componentWillUpdate(nextState) {
+        if (nextState.toModify != this.state.toModify) {
+          this.state.nowNode.setAttribute(
+            "style",
+            `background-color: ${nextState.toModify}; display: inline;`
+        );
+        }
+      }
+    */
+
+    //가장 최근에 select한 range를 state에 넣어두고 지울 수 있게(db없이 임시)
+    removeHighlight = () => {
+        console.log(this.state.nowNode);
+        //지우는코드 두줄. text를 따로 뽑은 뒤 element를 text로 대체하기
+        var toReplace = this.state.nowNode.textContent;
+        this.state.nowNode.replaceWith(toReplace);
+    }
+
+    retModifiedColor=(color)=>{
         this.setState({
-            hlNum: this.state.hlNum + 1,
-        });
+            toModify:color
+        })
     }
-    removeHighlight = (id) => {
+    addTool = (e, newNode)=> {
 
-    }
+            console.log("inside addTooltip Func");
+            var toolTipDiv = document.createElement('div');
+            toolTipDiv.setAttribute('id', 'toolTipDiv');
+
+            toolTipDiv.style.position = 'absolute';
+            toolTipDiv.style.top = window.scrollY+ e.clientY + "px";
+            // toolTipDiv.style.visibility = "visible";
+            toolTipDiv.style.left = window.scrollX+ e.clientX + "px";
+            // toolTipDiv.style.top = selection_pos.top + 40 + "px";
+            // toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
+            toolTipDiv.style.visibility = "visible";
+            toolTipDiv.style.display="block";
+            document.body.appendChild(toolTipDiv);
+            ReactDOM.render(<HighlightMenu rmfunc={this.removeHighlight}/>, toolTipDiv); //ret={this.retModifiedColor}
+        
+/* 
+       // Close the bubble when we click on the screen.
+        document.addEventListener('mousedown', function (e) {
+            //hidden시 a태그를 클릭해도 a tag가 실행이 안되는 문제 settimeout을 통해서 해결!
+            setTimeout(function(){
+                toolTipDiv.style.display='none';
+            },200);
+
+        }, false);
+*/
+    };
+
+
+
     addHighlight = (e, color) => {
         var selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
         var newNode = document.createElement("span");
 
-        var newtext = document.createTextNode(" 동적으로 추가되는 텍스트. ");
-        var para = document.createElement("span");
-        para.appendChild(newtext);
-
         if (selRange) {
-            console.log("selobj:",selObj);
-            console.log("selRange:", selRange);
-            console.log("selRange.extractContents:::", selRange.extractContents);
-            console.log("parent of selRange:", selRange.parentElement);
-        
             newNode.setAttribute(
                 "style",
                 `background-color: ${color}; display: inline;`
             );
             newNode.setAttribute('id', `highlight${this.state.hlNum}`);
-            newNode.addEventListener('click', ()=> {
-                var x = newNode.textContent;
-                newNode.replaceWith(x);
+            newNode.addEventListener('click', (e)=> {
+                this.addTool(e, newNode);
+                console.log("clickeventlistnenenened");
             } );
             //newNode.appendChild(selRange.extractContents());
             //selRange.insertNode(newNode);
@@ -52,6 +97,11 @@ class Palette extends Component {
         else {
             console.log("else else else");
         }
+        
+        this.setState({
+            hlNum: this.state.hlNum + 1,
+            nowNode:newNode
+        });
     }
 
     
