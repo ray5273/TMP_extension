@@ -8,6 +8,7 @@ import LoginButton from "./LoginButton";
 import MainMenu from "../MainMenu";
 import Signin from '../Signin';
 
+
 const shadow = (weight) => {
     const shadows = [
         css`box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);`,
@@ -152,3 +153,4 @@ class Header extends Component {
 }
 
 export default Header;
+

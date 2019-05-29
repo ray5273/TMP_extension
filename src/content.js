@@ -61,6 +61,7 @@ test.setAttribute("id",'menu-bar');
 document.body.insertBefore(test, document.body.firstChild);
 ReactDOM.render(<MenuBar />, test);
 
+
 //app.style.display = "none";
 iframe.style.display = "none";
 

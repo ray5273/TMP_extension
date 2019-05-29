@@ -20,7 +20,7 @@
 }
 #menu-bar {
   background-color: transparent;
-  display:flex;
+  display:flex !important;
   width:200px;
   height:30px;
   right:0;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Icon from '../../assets/marker-icon.png';
+//import Icon from '../../assets/marker-icon.png';
+import Icon from '../../assets/hlicon.png';
 
 const Button = styled.button`
     background-color: ${props => props.color};
@@ -24,6 +25,11 @@ class Palette extends Component {
         var selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
         var newNode = document.createElement("span");
+
+        var newtext = document.createTextNode(" 동적으로 추가되는 텍스트. ");
+        var para = document.createElement("span");
+        para.appendChild(newtext);
+
         if (selRange) {
             console.log("selobj:",selObj);
             console.log("selRange:", selRange);
@@ -35,7 +41,10 @@ class Palette extends Component {
                 `background-color: ${color}; display: inline;`
             );
             newNode.setAttribute('id', `highlight${this.state.hlNum}`);
-            newNode.addEventListener('click', ()=> {newNode.replaceWith(selObj.toString())} );
+            newNode.addEventListener('click', ()=> {
+                var x = newNode.textContent;
+                newNode.replaceWith(x);
+            } );
             //newNode.appendChild(selRange.extractContents());
             //selRange.insertNode(newNode);
             selRange.surroundContents(newNode);
@@ -65,3 +74,16 @@ class Palette extends Component {
 
 
 export default Palette;
+
+
+
+
+
+
+
+
+
+
+
+
+

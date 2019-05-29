@@ -153,7 +153,7 @@ module.exports = function(webpackEnv) {
       // initialization, it doesn't blow up the WebpackDevServer client, and
       // changing JS code would still trigger a refresh.
     ].filter(Boolean),
-    content: ['./src/content.js','./src/components/SimSearch.js']
+    content: ['./src/content.js','./src/components/SimSearch.js'] //, './src/components/MenuBar.js'
     
     },
     output: {
