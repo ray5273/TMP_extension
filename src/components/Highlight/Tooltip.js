@@ -85,11 +85,8 @@ class Tooltip extends Component {
                  toolTipDiv.style.visibility = 'visible';
                  toolTipDiv.style.position = 'absolute';
                  toolTipDiv.style.display="none";
-
+                 toolTipDiv.style.zIndex = 10000;
                  //TODO: 위치를 잘 조정해 보자
-                 var clientRect = image[i].getBoundingClientRect();
-                 var clientTop = clientRect.top;
-                 var clientLeft = clientRect.left;
                  toolTipDiv.style.top = '0px';
                  toolTipDiv.style.left = '0px';
                  document.body.appendChild(toolTipDiv);
