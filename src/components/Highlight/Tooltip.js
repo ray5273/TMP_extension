@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Palette from './Palette';
-
+import Paint from './Paint'
 class Tooltip extends Component {
 
     constructor(props) {
@@ -11,8 +11,6 @@ class Tooltip extends Component {
             MemoLeft :0,
         }
     }
-
-
         //텍스트 드래그시 마우스 좌표에 툴팁 띄우기
         addTooltip = ()=> {
             if(document.getElementById('toolTipDiv')==null) {
@@ -54,9 +52,47 @@ class Tooltip extends Component {
                 },200);
     
             }, false);
-        };      
+        };
+
+        //이미지 hover시 이미지 옆에 툴팁 띄우기
+        onMouseOver=(index)=>{
+            var toolTipDiv = document.getElementById(`toolTipDivForImage${index}`)
+            toolTipDiv.style.display="block";
+
+        }
+        //이미지 밖으로 나가면 툴팁 없애기
+        onMouseOut=(index)=>{
+            setTimeout(function(){
+                var toolTipDiv = document.getElementById(`toolTipDivForImage${index}`)
+                toolTipDiv.style.display="none";
+            },1000);
+
+        }
         componentDidMount(){
-            document.body.addEventListener('mouseup',this.addTooltip);
+           document.body.addEventListener('mouseup',this.addTooltip);
+
+
+            var image = document.getElementsByTagName('img');
+             for(var i = 0 ; i< image.length;i++){
+                 var toolTipDiv = document.createElement('div');
+                 image[i].addEventListener('mouseover',this.onMouseOver.bind(this,i));
+                 image[i].addEventListener('mouseout',this.onMouseOut.bind(this,i));
+                 toolTipDiv.setAttribute('id', `toolTipDivForImage${i}`);
+                 toolTipDiv.style.visibility = 'visible';
+                 toolTipDiv.style.position = 'absolute';
+                 toolTipDiv.style.display="none";
+
+                 //TODO: 위치를 잘 조정해 보자
+                 var clientRect = image[i].getBoundingClientRect();
+                 var clientTop = clientRect.top;
+                 var clientLeft = clientRect.left;
+                 toolTipDiv.style.top = window.scrollY+ image[i].height+clientTop+'px';
+                 toolTipDiv.style.left = window.scrollX+ image[i].width+clientLeft-25+'px';
+                 document.body.appendChild(toolTipDiv);
+
+                 //여기서 component에 i 값을 넘겨주고 paint.js에서 i값을 받아서 onclick에 사용하자.
+                 ReactDOM.render(<Paint imageIndexFromParent={i}/>, toolTipDiv);
+             }
         }
     render() {
         return (

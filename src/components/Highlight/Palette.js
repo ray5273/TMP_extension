@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Icon from 'assets/marker-icon.png';
+import Icon from '../../assets/marker-icon.png';
 
 const Button = styled.button`
     background-color: ${props => props.color};

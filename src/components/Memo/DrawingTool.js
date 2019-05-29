@@ -26,7 +26,7 @@ class DrawingTool extends Component {
 
         //이미지를 올리는 기능 존재
         //
-        var  storage = Firebase.storage();
+        var storage = Firebase.storage();
         var storage_ref = storage.ref();
         //TODO:currentUser 인식 안되는 문제 - 현재는 우리 어플 로그인 인식이 안되어도 파일이 올려지도록,
         var auth = Firebase.auth().currentUser;
@@ -37,7 +37,6 @@ class DrawingTool extends Component {
 
                //TODO: User 인식 후 storage directory 변경해주기
                //TODO: storage directory 변경 후 metadata도 firestore에 저장 해주어야할듯
-               //TODO: 사이트 내의 image를 클립보드 통해서 drawing tool 에 올리는 기능 추가
                var dataUrl = image.asDataURL();
                var blob = dataURItoBlob(dataUrl);
                var dataRef = storage_ref.child('data.png');
