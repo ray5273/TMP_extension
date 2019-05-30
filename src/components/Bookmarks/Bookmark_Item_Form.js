@@ -1,24 +1,37 @@
 /*global chrome*/
 import React, { Component } from 'react';
+
 class Bookmark_Add_Form extends Component {
 
     constructor(props) {
         super(props);
+        var getUrl = '';
 
         this.state = {
             categoryName: props.categories[0].categoryName,
             title: '',
-            url: window.top.location.href,
+            url:  '',
             summary:'',
             tag:''
-        }
+        };
+        console.log("getUrl :" + getUrl);
     };
+
+    componentDidMount(): void {
+        chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
+            var tabUrl = tabs[0].url;
+            console.log("tabUrl :" + tabUrl);
+            this.setState({
+                url: tabUrl
+            })
+        }.bind(this));
+    }
+
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
-
-};
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
