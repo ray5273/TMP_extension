@@ -1,10 +1,11 @@
 
 export class Bookmark {
-    constructor(url= '', title= '', summary='', tag='') {
+    constructor(url= '', title= '', summary='', tag='', html = '') {
         this._url = url;
         this._title = title;
         this._summary = summary;
         this._tag = tag;
+        this._html = html;
     }
     get url() {
         return this._url;
@@ -22,6 +23,10 @@ export class Bookmark {
         return this._tag;
     }
 
+    get html() {
+        return this._html;
+    }
+
     set url(value) {
         this._url = value;
     }
@@ -36,6 +41,10 @@ export class Bookmark {
 
     set tag(value) {
         this._tag = value;
+    }
+
+    set html(value) {
+        this._html = value;
     }
 }
 

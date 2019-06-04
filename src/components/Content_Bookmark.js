@@ -8,25 +8,6 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import {Bookmark, Category} from './Bookmarks/BookmarkStructures';
 
-const styles = theme => ({
-    main: {
-        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
-    },
-
-    submit: {
-        marginTop: theme.spacing.unit * 3,
-    },
-
-    button: {
-      margin:theme.spacing.unit,
-    },
-
-});
-
 const BookmarkButton = styled(Button)`
     variant: outlined;
     color: primary;
@@ -42,11 +23,12 @@ class Bookmarks extends Component {
         this.state = {
             addBookmark: false,
             categories: this.getCategoryListFromFirebase(),
-
+            openRemoveCategory: false
         }
     };
 
     // Content_Bookmark 초기 생성 시 fb에서 리스트를 가져옴.
+    // TODO: 파이어베이스 연동을 해야함. 북마크 관련해서 파이어베이스 연동을 아직 안함.
     getCategoryListFromFirebase = () => {
         var b1 = new Bookmark('https://www.naver.com', '네이버','testing....', '#연습');
         var b2 = new Bookmark('https://www.google.com', '구글','testing....', "#연습");
@@ -90,9 +72,9 @@ class Bookmarks extends Component {
         this.setState({
             categories: this.state.categories.map((category)=> {
                 if(category.categoryName === changedCategory.categoryName) {
-                    category.categoryName = changedCategory.changedCategoryName;
-                    category.bookmarkList = changedCategory.bookmarkList;
-                    return category;
+                  //  category.categoryName = changedCategory.changedCategoryName;
+                  //  category.bookmarkList = changedCategory.bookmarkList;
+                    return new Category(category.id, changedCategory.changedCategoryName, changedCategory.bookmarkList);
                 }
                 else
                     return category;
@@ -118,11 +100,24 @@ class Bookmarks extends Component {
         });
     };
 
+    // 카테고리 삭제
+    handleRemoveCategory = (categoryName) => {
+        console.log("removed : " + categoryName);
+        this.setState({
+            openRemoveCategory: !this.state.openRemoveCategory,
+            categories: this.state.categories.filter( cate => { if(cate.categoryName !== categoryName) { console.log(cate.categoryName); return cate;}
+            })
+        });
+        this.state.categories.map((c) => console.log("from removeCategory : " + c.categoryName));
+    };
+
     handleSubmit = (data) => {
-        var bookmark = new Bookmark(data.url, data.title, data.summary, data.tag);
+        var bookmark = new Bookmark(data.url, data.title, data.summary, data.tag, data.html);
+        console.log("HTML from Content_bookmark : arg : \n"+ data.html);
+
         var newCategories = this.state.categories.map( (category) => {
             if(data.categoryName === category.categoryName) {
-                category.bookmarkList = (category.bookmarkList).concat(bookmark);
+                category.bookmarkList = (category.bookmarkList).concat(new Bookmark(data.url, data.title, data.summary, data.tag, data.html));
             }
             return category;
         });
@@ -137,35 +132,37 @@ class Bookmarks extends Component {
         }
     };
 
+
     showCategories() {
         return this.state.categories.map((item) => {
-                return <Bookmark_Category
+           // console.log("from showCategories : " + item.categoryName);
+            return <Bookmark_Category
                     categoryName={item.categoryName}
                     bookmarkList={item.bookmarkList}
+                    openRemoveCategory = {this.state.openRemoveCategory}
+                    handleRemoveCategory = {this.handleRemoveCategory}
                     handleRemove={this.handleRemove}
                     handleChange={this.handleChange}/>
         })
     }
 
     render() {
-        const { classes } = this.props;
         return (
             <div >
                 <div>
                     <BookmarkButton onClick={this.handleCreateFolder}>폴더 생성</BookmarkButton>
-                    <BookmarkButton>폴더 삭제</BookmarkButton>
+                    <BookmarkButton onClick={() => {
+                        this.setState({openRemoveCategory: !this.state.openRemoveCategory});
+                        }}>폴더 삭제</BookmarkButton>
                     <BookmarkButton onClick={this.handleAddBookmark}>북마크 추가</BookmarkButton>
                 </div>
-
-                <main className={classes.main}>
-                    <div>
-                        { this.state.addBookmark ? <Bookmark_Add_Form handleSubmit={this.handleSubmit} categories={this.state.categories} />  : "" }
-                    </div>
-                    <br/>
-                    <div>
-                        { this.showCategories() }
-                    </div>
-                </main>
+                <div>
+                    { this.state.addBookmark ? <Bookmark_Add_Form handleSubmit={this.handleSubmit} categories={this.state.categories} />  : "" }
+                </div>
+                <br/>
+                <div>
+                    { this.showCategories() }
+                </div>
             </div>
         );
     };
@@ -175,4 +172,4 @@ Bookmarks.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Bookmarks);
+export default Bookmarks;

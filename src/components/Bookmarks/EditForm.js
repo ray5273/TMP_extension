@@ -29,7 +29,8 @@ export class EditForm extends Component {
             title: props.bookmark.title,
             summary: props.bookmark.summary,
             tag: props.bookmark.tag,
-            url: props.bookmark.url
+            url: props.bookmark.url,
+            html: props.bookmark.html
         }
     };
 

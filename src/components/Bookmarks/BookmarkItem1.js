@@ -5,6 +5,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import StarBorder from "@material-ui/core/SvgIcon/SvgIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
+import Launch from "@material-ui/icons/Launch";
+import BookmarkBorder from '@material-ui/icons/BookmarkBorder';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { EditForm } from './EditForm';
@@ -39,14 +41,22 @@ export class BookmarkItem1 extends  Component {
         });
         this.props.handleEditBookmark(data);
     };
+    handleOpenHTML = (html) => {
+        var win = window.open('');
+        console.log("from handleOpenHTML : \n"+html);
+        win.document.body.innerHTML = html;
+    };
 
     render() {
         const { bookmark } = this.props;
         return (
-            <ListItem  key={bookmark.title} button onClick={() => {window.parent.location.href = bookmark.url }} >
+            <ListItem  key={bookmark.title} button onClick={() => window.open(bookmark.url) } >
                 {// 북마크의 편집 버튼을 눌렀을 때, 편집을 할 수 있는 창을 생성.
                     !this.state.isEdit?
                         <div>
+                            <ListItemIcon>
+                                <BookmarkBorder/>
+                            </ListItemIcon>
                             < ListItemText insert primary={bookmark.title} secondary={bookmark.summary} />
                             <ListItemSecondaryAction>
                                 <IconButton aria-label="Edit" onClick={(e) => {
@@ -54,6 +64,14 @@ export class BookmarkItem1 extends  Component {
                                     this.handleEditBookmark();
                                 }}>
                                     <EditIcon/>
+                                </IconButton>
+                                <IconButton aria-label="OpenWebpage" onClick={(e) => {
+                                    e.stopPropagation();
+                                    console.log("before handleOpenHTML : \n"+bookmark.html);
+
+                                    this.handleOpenHTML(bookmark.html);
+                                }}>
+                                    <Launch/>
                                 </IconButton>
                                 <IconButton aria-label="Delete" onClick={(e) => {
                                     e.stopPropagation();

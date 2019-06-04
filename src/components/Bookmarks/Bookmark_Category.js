@@ -7,14 +7,12 @@ import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-
 import IconButton from '@material-ui/core/IconButton';
+import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import EditIcon from '@material-ui/icons/Edit'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import {Bookmark, Category} from './BookmarkStructures';
 import styled from "styled-components";
 import { BookmarkItem1 } from './BookmarkItem1';
-import {EditForm} from './EditForm';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const ChangeTitle = styled.input`
     border: none;
@@ -27,22 +25,22 @@ class Bookmark_Category extends  Component {
     constructor(props) {
         super(props);
         // 차 후 DB 에서 목록을 가져오는 것을 추가해야한다.
+
         this.state = {
             isChangingName: false,
             categoryName : props.categoryName,
             changedCategoryName: props.categoryName,
             bookmarkList: props.bookmarkList,
             open: false,
-
+            openRemoveCategory: false,
         };
     }
 
-    // 클릭마다, 북마크 리스트 open / close
+// 클릭마다, 북마크 리스트 open / close
     handleClick = () => {
         this.setState(state => ({ open: !state.open }));
     };
 
-    // 카테고리명 변경 해들링. (아직 미완성.)
     handleEditCategoryName = (e) => {
         e.stopPropagation();
 
@@ -50,7 +48,6 @@ class Bookmark_Category extends  Component {
             isChangingName: !this.state.isChangingName,
         });
 
-        //
         if(this.state.categoryName !== this.state.changedCategoryName) {
            this.props.handleChange(this.state);
         }
@@ -88,11 +85,12 @@ class Bookmark_Category extends  Component {
         handleRemove(this.state.categoryName, newList);
     };
 
-
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        // console.log("nextCategoryName : " + nextProps.categoryName);
         this.setState({
             bookmarkList: nextProps.bookmarkList,
             categoryName: nextProps.categoryName,
+            changedCategoryName: nextProps.categoryName
         });
     }
 
@@ -101,16 +99,26 @@ class Bookmark_Category extends  Component {
             <div>
                 <ListItem button onClick={this.handleClick} id='list' >
                     <ListItemIcon>
-                        <InboxIcon />
+                        <BookmarksIcon />
                     </ListItemIcon>
                         {!this.state.isChangingName ?
                             <ListItemText insert primary={this.state.changedCategoryName} />
-                            : <ChangeTitle type='text' id='changedCategoryName' value={ this.state.changedCategoryName } onChange={(e)=>{this.setState({[e.target.id]: e.target.value})}} autoFocus placeholder='카테고리명을 입력하세요.'/>}
-                    <IconButton aria-label="Edit" onClick={this.handleEditCategoryName}>
-                        <EditIcon/>
-                    </IconButton>
+                            : <ChangeTitle type='text' id='changedCategoryName' value={ this.state.changedCategoryName }
+                                           onChange={(e)=>{this.setState({[e.target.id]: e.target.value})}}
+                                           autoFocus placeholder='카테고리명을 입력하세요.'/>
+                        }
+                        {this.props.openRemoveCategory ?
+                        <IconButton aria-label="Delete" onClick={(e) => { e.stopPropagation(); this.props.handleRemoveCategory(this.state.categoryName)
+                        }}>
+                            <DeleteIcon/>
+                        </IconButton>
+                        :
+                        <IconButton aria-label="Edit" onClick={this.handleEditCategoryName}>
+                            <EditIcon/>
+                        </IconButton>
+                        }
 
-                    {this.state.open ? <ExpandLess /> : <ExpandMore />}
+                        {this.state.open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={this.state.open} timeout = "auto" unmountOnExit>
                     <List component="div" disablePadding >
