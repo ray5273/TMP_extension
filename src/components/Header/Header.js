@@ -1,3 +1,4 @@
+/*global chrome*/
 import React, { Component } from 'react';
 import firebase from '../../Firebase.js'
 import styled, { css } from 'styled-components';
@@ -111,6 +112,13 @@ class Header extends Component {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({ user: user });
+                var curUser = user.uid;
+                console.log("user value:"+curUser);
+                chrome.runtime.sendMessage({
+                    contentScriptQuery:"getID",
+                    id:curUser
+                });
+
             } else {
                 this.props.history.push('index.html');
             }

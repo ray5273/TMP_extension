@@ -75,8 +75,9 @@ class MenuBar extends Component {
         if (firebaseui.auth.AuthUI.getInstance() == null) { 
             console.log("유저가 null");
         }
-        else console.log("유저가 있음");
-        
+        else {
+            console.log("유저가 있음");
+        }
     }
 
 
