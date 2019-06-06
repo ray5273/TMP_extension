@@ -41,6 +41,23 @@ document.body.appendChild(app);
 ReactDOM.render(<SignIn />, app);
 */
 
+//여기서 background script의 메세지를 받고
+//위에 MemoButton을 DB에서 가져와서 띄워주는 형식으로 해야할것 같다.
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if( request.message === "clicked_browser_action") {
+            toggle();
+            chrome.runtime.sendMessage({
+                contentScriptQuery:"queryPrice"
+            });
+            console.log("browser action ended");
+        }
+        if(request.message==="getID"){
+            uid = request.id;
+            ReactDOM.render(<MenuBar uid={request.id}/>, test);
+        }
+    }
+);
 
 var iframe = document.createElement('iframe');
 iframe.style.background = "white";
@@ -63,7 +80,7 @@ document.body.appendChild(iframe);
 const test = document.createElement('div');
 test.setAttribute("id",'menu-bar');
 document.body.insertBefore(test, document.body.firstChild);
-ReactDOM.render(<MenuBar />, test);
+console.log("content.js uid", uid);
 
 
 //app.style.display = "none";
@@ -79,22 +96,6 @@ function toggle(){
 }
 
 
-//여기서 background script의 메세지를 받고
-//위에 MemoButton을 DB에서 가져와서 띄워주는 형식으로 해야할것 같다.
-chrome.runtime.onMessage.addListener(
-   function(request, sender, sendResponse) {
-      if( request.message === "clicked_browser_action") {
-        toggle();
-        chrome.runtime.sendMessage({
-            contentScriptQuery:"queryPrice"
-        });
-          console.log("browser action ended");
-      }
-      if(request.message==="getID"){
-          uid = request.id;
-      }
-   }
-);
 
 /*
 function toggle(){
