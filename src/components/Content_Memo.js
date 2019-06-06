@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Item from './Item';
 import SearchBar from 'material-ui-search-bar';
+import firebase from '../Firebase';
+import 'firebase/firestore';
 
 const styles = theme => ({
     main: {
@@ -41,9 +43,17 @@ class Memos extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        memos:[],
-        searchedMemos:[]
-      }
+          memos:[],
+          searchedMemos:[],
+          user:null
+      };
+      firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user: user });
+            } else {
+                this.setState({ user: user });
+            }
+      });
     }
     componentDidUpdate(oldProps) {
         const newProps = this.props

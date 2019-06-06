@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import firebase from '../Firebase';
+import 'firebase/firestore';
 
 class SimSearch extends Component {
     constructor(props) {
@@ -8,6 +10,20 @@ class SimSearch extends Component {
             abc: document.getElementsByName('q')[0].value
         }
     }
+    componentDidMount(): void {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user: user });
+                var curUser = user.uid;
+                console.log("SimSearch: User value:"+curUser);
+
+            } else {
+                this.setState({ user: user });
+                console.log("SimSearch: Signed Out");
+            }
+        });
+    }
+
     render() {
         return (
             <React.Fragment>

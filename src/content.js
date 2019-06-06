@@ -7,6 +7,10 @@ import "./content.css";
 import MainMenu from './components/MainMenu';
 import MenuBar from './components/MenuBar';
 import { testNameToKey } from 'jest-snapshot/build/utils';
+import firebase from './Firebase';
+import 'firebase/firestore';
+
+var uid = null;
 
 class Main extends Component {
     render() {
@@ -84,13 +88,15 @@ chrome.runtime.onMessage.addListener(
         chrome.runtime.sendMessage({
             contentScriptQuery:"queryPrice"
         });
-        console.log("browser action ended");
+          console.log("browser action ended");
       }
-      //
+      if(request.message==="getID"){
+          uid = request.id;
+      }
    }
 );
 
-/* 
+/*
 function toggle(){
    if(app.style.display === "none"){
      app.style.display = "block";

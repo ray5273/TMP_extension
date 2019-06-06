@@ -20,6 +20,8 @@ import Tabs from "@material-ui/core/Tabs";
 import SwipeableViews from 'react-swipeable-views';
 import SearchBar from 'material-ui-search-bar'
 import '../content.css';
+import firebase from '../Firebase';
+import 'firebase/firestore';
 
 //이쪽 UI 제대로 바꾸기 search , button , icons 얘네들 다 추가하기
 //material-ui appbar로 검색하면 될듯
@@ -96,7 +98,8 @@ class CustomizedTabs extends React.Component {
     state = {
         value: 0,
         search_val: "Search",
-        keyword:""
+        keyword:"",
+        uid: null
     };
 
     handleChange = (event, value) => {
@@ -105,7 +108,17 @@ class CustomizedTabs extends React.Component {
     handleChangeIndex = index => {
         this.setState({ value: index });
     };
- 
+
+    componentDidMount(): void {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user: user });
+            } else {
+                this.setState({ user: user });
+            }
+        });
+    }
+
 
     render() {
         const { classes,theme } = this.props;

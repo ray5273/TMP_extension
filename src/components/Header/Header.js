@@ -113,12 +113,10 @@ class Header extends Component {
             if (user) {
                 this.setState({ user: user });
                 var curUser = user.uid;
-                console.log("user value:"+curUser);
                 chrome.runtime.sendMessage({
                     contentScriptQuery:"getID",
                     id:curUser
                 });
-
             } else {
                 this.props.history.push('index.html');
             }
