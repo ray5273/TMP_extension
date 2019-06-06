@@ -1,3 +1,4 @@
+/*global chrome*/
 import React, { Component } from 'react';
 import DomMemo from './Memo/DomMemo';
 import HighLight from './Highlight/Tooltip';
@@ -15,6 +16,8 @@ class MenuBar extends Component {
         super(props);
         this.state = {
             words:{},
+            url:'',
+            data:''
         }
     }
 /* 
@@ -70,14 +73,45 @@ class MenuBar extends Component {
     */
         
     componentDidMount() {
-        //this.getData();
-        //this.test();
+        console.log("uiduiduiduiduiduid",this.props.uid);
+        /*
         if (firebaseui.auth.AuthUI.getInstance() == null) { 
             console.log("유저가 null");
         }
         else {
             console.log("유저가 있음");
         }
+         */
+
+        /* 
+        chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
+            var tabUrl = tabs[0].url;
+            console.log("tabUrl :" + tabUrl);
+            this.setState({
+                url: tabUrl
+            });
+        }.bind(this));
+        */
+
+        var db = firebase.firestore();
+        var docRef = db.collection("memo").doc("a");
+
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+
+                this.setState({
+                    data: doc.data()
+                })
+                console.log(this.state.data);
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+        console.log()
     }
 
 
