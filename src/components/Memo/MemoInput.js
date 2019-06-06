@@ -1,7 +1,7 @@
 //메모 인풋
 
 import React, { Component } from 'react';
-
+import firebase from '../../Firebase';
 class MemoInput extends Component {
     constructor(props) {
         super(props);
@@ -32,6 +32,23 @@ class MemoInput extends Component {
         toParent[0] = this.state.test;
         toParent[1] = true;
         this.props.callbackFromParent(toParent);
+
+        var db = firebase.firestore();
+        db.collection("memo").doc("a").set({
+            memos: [{
+                text:this.state.test,
+                posX: 3,
+                posY: 4,
+            },
+            {
+                text:this.state.test+"asdgsdg",
+                posX: 37,
+                posY: 43,
+            }]
+        }).then(function() {
+            console.log("Document successfully written!");
+        });
+
     };
     handleRevise = ()=>{
         console.log("handleRevise Mode");
@@ -65,5 +82,7 @@ class MemoInput extends Component {
         );
     }
 }
-
+MemoInput.defaultProps={
+    memos:'',
+}
 export default MemoInput;

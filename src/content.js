@@ -63,7 +63,9 @@ document.body.appendChild(iframe);
 const test = document.createElement('div');
 test.setAttribute("id",'menu-bar');
 document.body.insertBefore(test, document.body.firstChild);
-ReactDOM.render(<MenuBar />, test);
+
+console.log("in content.js",uid);
+ReactDOM.render(<MenuBar uid={uid} />, test);
 
 
 //app.style.display = "none";
