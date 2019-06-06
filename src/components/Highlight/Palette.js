@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Icon from '../../assets/hlicon.png';
 import ReactDOM from 'react-dom';
 import HighlightMenu from './HighlightMenu';
+import Firebase from '../../Firebase'
 
 const Button = styled.button`
     background-color: ${props => props.color};
@@ -79,6 +80,8 @@ class Palette extends Component {
         var selObj = window.getSelection();
         var selRange = selObj.getRangeAt(0);
         var newNode = document.createElement("span");
+
+        console.log("in addhighlight!");
 
         if (selRange) {
             newNode.setAttribute(

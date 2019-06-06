@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Painterro from 'painterro_tmp'
 import Firebase from '../../Firebase'
+import 'firebase/firestore'
 //data file to blob file
 function dataURItoBlob(dataURI)
 {
@@ -31,7 +32,25 @@ class DrawingTool extends Component {
         //TODO:currentUser 인식 안되는 문제 - 현재는 우리 어플 로그인 인식이 안되어도 파일이 올려지도록,
         var auth = Firebase.auth().currentUser;
         console.log(auth);
-
+        // const projectID = 'jsp-tmp';
+        // const key = 'AIzaSyB_d7o3MIvbgpLik2LPy7Mze_sQ2Or4NgE';
+        // const doc = 'players/8SB90IpAbzCmIH7N5tkG';
+        // const url = `https://firestore.googleapis.com/v1beta1/projects/${projectID}/databases/(default)/documents/${doc}?key=${key}`;
+        //
+        // // Use fetch to request the API information
+        // fetch(url)
+        //     .then(response => response.json())
+        //     .then(json => console.log(json));
+        var database = Firebase.firestore();
+        database.collection("cdkfdkfds").doc("LAskdakdjsd").set({
+            name: "Los Angelesddd",
+            state: "CAasdsd",
+            country: "USAs"
+        }).then(function() {
+            console.log("Document successfully written!");
+        }).catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
        var ptro = Painterro({
            saveHandler : function(image,done){
 
