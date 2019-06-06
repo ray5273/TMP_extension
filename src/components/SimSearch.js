@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import Firebase from '../Firebase'
 class SimSearch extends Component {
     constructor(props) {
         super(props);
@@ -8,6 +8,23 @@ class SimSearch extends Component {
             abc: document.getElementsByName('q')[0].value
         }
     }
+    getData = () =>{
+        var db = Firebase.firestore();
+        var uid = "guest";
+        var docRef = db.collection("User").doc(uid).collection("Memo").doc("VkVgZ5yhz6lZgMmiNgPv");
+
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+    };
+
     render() {
         return (
             <React.Fragment>
@@ -18,6 +35,7 @@ class SimSearch extends Component {
                     <div className="search3">
                         <div className="search4"> 이건 제목 이건 제목 이건 제목 </div>
                         <div> {this.state.abc}</div>
+                        <button onClick={this.getData}>button</button>
                     </div>
                     <div className="search3">
                         <div className="search4"> 이건 제목 </div>
