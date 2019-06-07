@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 import DomMemo from './Memo/DomMemo';
 import HighLight from './Highlight/Tooltip';
 import DrawingTool from './Memo/DrawingTool'
-import axios from 'axios';
-import "firebase/auth";
-import firebase from '../Firebase.js'
+import Firebase from '../Firebase.js'
 import * as firebaseui from 'firebaseui'
+import "firebase/auth";
+import "firebase/storage";
+import "firebase/firestore";
+import DragImage from "./Memo/DragImage"
 import ReactDOM from 'react-dom';
 
 //const URL = "https://tmp-test-1a336.firebaseio.com/";
@@ -20,98 +22,59 @@ class MenuBar extends Component {
             data:''
         }
     }
-/* 
-    test = () => {
-        axios.post(`${URL}/test.json`,  {
-            test2: "doing test~~~",
-        })
-            .then(res => {
-                console.log(res)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-
-    testGet=()=>{
-        axios.get(`${URL}/test.json`)
-            .then(res => {
-                   console.log(res);
-                console.log("content :::", res["config"]);
-            })
-            .catch(e => { console.log(e); });
-        
-        
-    }
-    getData() {
-        fetch(`${URL}/test.json`).then(res => {
-        if(res.status != 200) {
-        throw new Error(res.statusText);
-        }
-        return res.json();
-        }).then(words => this.setState({words: words}));
-    }
-    */
-
-    
-    /* 
-    postData(word) {
-        return fetch(`${URL}/test.json`, {
-        method: 'POST',
-        body: JSON.stringify(word)
-        }).then(res => {
-        if(res.status != 200) {
-        throw new Error(res.statusText);
-        }
-        return res.json();
-        }).then(data => {
-        let nextState = this.state.words;
-        nextState[data.name] = word;
-        this.setState({words: nextState});
-        });
-    }
-    */
         
     componentDidMount() {
         console.log("uiduiduiduiduiduid",this.props.uid);
-        /*
-        if (firebaseui.auth.AuthUI.getInstance() == null) { 
-            console.log("유저가 null");
-        }
-        else {
-            console.log("유저가 있음");
-        }
-         */
 
-        /* 
-        chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
-            var tabUrl = tabs[0].url;
-            console.log("tabUrl :" + tabUrl);
-            this.setState({
-                url: tabUrl
+        let storage = Firebase.storage();
+        let storageRef = storage.ref();
+        console.log("component did update!");
+        let i=0;
+        for(let i =0;i<10;i++){
+            //let i=1;
+            console.log("iteration:"+i);
+            let imageMemo = document.createElement('div');
+            let end = false;
+            imageMemo.setAttribute('id', `imageMemo${i}`);
+            imageMemo.style.position = 'absolute';
+            imageMemo.style.width = "300px";
+            //sticky memo 생성위치 조정
+            imageMemo.style.top = window.scrollY + 'px';
+            imageMemo.style.left = window.scrollX + this.state.t * 50 + 'px';
+            // stickyMemo.style.top = `${this.state.MemoTop}px`;
+            // stickyMemo.style.left = `${this.state.MemoLeft}px`;
+            //stickymemo를 z-index 통해 최상위로 올려줌
+            imageMemo.style.zIndex = 2147483647;
+            let real_image = storageRef.child(`data${i}.png`);
+            console.log("real image : " + real_image);
+            //        if(real_image==null)
+            //            break;
+            document.body.appendChild(imageMemo);
+            real_image.getDownloadURL().then(function (url) {
+                // `url` is the download URL for 'images/stars.jpg'
+
+                // This can be downloaded directly:
+                var xhr = new XMLHttpRequest();
+                xhr.responseType = 'blob';
+                xhr.onload = function (event) {
+                    var blob = xhr.response;
+                };
+                xhr.open('GET', url);
+                xhr.send();
+                console.log("get image data!");
+                // Or inserted into an <img> element:
+                //var img = document.getElementById('imageMemo');
+                ReactDOM.render(<DragImage push_src={url} push_x={window.scrollX+50*i} push_y={window.scrollY+50*i}/>, document.getElementById(`imageMemo${i}`));
+            }).catch(function (error) {
+                // Handle any errors
+                console.log("cannot get image data!");
+                end = true;
             });
-        }.bind(this));
-        */
+            if(end)
+                break;
+            //}
+        }
 
-        var db = firebase.firestore();
-        var docRef = db.collection("memo").doc("a");
-
-        docRef.get().then((doc) => {
-            if (doc.exists) {
-                console.log("Document data:", doc.data());
-
-                this.setState({
-                    data: doc.data()
-                })
-                console.log(this.state.data);
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
-        console.log()
     }
 
 

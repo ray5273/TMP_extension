@@ -1,7 +1,9 @@
+/*global chrome*/
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from '../Firebase';
 import 'firebase/firestore';
+import MenuBar from "./MenuBar";
 
 class SimSearch extends Component {
     constructor(props) {
@@ -11,6 +13,7 @@ class SimSearch extends Component {
         }
     }
     componentDidMount(): void {
+        console.log("uid in Simsearch : "+this.props.uid);
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({ user: user });
@@ -23,7 +26,6 @@ class SimSearch extends Component {
             }
         });
     }
-
     render() {
         return (
             <React.Fragment>
@@ -55,4 +57,12 @@ const check1 = document.createElement('div');
 const check2 = document.getElementById('rhs');
 const check = document.getElementById('rhs_block');
 check2.insertBefore(check1, check);
-ReactDOM.render(<SimSearch/>, check1);
+
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if(request.message==="getID"){
+            ReactDOM.render(<SimSearch uid={request.id}/>, check1);
+        }
+    }
+);
