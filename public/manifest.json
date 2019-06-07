@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "version": "1.0",
   "name": "TMP Test App 0.1",
-  "content_security_policy": "script-src 'self' https://*.googleapis.com/* https://apis.google.com https://www.googleapis.com https://www.gstatic.com/ https://cdn.firebase.com https://*.firebaseio.com 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://*.googleapis.com/* https://apis.google.com https://www.googleapis.com https://www.gstatic.com/ https://cdn.firebase.com https://*.firebaseio.com 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU='; object-src 'self'",
   "browser_action": {
   },
   "content_scripts": [
