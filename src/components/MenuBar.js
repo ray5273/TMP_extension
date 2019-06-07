@@ -56,7 +56,8 @@ class MenuBar extends Component {
                     imageMemo.style.left = window.scrollX + 'px';
                     //stickymemo를 z-index 통해 최상위로 올려줌
                     imageMemo.style.zIndex = 2147483647;
-                   document.body.appendChild(imageMemo);
+                    document.body.appendChild(imageMemo);
+                    var curpage = url;
 
                    let real_image = storageRef.child(imagePath);
                     console.log("real image : " + real_image);
@@ -64,12 +65,12 @@ class MenuBar extends Component {
 
                         const x_pos = doc.data().x;
                         const y_pos = doc.data().y;
-                        console.log("xpos : ",x_pos);
-                        console.log("ypos :",y_pos);
+                        // console.log("xpos : ",x_pos);
+                        // console.log("ypos :",y_pos);
                         real_image.getDownloadURL().then(function (url) {
                             console.log("get image data!");
-                            ReactDOM.render(<DragImage push_src={url} push_x={x_pos}
-                                                       push_y={y_pos}/>, document.getElementById(`imageMemo${i}`));
+                            ReactDOM.render(<DragImage src={url} push_x={x_pos} url={curpage}
+                                                       push_y={y_pos} idx={i} uid={uid}/>, document.getElementById(`imageMemo${i}`));
                         }).catch(function (error) {
                             // Handle any errors
                             console.log("cannot get image data!"+error);

@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import Draggable from 'react-draggable-component';
+import Firebase from '../../Firebase'
+import 'firebase/firestore'
+import ReactDOM from "react-dom";
 
 class DragImage extends Component {
     constructor(props) {
@@ -13,12 +16,28 @@ class DragImage extends Component {
         }
     }
     componentDidUpdate=()=>{
-
     };
     handleStart = () =>{
         var str = "x pos: "+ this.props.push_x + " y pos: "+this.props.push_y;
         console.log(str);
     };
+    handleStop = ()=>{
+        console.log("handle stop!");
+        var e = window.event;
+         console.log("this.props.uid:"+this.props.uid);
+         console.log("htis.props.url:"+this.props.url);
+
+         console.log("x val :"+(window.scrollX+e.clientX));
+        console.log("y val :"+(window.scrollY+e.clientY));
+         var changed_posX = window.scrollX+e.clientX;
+         var changed_posY = window.scrollY+e.clientY;
+         const database = Firebase.firestore();
+          database.collection("User").doc(this.props.uid).collection(this.props.url).doc(`ImageMetadata${this.props.idx}`).set({
+              x:changed_posX,
+              y:changed_posY
+         });
+
+    }
     render() {
         return (
             <Draggable
@@ -28,9 +47,9 @@ class DragImage extends Component {
                 position={{x:this.props.push_x,y:this.props.push_y}}
                 grid={[25, 25]}
                 scale={1}
-                onStart={this.handleStart}
-                onDrag={this.handleDrag}
-                onStop={this.handleStop}>
+                dragStartCallback={this.handleStart}
+                dragCallback={this.handleDrag}
+                dragStopCallback={this.handleStop}>
                 <div className="image-wrapper">
                     <div className="temp-text-wrapper">
                         <div className="tmp-btn">Image</div>
@@ -40,7 +59,7 @@ class DragImage extends Component {
                     </div>
                     <div>
                         {this.state.open ?
-                            <img src={this.props.push_src}/> : <p>closed</p>
+                            <img src={this.props.src}/> : <p>closed</p>
                         }
                     </div>
                 </div>
