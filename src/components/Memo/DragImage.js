@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Draggable from 'react-draggable-component';
 import Firebase from '../../Firebase'
 import 'firebase/firestore'
+import 'firebase/storage'
 import ReactDOM from "react-dom";
 
 class DragImage extends Component {
@@ -22,8 +23,8 @@ class DragImage extends Component {
         console.log(str);
     };
     handleStop = ()=>{
-        console.log("handle stop!");
-        var e = window.event;
+         console.log("handle stop!");
+         var e = window.event;
          console.log("this.props.uid:"+this.props.uid);
          console.log("htis.props.url:"+this.props.url);
 
@@ -36,6 +37,20 @@ class DragImage extends Component {
               x:changed_posX,
               y:changed_posY
          });
+
+    }
+    deleteImage = () =>{
+        console.log("delete Image");
+        console.log("");
+        const storage = Firebase.storage();
+        const storage_ref = storage.ref();
+        const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
+        imageMemo.style.display = 'none';
+        const imagePath = this.props.uid +'/'+this.props.url+'/'+'image'+this.props.idx+'.png';
+        const dataRef = storage_ref.child(imagePath);
+        dataRef.delete().then(function (snapshot) {
+            console.log("deleted file!");
+        });
 
     }
     render() {
@@ -52,10 +67,12 @@ class DragImage extends Component {
                 dragStopCallback={this.handleStop}>
                 <div className="image-wrapper">
                     <div className="temp-text-wrapper">
-                        <div className="tmp-btn">Image</div>
-                        <div className="tmp-btn" onClick={()=>this.setState({open:!this.state.open})}>
+                        <div className="tmp-btn">Image </div>
+                        <br></br>
+                        <button className="tmp-btn" onClick={this.deleteImage}> Delete </button>
+                        <button className="tmp-btn" onClick={()=>this.setState({open:!this.state.open})}>
                             Toggle
-                        </div>
+                        </button>
                     </div>
                     <div>
                         {this.state.open ?
