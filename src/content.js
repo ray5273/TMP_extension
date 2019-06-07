@@ -53,7 +53,8 @@ chrome.runtime.onMessage.addListener(
         }
         if (request.message === "getID") {
             uid = request.id;
-            ReactDOM.render(<MenuBar uid={request.id}/>, test);
+            console.log("cur url:"+request.url);
+            ReactDOM.render(<MenuBar uid={request.id} url ={request.url}/>, test);
         }
     }
 );

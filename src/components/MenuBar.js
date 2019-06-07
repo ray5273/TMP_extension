@@ -90,7 +90,7 @@ class MenuBar extends Component {
                 <div className="menus"> <p>북마크</p></div>
                 <div className="menus"> <p>PDF</p></div>
                 <DomMemo />
-                <DrawingTool/>
+                <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
                 <HighLight />
             </React.Fragment>
         );
