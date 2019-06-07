@@ -42,9 +42,9 @@ class DragText extends Component {
                 position={null}
                 grid={[25, 25]}
                 scale={1}
-                onStart={this.handleStart}
-                onDrag={this.handleDrag}
-                onStop={this.handleStop}>
+                dragStartCallback={this.handleStart}
+                dragCallback={this.handleDrag}
+                dragStopCallback={this.handleStop}>
                 <div className="input-wrapper">
                     <div className="temp-text-wrapper">
                         <div className="tmp-btn">Drag</div>
