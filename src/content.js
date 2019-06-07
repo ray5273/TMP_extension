@@ -45,14 +45,13 @@ ReactDOM.render(<SignIn />, app);
 //위에 MemoButton을 DB에서 가져와서 띄워주는 형식으로 해야할것 같다.
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if( request.message === "clicked_browser_action") {
+        if (request.message === "clicked_browser_action") {
             toggle();
             chrome.runtime.sendMessage({
                 contentScriptQuery:"queryPrice"
             });
-            console.log("browser action ended");
         }
-        if(request.message==="getID"){
+        if (request.message === "getID") {
             uid = request.id;
             ReactDOM.render(<MenuBar uid={request.id}/>, test);
         }
@@ -66,7 +65,6 @@ iframe.style.width = "350px";
 iframe.style.position = "fixed";
 
 //top , right 조건을 통하여 옆의 화면을 꽉채울것인지 띄울것인지 수정가능
-
 iframe.style.top = "0px";
 iframe.style.right = "0px";
 iframe.style.zIndex = "9000000000000000000";
@@ -76,21 +74,18 @@ iframe.src = chrome.extension.getURL("index.html");
 
 document.body.appendChild(iframe);
 
-
 const test = document.createElement('div');
 test.setAttribute("id",'menu-bar');
 document.body.insertBefore(test, document.body.firstChild);
-console.log("content.js uid", uid);
-
 
 //app.style.display = "none";
 iframe.style.display = "none";
 
 function toggle(){
-   if(iframe.style.display == "none"){
+   if (iframe.style.display === "none") {
        iframe.style.display = "block";
    }
-   else{
+   else {
        iframe.style.display = "none";
    }
 }

@@ -4,11 +4,9 @@ import firebase from '../../Firebase.js'
 import styled, { css } from 'styled-components';
 import oc from 'open-color';
 import { Redirect } from 'react-router-dom';
-
 import LoginButton from "./LoginButton";
 import MainMenu from "../MainMenu";
 import Signin from '../Signin';
-
 
 const shadow = (weight) => {
     const shadows = [
@@ -112,10 +110,9 @@ class Header extends Component {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({ user: user });
-                var curUser = user.uid;
                 chrome.runtime.sendMessage({
                     contentScriptQuery:"getID",
-                    id:curUser
+                    id:user.uid
                 });
             } else {
                 this.props.history.push('index.html');
@@ -126,8 +123,6 @@ class Header extends Component {
     render() {
         return (
             <div>
-
-
                 <Positioner>
                     <WhiteBackground>
                         <HeaderContents>
@@ -135,18 +130,13 @@ class Header extends Component {
                             <Spacer />
                             {this.state.user == null ?
                            null
-                            
                             :
                                 <BorderedButton types="out" onClick={this.clickSignOut}>로그아웃</BorderedButton>
-                               
-                                
                             }
                         </HeaderContents>
                     </WhiteBackground>
-
                     <GradientBorder />
                 </Positioner>
-
                 {this.state.user == null ?
                     <div><Signin /></div>
                     :
@@ -154,7 +144,6 @@ class Header extends Component {
                 }
             </div>
         )
-
     }
 }
 
