@@ -71,25 +71,19 @@ class DrawingTool extends Component {
                 database.collection("User").doc(uid).collection(url).doc("MemoImage").get().then(function(doc){
                         console.log("value : "+doc.data().imageCount);
                         var image_data_num = doc.data().imageCount+1;
+                        database.collection("User").doc(uid).collection(url).doc(`ImageMetadata${image_data_num}`).set({
+                            x:0,
+                            y:0
+                        });
                         database.collection("User").doc(uid).collection(url).doc("MemoImage").set({
-                            imageCount: image_data_num
+                            imageCount: image_data_num,
                         }).then(function() {
                             console.log("Document successfully written!");
                             var imagePath = uid +'/'+url+'/'+'image'+image_data_num+'.png';
                             var dataRef = storage_ref.child(imagePath);
-                            var posMetadata = {
-                                customMetadata: {
-                                    'x':0,
-                                    'y':0
-                                }
-                            };
                             dataRef.put(blob).then(function (snapshot) {
                                 console.log("uploaded a file!");
                                 done(true);
-                                dataRef.updateMetadata(posMetadata).then(function(metadata){
-                                    console.log("meta data pos : 0,0");
-                                }).catch(function(error){
-                                });
                             });
 
 
