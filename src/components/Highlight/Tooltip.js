@@ -90,9 +90,10 @@ class Tooltip extends Component {
                  toolTipDiv.style.top = '0px';
                  toolTipDiv.style.left = '0px';
                  document.body.appendChild(toolTipDiv);
-
+                 var url = this.props.url;
+                 var uid = this.props.uid;
                  //여기서 component에 i 값을 넘겨주고 paint.js에서 i값을 받아서 onclick에 사용하자.
-                 ReactDOM.render(<Paint imageIndexFromParent={i}/>, toolTipDiv);
+                 ReactDOM.render(<Paint imageIndexFromParent={i} uid={uid} url={url}/>, toolTipDiv);
              }
         }
     render() {

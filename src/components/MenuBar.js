@@ -108,7 +108,7 @@ class MenuBar extends Component {
                         </div>
                         <DomMemo />
                         <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
-                        <HighLight />
+                        <HighLight uid = {this.props.uid} url = {this.props.url}/>
                     </div>
                     :
                     <div className="menus">

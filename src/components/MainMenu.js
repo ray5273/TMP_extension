@@ -53,14 +53,14 @@ const styles = theme => ({
 
     },
     tabsIndicator: {
-        backgroundColor: '#6B9900',
+        backgroundColor: '#5d84af',
     },
     tabRoot: {
         textTransform: 'initial',
         minWidth: 100,
         fontWeight: theme.typography.fontWeightMedium,
        // background: '#e2315a',
-        background:'#93CC8D',
+        background:'#83b8f4',
         fontFamily: [
             '-apple-system',
             'BlinkMacSystemFont',

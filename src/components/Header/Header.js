@@ -21,17 +21,18 @@ const shadow = (weight) => {
 };
 const BorderedButton = styled.div`
     font-weight: 600;
-    color: ${oc.cyan[6]};
-    border: 1px solid ${oc.cyan[6]};
+    color: #83b8f4;
+    border: 1px solid #83b8f4;
     padding: 0.5rem;
     padding-bottom: 0.4rem;
     cursor: pointer;
     border-radius: 2px;
     text-decoration: none;
     transition: .2s all;
-    
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+
     &:hover {
-        background: ${oc.cyan[6]};
+        background: #83b8f4;
         color: white;
         ${shadow(1)}
     }
@@ -64,7 +65,7 @@ const HeaderContents = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    
     padding-right: 1rem;
     padding-left: 1rem;
 `;
@@ -72,8 +73,9 @@ const HeaderContents = styled.div`
 const Logo = styled.div`
     font-size: 1.4rem;
     letter-spacing: 2px;
-    color: ${oc.teal[7]};
-    font-family: 'Rajdhani';
+    color:#83b8f4;
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+
 `;
 // 중간 여백
 const Spacer = styled.div`
@@ -82,7 +84,7 @@ const Spacer = styled.div`
 // 하단 그래디언트 테두리
 const GradientBorder = styled.div`
     height: 3px;
-    background: linear-gradient(to right, ${oc.teal[6]}, ${oc.cyan[5]});
+    background: #83b8f4;
 `;
 
 class Header extends Component {
@@ -126,7 +128,7 @@ class Header extends Component {
                 <Positioner>
                     <WhiteBackground>
                         <HeaderContents>
-                            <Logo>Trendy Memo Project</Logo>
+                            <Logo>TMP</Logo>
                             <Spacer />
                             {this.state.user == null ?
                            null
