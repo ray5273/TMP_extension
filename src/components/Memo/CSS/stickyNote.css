@@ -57,7 +57,7 @@
 /*image memo*/
 .image-wrapper{
     min-width: 200px;
-    background : linear-gradient(right,#C0C0C0, #FFFFFF);
+    background-color: #bcfd60;
     /*background-color: #C0C0C0;*/
     box-shadow: 5px 5px 10px -2px rgba(33,33,33,.3);
 
