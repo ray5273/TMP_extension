@@ -10,7 +10,8 @@
 .header-button {
     width:50%;
     height:35px;
-    background-color:#93CC8D;
+    /*background-color:#93CC8D;*/
+    background-color: 	#83b8f4;
     border:1px solid white;
 }
 .header-button-div {
@@ -18,7 +19,8 @@
 }
 
 .search-input {
-    background-color:#93CC8D;
+    /*background-color:#93CC8D;*/
+    background-color: 	#83b8f4;
     width: 100%;
     height:40px;
     border: 1px solid white;
@@ -45,7 +47,9 @@
 
 .iframe-buttons {
     height:21px;
-    background-color: #86AA31;
+    /*background-color: #86AA31;*/
+
+    background-color: #83b8f4;
     border: 1px solid white;
     margin: 1px;
 }

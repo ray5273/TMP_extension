@@ -23,7 +23,7 @@
   display:flex !important;
   /*width:200px;*/
   /*height:30px;*/
-  background:#89D7F6;
+  background:#bae1ff;
   padding:5px;
   right:0;
   top:50px;
@@ -37,7 +37,8 @@
   display:flex !important;
   /*width:200px;*/
   /*height:30px;*/
-  background:#89D7F6;
+  /*background:#89D7F6;*/
+  background:#bae1ff;
   padding:5px;
   right:350px;
   top:50px;
