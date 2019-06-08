@@ -3,6 +3,10 @@
 import React, { Component } from 'react';
 import firebase from '../../Firebase';
 import './CSS/stickyNote.css';
+import minimize_icon from '../../assets/stickyNote/minimize.png';
+import close_icon from '../../assets/stickyNote/close.png';
+import check_icon from '../../assets/stickyNote/check.png';
+import modify_icon from '../../assets/stickyNote/modify.png';
 
 class MemoInput extends Component {
     constructor(props) {
@@ -27,6 +31,7 @@ class MemoInput extends Component {
             [e.target.name]: e.target.value
         })
     };
+
     handleSubmit = () => {
         console.log("handleSubmit clicked");
         this.setState({
@@ -54,6 +59,7 @@ class MemoInput extends Component {
         });
 
     };
+
     handleRevise = ()=>{
         console.log("handleRevise Mode");
         this.setState({
@@ -64,9 +70,12 @@ class MemoInput extends Component {
         toParent[1] = false;
         this.props.callbackFromParent(toParent);
     };
+
     handleDelete = ()=>{
         console.log("handleDelete Mode");
     };
+
+
     render() {
         return (
             <div className="memo-input-wrapper">
@@ -74,12 +83,20 @@ class MemoInput extends Component {
                     {/*이부분에 최소화 버튼 네모가 좋을듯 --> 빨간 배경에 - */}
                     {/*체크버튼 , 펜 버튼 왔다갔다하게 만들기*/}
                     {/*삭제버튼(X버튼) 추가하기*/}
+                    <a className="delete-btn" onClick={this.handleDelete}>
+                        <img src={close_icon} alt=""/>
+                    </a>
+                    <a onClick={()=>this.setState({open:!this.state.open})}>
+                        <img src={minimize_icon} alt=""/>
+                    </a>
                     {this.state.submitted
                         ?
-                        <a className="submit-btn" onClick={this.handleRevise}>수정</a>
-                        : <a className="submit-btn" onClick={this.handleSubmit}>확인</a>}
-                    <a onClick={()=>this.setState({open:!this.state.open})}>최소화</a>
-                    <a className="delete-btn" onClick={this.handleDelete}>삭제</a>
+                        <a className="submit-btn" onClick={this.handleRevise}>
+                            <img src={modify_icon} alt=""/>
+                        </a>
+                        : <a className="submit-btn" onClick={this.handleSubmit}>
+                            <img src={check_icon} alt=""/>
+                        </a>}
                     <div className="memo-text-wrapper">
                         {   this.state.open
                             ?

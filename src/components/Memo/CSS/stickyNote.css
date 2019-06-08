@@ -10,23 +10,11 @@
     align-content: end;
     width: 200px;
 }
-/*.input-wrapper textarea{*/
-/*    text-decoration:none;*/
-/*    background-color: transparent;*/
-/*    display:block;*/
-/*    height:100%;*/
-/*    border: none;*/
 
-/*    color          : #333;*/
-/*    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;*/
-/*    font-size      : 13px;      !* inline style *!*/
-/*    letter-spacing : -0.34px;   !* -0.02em *!*/
-/*    line-height    : 27.625px;  !* 1.625 *!*/
-
-/*}*/
 .memo-input-wrapper a{
     float:right;
-
+    cursor:pointer;
+    margin-left: 5px;
 }
 
 .submit-button{
@@ -41,21 +29,22 @@
     border: none;
     color          : #333;
     font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
-    font-size      : 13px;      /* inline style */
+    font-size      : 15px;      /* inline style */
     letter-spacing : -0.34px;   /* -0.02em */
     line-height    : 27.625px;  /* 1.625 */
 
 }
 .memo-text{
+    display: block;
     text-decoration:none;
     background:#ffc;
-    height:10em;
-    width:10em;
-    padding:1em;
+    width:100%;
+    min-height: 150px;
+    border:none;
 
     color          : #333;
     font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
-    font-size      : 13px;      /* inline style */
+    font-size      : 15px;      /* inline style */
     letter-spacing : -0.34px;   /* -0.02em */
     line-height    : 27.625px;  /* 1.625 */
 
