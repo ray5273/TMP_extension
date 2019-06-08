@@ -8,18 +8,17 @@ class MemoInput extends Component {
     constructor(props) {
         super(props);
         var parentData = this.props.stateFromParent;
-        this.state = {
-            open:false
-        };
         if(parentData==null){
             this.state = {
                 test:"",
-                submitted:false
+                submitted:false,
+                open:true
             }
         }else {
             this.state = {
                 test: parentData[0],
-                submitted: parentData[1]
+                submitted: parentData[1],
+                open:true
             }
         }
     }
@@ -82,19 +81,27 @@ class MemoInput extends Component {
                     <a onClick={()=>this.setState({open:!this.state.open})}>최소화</a>
                     <a className="delete-btn" onClick={this.handleDelete}>삭제</a>
                     <div className="memo-text-wrapper">
-                        {this.state.submitted
+                        {   this.state.open
                             ?
-                            <div className="memo-text">
-                                {this.state.test}
-                            </div>
+
+                                this.state.submitted
+                                    ?
+                                    <div className="memo-text">
+                                        {this.state.test}
+                                    </div>
+                                    :
+                                    <textarea
+                                        onChange={this.handleChange}
+                                        name="test"
+                                        className="memo-input"
+                                    >
+                                    {this.state.test}
+                                    </textarea>
+
                             :
-                            <textarea
-                                onChange={this.handleChange}
-                                name="test"
-                                className="memo-input"
-                            >
-                            {this.state.test}
-                        </textarea>}
+                            <div className="memo-minimize">
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
