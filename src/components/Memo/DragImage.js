@@ -3,6 +3,11 @@ import Draggable from 'react-draggable-component';
 import Firebase from '../../Firebase'
 import 'firebase/firestore'
 import 'firebase/storage'
+
+import minimize_icon from '../../assets/stickyNote/minimize.png';
+import close_icon from '../../assets/stickyNote/close.png';
+import move_icon from '../../assets/stickyNote/move.png';
+
 import ReactDOM from "react-dom";
 
 class DragImage extends Component {
@@ -66,17 +71,22 @@ class DragImage extends Component {
                 dragCallback={this.handleDrag}
                 dragStopCallback={this.handleStop}>
                 <div className="image-wrapper">
-                    <div className="temp-text-wrapper">
-                        <div className="tmp-btn">Image </div>
-                        <br></br>
-                        <button className="tmp-btn" onClick={this.deleteImage}> Delete </button>
-                        <button className="tmp-btn" onClick={()=>this.setState({open:!this.state.open})}>
-                            Toggle
-                        </button>
+                    <div className="image-wrapper-inside">
+                        <a className="image-move">
+                            <img src={move_icon} alt=""/>
+                        </a>
+                        <a onClick={()=>this.setState({open:!this.state.open})}>
+                            <img src={minimize_icon} alt=""/>
+                        </a>
+                        <a onClick={this.deleteImage}>
+                            <img src={close_icon} alt=""/>
+                        </a>
                     </div>
                     <div>
                         {this.state.open ?
-                            <img src={this.props.src}/> : <p>closed</p>
+                            <img src={this.props.src}/> :
+                            <div className="memo-minimize">
+                            </div>
                         }
                     </div>
                 </div>
