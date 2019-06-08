@@ -97,7 +97,7 @@ class Tooltip extends Component {
         }
     render() {
         return (
-            <div className="menus">
+            <div className="menus-highlight">
                 {/*<p>하이라이트</p>*/}
             </div>
         );

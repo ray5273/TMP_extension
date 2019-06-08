@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import DragText from './DragText';
+import memo_add_icon from '../../assets/menuBar/add.png';
 
 import Painterro from 'painterro_tmp'
 class DomMemo extends Component {
@@ -49,7 +50,7 @@ class DomMemo extends Component {
     render() {
         return (
             <div className="menus" onClick={this.addStickyMemo}>
-                <p>메모 추가</p>
+                <img src={memo_add_icon} alt=""/>
             </div>
         );
     }

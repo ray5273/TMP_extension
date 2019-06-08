@@ -10,6 +10,10 @@ import "firebase/storage";
 import "firebase/firestore";
 import DragImage from "./Memo/DragImage"
 import ReactDOM from 'react-dom';
+import memo_bookmark_icon from '../assets/menuBar/bookmark.png';
+import pdf_icon from '../assets/menuBar/pdf.png';
+import left_arrow_icon from '../assets/menuBar/left_arrow.png';
+import right_arrow_icon from '../assets/menuBar/right_arrow.png';
 
 //const URL = "https://tmp-test-1a336.firebaseio.com/";
 
@@ -19,7 +23,8 @@ class MenuBar extends Component {
         this.state = {
             words:{},
             url:'',
-            data:''
+            data:'',
+            open:true
         }
     }
         
@@ -89,17 +94,27 @@ class MenuBar extends Component {
     render() {
         return (
             <React.Fragment>
-                {firebaseui.auth.AuthUI.getInstance() == null?
-            console.log("유저가 null")
-            :console.log("유저가 있음")}
-
-                )}
-                {console.log("test for realtime db", this.state.words)}
-                <div className="menus"> <p>북마크</p></div>
-                <div className="menus"> <p>PDF</p></div>
-                <DomMemo />
-                <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
-                <HighLight />
+                {this.state.open
+                    ?
+                    <div className="menu-container">
+                        <div className="menus">
+                            <img src={right_arrow_icon} alt="" onClick={()=>this.setState({open:!this.state.open})}/>
+                        </div>
+                        <div className="menus">
+                            <img src={memo_bookmark_icon} alt="" />
+                        </div>
+                        <div className="menus">
+                        <img src={pdf_icon} alt="" />
+                        </div>
+                        <DomMemo />
+                        <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
+                        <HighLight />
+                    </div>
+                    :
+                    <div className="menus">
+                        <img src={left_arrow_icon} alt="" onClick={()=>this.setState({open:!this.state.open})}/>
+                    </div>
+                }
             </React.Fragment>
         );
     }

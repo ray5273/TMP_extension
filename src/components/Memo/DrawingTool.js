@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Painterro from 'painterro_tmp'
 import Firebase from '../../Firebase'
 import 'firebase/firestore'
+import memo_image_add_icon from '../../assets/menuBar/image.png';
+
 //data file to blob file
 function dataURItoBlob(dataURI)
 {
@@ -98,7 +100,7 @@ class DrawingTool extends Component {
     render() {
         return (
             <div className="menus" onClick={this.addDrawingMemo}>
-                <p>그림 메모 추가</p>
+                <img src={memo_image_add_icon} alt=""/>
             </div>
         );
     }
