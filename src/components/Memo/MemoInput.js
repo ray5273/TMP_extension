@@ -2,10 +2,15 @@
 
 import React, { Component } from 'react';
 import firebase from '../../Firebase';
+import './CSS/stickyNote.css';
+
 class MemoInput extends Component {
     constructor(props) {
         super(props);
         var parentData = this.props.stateFromParent;
+        this.state = {
+            open:false
+        };
         if(parentData==null){
             this.state = {
                 test:"",
@@ -60,24 +65,38 @@ class MemoInput extends Component {
         toParent[1] = false;
         this.props.callbackFromParent(toParent);
     };
+    handleDelete = ()=>{
+        console.log("handleDelete Mode");
+    };
     render() {
         return (
             <div className="memo-input-wrapper">
-                {this.state.submitted
-                    ?
-                    <div className="memo-text">
-                        {this.state.test}
+                <div className="input-menu-wrapper">
+                    {/*이부분에 최소화 버튼 네모가 좋을듯 --> 빨간 배경에 - */}
+                    {/*체크버튼 , 펜 버튼 왔다갔다하게 만들기*/}
+                    {/*삭제버튼(X버튼) 추가하기*/}
+                    {this.state.submitted
+                        ?
+                        <a className="submit-btn" onClick={this.handleRevise}>수정</a>
+                        : <a className="submit-btn" onClick={this.handleSubmit}>확인</a>}
+                    <a onClick={()=>this.setState({open:!this.state.open})}>최소화</a>
+                    <a className="delete-btn" onClick={this.handleDelete}>삭제</a>
+                    <div className="memo-text-wrapper">
+                        {this.state.submitted
+                            ?
+                            <div className="memo-text">
+                                {this.state.test}
+                            </div>
+                            :
+                            <textarea
+                                onChange={this.handleChange}
+                                name="test"
+                                className="memo-input"
+                            >
+                            {this.state.test}
+                        </textarea>}
                     </div>
-                    :
-                    <textarea
-                        onChange={this.handleChange}
-                        name="test"
-                        className="memo-input"
-                    >
-                        {this.state.test}
-                    </textarea>}
-                    {this.state.submitted ? <button className="submit-btn" onClick={this.handleRevise}>수정</button>
-                        : <button className="submit-btn" onClick={this.handleSubmit}>확인</button>}
+                </div>
             </div>
         );
     }

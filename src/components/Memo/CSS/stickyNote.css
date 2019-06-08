@@ -1,0 +1,63 @@
+.input-wrapper{
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    box-shadow: 5px 5px 10px -2px rgba(33,33,33,.3);
+    background-color: #FFFD75;
+    transform: rotate(2deg);
+    transform: skew(-1deg,1deg);
+    transition: transform .15s;
+    align-content: end;
+    width: 200px;
+}
+.input-wrapper textarea{
+    text-decoration:none;
+    background-color: transparent;
+    display:block;
+    width:100%;
+    height:100%;
+    border: none;
+
+    color          : #333;
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+    font-size      : 13px;      /* inline style */
+    letter-spacing : -0.34px;   /* -0.02em */
+    line-height    : 27.625px;  /* 1.625 */
+
+}
+.memo-input-wrapper{
+
+
+}
+.memo-input{
+    text-decoration:none;
+    background:#FFFD75;
+    display:block;
+    height:10em;
+    width:10em;
+    padding:1em;
+
+    color          : #333;
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+    font-size      : 13px;      /* inline style */
+    letter-spacing : -0.34px;   /* -0.02em */
+    line-height    : 27.625px;  /* 1.625 */
+
+}
+.memo-text{
+    text-decoration:none;
+
+    background:#ffc;
+    display:block;
+    height:10em;
+    width:10em;
+    padding:1em;
+
+    color          : #333;
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+    font-size      : 13px;      /* inline style */
+    letter-spacing : -0.34px;   /* -0.02em */
+    line-height    : 27.625px;  /* 1.625 */
+
+}
+

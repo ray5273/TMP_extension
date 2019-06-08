@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import DragText from './DragText';
+
 import Painterro from 'painterro_tmp'
 class DomMemo extends Component {
     constructor(props) {

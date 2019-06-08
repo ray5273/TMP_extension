@@ -12,11 +12,6 @@ class DragText extends Component {
             submit:false
         }
     }
-    eventLogger = (e: MouseEvent, data: Object) => {
-        console.log('Event: ', e);
-        console.log('Data: ', data);
-    };
-
     myCallback = (dataFromChild) => {
         var childList = dataFromChild;
         var text_data = childList[0];
@@ -46,20 +41,7 @@ class DragText extends Component {
                 dragCallback={this.handleDrag}
                 dragStopCallback={this.handleStop}>
                 <div className="input-wrapper">
-                    <div className="temp-text-wrapper">
-                        <div className="tmp-btn">Drag</div>
-                        <div className="tmp-btn" onClick={()=>this.setState({open:!this.state.open})}>
-                            Toggle
-                        </div>
-                    </div>
-                    <div>
-                        { this.state.open ?
-                        <Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>
-                        :
-                        <div className="memo-closed">
-                        <img alt="" onClick={()=>this.setState({open:!this.state.open})} src={MemoIcon} className="memo-closed-icon"/>
-                        </div>}
-                    </div>
+                    <Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>
                 </div>
             </Draggable>
         );
