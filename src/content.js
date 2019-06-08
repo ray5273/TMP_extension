@@ -85,9 +85,12 @@ iframe.style.display = "none";
 function toggle(){
    if (iframe.style.display === "none") {
        iframe.style.display = "block";
+       test.setAttribute("id",'menu-bar-iframe');
    }
    else {
        iframe.style.display = "none";
+       test.setAttribute("id",'menu-bar');
+
    }
 }
 
