@@ -83,6 +83,10 @@ class Palette extends Component {
 
         console.log("in addhighlight!");
 
+        var uid = this.props.uid;
+        var url = encodeURIComponent(this.props.url);
+        var db = Firebase.firestore();
+
         if (selRange) {
             newNode.setAttribute(
                 "style",

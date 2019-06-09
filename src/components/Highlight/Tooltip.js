@@ -21,7 +21,7 @@ class Tooltip extends Component {
                 toolTipDiv.style.top = '0px';
                 toolTipDiv.style.left = '0px';
                 document.body.appendChild(toolTipDiv);
-                ReactDOM.render(<Palette />, toolTipDiv);
+                ReactDOM.render(<Palette uid={this.props.uid} url={this.props.url}/>, toolTipDiv);
             }
           
             // Lets listen to mouseup DOM events.
