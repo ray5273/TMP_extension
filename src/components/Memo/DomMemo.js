@@ -41,7 +41,6 @@ class DomMemo extends Component {
             //console.log("stickymemo left pos : "+stickyMemo.style.left.toString());
             document.body.appendChild(stickyMemo);
             // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
-            ReactDOM.render(
             //<DragText
             //    uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${i}`));
             ReactDOM.render(<DragText isInserted = {true} uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${this.state.t}`));
