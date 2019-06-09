@@ -98,7 +98,7 @@ class MenuBar extends Component {
 
         //여기서 url에 대한 image memo count가 존재하는지 먼저 파악 없을시 아무것도 띄우지 않음
         //image memo count가 존재 할 시 존재하는 숫자만큼 이미지를 띄움.
-        database.collection("User").doc(uid).collection(url).doc("MemoImage").get().then(function(doc){
+        database.collection("User").doc(uid).collection("Url").doc(url).get().then(function(doc){
             //존재 할 시
             if(doc.exists){
                 console.log("in database doc");
@@ -122,7 +122,7 @@ class MenuBar extends Component {
 
                    let real_image = storageRef.child(imagePath);
                     console.log("real image : " + real_image);
-                    database.collection("User").doc(uid).collection(url).doc(`ImageMetadata${i}`).get().then(function(doc){
+                    database.collection("User").doc(uid).collection("Url").doc(url).collection(`ImageMetadata${i}`).doc("pos").get().then(function(doc){
 
                         const x_pos = doc.data().x;
                         const y_pos = doc.data().y;
