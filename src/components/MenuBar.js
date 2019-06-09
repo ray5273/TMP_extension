@@ -14,7 +14,7 @@ import memo_bookmark_icon from '../assets/menuBar/bookmark.png';
 import pdf_icon from '../assets/menuBar/pdf.png';
 import left_arrow_icon from '../assets/menuBar/left_arrow.png';
 import right_arrow_icon from '../assets/menuBar/right_arrow.png';
-
+import DragText from './Memo/DragText';
 //const URL = "https://tmp-test-1a336.firebaseio.com/";
 
 class MenuBar extends Component {
@@ -27,7 +27,35 @@ class MenuBar extends Component {
             open:true
         }
     }
-        
+    callStickyMemo = () => {
+        window.alert("sticky memo!");
+        var i;
+        for (i=0; i<this.state.data.length; i++) {
+            console.log(i,"번쨰 posX",this.state.data[i].posX);
+            console.log(i,"번쨰 text",this.state.data[i].text);
+            if(document.getElementById(`stickyMemo${i}`)==null) {
+                var stickyMemo = document.createElement('div');
+                stickyMemo.setAttribute('id', `stickyMemo${i}`);
+                stickyMemo.style.position = 'absolute';
+                stickyMemo.style.width="300px";
+                stickyMemo.style.top = window.scrollY+'px';
+                stickyMemo.style.left = window.scrollX + i*50+'px';
+                stickyMemo.style.zIndex=2147483647;
+                stickyMemo.setAttribute('class', 'memo-before-render');
+                document.body.appendChild(stickyMemo);
+                // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
+                ReactDOM.render(<DragText
+                id={this.state.data[i].id}
+                index={i}
+                posX={this.state.data[i].posX}
+                posY={this.state.data[i].posY}
+                text={this.state.data[i].text}
+                uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${i}`));
+                //Painterro().show();
+            }
+
+        }
+    };
     componentDidMount() {
         console.log("uiduiduiduiduiduid",this.props.uid);
 
@@ -39,6 +67,34 @@ class MenuBar extends Component {
 
         // 주소 URL이 path를 의미하는 / 를 포함하기때문에 인코딩 디코딩 과정 추가
         url = encodeURIComponent(url);
+        /* 
+        database.collection("User").doc(this.props.uid).collection("Url").doc(url).set(
+            {
+                memos: [{
+                    x:"departFocu",
+                    y:"sdg",
+                    c:"Sdgsdfsd"
+                },
+                {
+                    x:"depsdgFocu",
+                    y:"ssg",
+                    c:"Sdssd"
+                }]
+            }
+        )
+       */
+        database.collection("User").doc(uid).collection("Url").doc(url).get().then(
+            (doc) => {
+                if(doc.exists){
+                    this.setState({
+                        data: doc.data().memos
+                    });
+               }
+            }
+        ).then(()=> {
+               this.callStickyMemo();
+            }
+        )
 
         //여기서 url에 대한 image memo count가 존재하는지 먼저 파악 없을시 아무것도 띄우지 않음
         //image memo count가 존재 할 시 존재하는 숫자만큼 이미지를 띄움.
@@ -106,7 +162,7 @@ class MenuBar extends Component {
                         <div className="menus">
                         <img src={pdf_icon} alt="" />
                         </div>
-                        <DomMemo />
+                        <DomMemo uid = {this.props.uid} url = {this.props.url} data={this.state.data}/>
                         <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
                         <HighLight uid = {this.props.uid} url = {this.props.url}/>
                     </div>

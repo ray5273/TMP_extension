@@ -4,44 +4,43 @@ import Input from './MemoInput';
 import MemoIcon from 'assets/Memo-icon.png';
 
 class DragText extends Component {
+    static defaultProps = {
+        posX:0,
+        posY:0,
+        text:''
+    }
     constructor(props) {
         super(props);
         this.state = {
-            test: "",
             open:false,
             submit:false
         }
     }
-    myCallback = (dataFromChild) => {
-        var childList = dataFromChild;
-        var text_data = childList[0];
-        var submit_data = childList[1];
-        console.log("get submit data : "+submit_data);
-        this.setState({
-             test:text_data,
-             submit:submit_data
-        });
-        // this.setState({ test: dataFromChild });
-    };
+    handleStop = ()=>{
+        var e = window.event;
+        console.log("x val :"+(window.scrollX+e.clientX));
+       console.log("y val :"+(window.scrollY+e.clientY));
+        var changed_posX = window.scrollX+e.clientX;
+        var changed_posY = window.scrollY+e.clientY;
 
+
+   }
     render() {
-        var text_submit = [];
-        text_submit[0] = this.state.test;
-        text_submit[1] = this.state.submit;
-        console.log("listname:"+text_submit);
         return (
             <Draggable
                 axis="x"
                 handle=".handle"
                 defaultPosition={{x: 0, y: 0}}
-                position={null}
+                position={{x: this.props.posX, y: this.props.posY}}
                 grid={[25, 25]}
                 scale={1}
                 dragStartCallback={this.handleStart}
                 dragCallback={this.handleDrag}
                 dragStopCallback={this.handleStop}>
                 <div className="input-wrapper">
-                    <Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>
+                    {console.log("in Draggable: ", this.props.text, this.props.posX,this.props.posY)}
+                    <Input isInserted={this.props.isInserted} id={this.props.id} index={this.props.index} text={this.props.text} uid = {this.props.uid} url = {this.props.url}
+                    data={this.props.data} posX={this.props.posX} posY={this.props.posY} />
                 </div>
             </Draggable>
         );
