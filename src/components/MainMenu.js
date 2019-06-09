@@ -49,7 +49,7 @@ const styles = theme => ({
     },
     tabsRoot: {
     //    borderBottom: '1px solid #e2315a',
-        borderBottom: '1px solid #6B9900',
+        borderBottom: '1px solid #5d84af',
 
     },
     tabsIndicator: {
