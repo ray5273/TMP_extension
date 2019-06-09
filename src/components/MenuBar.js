@@ -4,6 +4,7 @@ import DomMemo from './Memo/DomMemo';
 import HighLight from './Highlight/Tooltip';
 import DrawingTool from './Memo/DrawingTool'
 import Firebase from '../Firebase.js'
+import BookMark from './Bookmarks/Bookmark'
 import * as firebaseui from 'firebaseui'
 import "firebase/auth";
 import "firebase/storage";
@@ -57,6 +58,9 @@ class MenuBar extends Component {
         }
     };
     componentDidMount() {
+        //bookmark div 부분 생성
+        //ReactDOM.render(<BookMark_Form uid={this.props.uid} url={this.props.url} />, document.getElementById('bookmark_popup'));
+       // ReactDOM.render(<BookMark_Form uid={this.props.uid} url={this.props.url} />, document.getElementById('bookmark_popup-iframe'));
         console.log("uiduiduiduiduiduid",this.props.uid);
 
         let storage = Firebase.storage();
@@ -120,7 +124,7 @@ class MenuBar extends Component {
                     document.body.appendChild(imageMemo);
                     var curpage = url;
 
-                   let real_image = storageRef.child(imagePath);
+                    let real_image = storageRef.child(imagePath);
                     console.log("real image : " + real_image);
                     database.collection("User").doc(uid).collection("Url").doc(url).collection(`ImageMetadata${i}`).doc("pos").get().then(function(doc){
 
@@ -156,9 +160,7 @@ class MenuBar extends Component {
                         <div className="menus">
                             <img src={right_arrow_icon} alt="" onClick={()=>this.setState({open:!this.state.open})}/>
                         </div>
-                        <div className="menus">
-                            <img src={memo_bookmark_icon} alt="" />
-                        </div>
+                        <BookMark uid = {this.props.uid} url = {this.props.url}/>
                         <div className="menus">
                         <img src={pdf_icon} alt="" />
                         </div>
