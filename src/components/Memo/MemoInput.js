@@ -1,5 +1,3 @@
-//메모 인풋
-
 import React, { Component } from 'react';
 import firebase from '../../Firebase';
 import './CSS/stickyNote.css';
@@ -9,23 +7,22 @@ import check_icon from '../../assets/stickyNote/check.png';
 import modify_icon from '../../assets/stickyNote/modify.png';
 
 class MemoInput extends Component {
-    static defaultProps = {
-        data:[],
-      }
     constructor(props) {
         super(props);
-            this.state = {
-                text:this.props.text,
-                submitted:false,
-                open:true,
-                
-            }    
+        this.state = {
+            text: this.props.text,
+            submitted: false,
+            open: true,
+            id: ""
+        }
     }
+
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         })
     };
+
     handleSubmit = () => {
         this.setState({
             submitted: true
@@ -33,39 +30,23 @@ class MemoInput extends Component {
 
         const url = encodeURIComponent(this.props.url);
         var db = firebase.firestore();
-        const ddoc=db.collection("User").doc(this.props.uid).collection("Url").doc(url);
 
-         
-        ddoc.get().then(
-            (doc) => {
-                if(doc.exists){
-                    this.setState({
-                        tmpdata: doc.data().memos
-                    })
-                    
-                    console.log(doc.data());
-                    console.log("this.state.tmpdata: ",this.state.tmpdata);
-               }
-            }
-        ).then(()=>{
-        const id = this.state.tmpdata[this.state.tmpdata.length-1].id;
-        const newdata = this.state.tmpdata.concat(
-            {
-                id: id+1,
-                posX :10,
-                posY :30,
-                text: this.state.text
-            });
-        console.log("id:" ,id);
-        ddoc.set({memos: newdata }).then(()=> {
-            console.log("Document successfully written!");
+        var title = document.getElementsByTagName('title')[0].innerHTML;
+
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").add({
+            title: title,
+            url: this.props.url,
+            posX: 10,
+            posY: 30,
+            content: this.state.text
+        })
+        .then(function(docRef) {
+            console.log("Generated memo id: ", docRef.id);
+            this.setState({id: docRef.id});
+        })
+        .catch(function(error) {
+            console.error("Error inserting memo data: ", error);
         });
-    });
-
-        console.log("props: ", this.props.data);
-        
-
-        
     };
 
     handleRevise = ()=>{
@@ -127,8 +108,5 @@ class MemoInput extends Component {
             </div>
         );
     }
-}
-MemoInput.defaultProps={
-    memos:'',
 }
 export default MemoInput;
