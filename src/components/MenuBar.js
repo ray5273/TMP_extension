@@ -57,8 +57,8 @@ class MenuBar extends Component {
                     imageMemo.style.position = 'absolute';
                     imageMemo.style.width = "300px";
                     //sticky memo 생성위치 조정
-                    imageMemo.style.top = window.scrollY + 'px';
-                    imageMemo.style.left = window.scrollX + 'px';
+                    imageMemo.style.top = '0px';
+                    imageMemo.style.left = '0px';
                     //stickymemo를 z-index 통해 최상위로 올려줌
                     imageMemo.style.zIndex = 2147483647;
                     document.body.appendChild(imageMemo);
