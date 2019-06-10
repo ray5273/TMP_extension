@@ -30,6 +30,7 @@ class DomMemo extends Component {
         db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").add({
             title: title,
             url: url,
+            url: decodeURIComponent(url),
             posX: 10,
             posY: 30,
             content: ''
