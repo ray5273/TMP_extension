@@ -96,7 +96,9 @@ class MemoInput extends Component {
                                 this.state.submitted
                                     ?
                                     <div className="memo-text">
-                                        {this.state.text}
+                                        <textarea readOnly className="memo-input">
+                                            {this.state.text}
+                                        </textarea>
                                     </div>
                                     :
                                     <textarea
