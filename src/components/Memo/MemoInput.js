@@ -58,6 +58,13 @@ class MemoInput extends Component {
 
     handleDelete = ()=>{
         console.log("handleDelete Mode");
+
+        const url = encodeURIComponent(this.props.url);
+        var db = firebase.firestore();
+
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).delete();
+
+        document.getElementById(`stickyMemo_${this.props.id}`).style.visibility = 'hidden';
     };
 
 
