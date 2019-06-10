@@ -1,5 +1,3 @@
-//메모 인풋
-
 import React, { Component } from 'react';
 import firebase from '../../Firebase';
 import './CSS/stickyNote.css';
@@ -11,21 +9,14 @@ import modify_icon from '../../assets/stickyNote/modify.png';
 class MemoInput extends Component {
     constructor(props) {
         super(props);
-        var parentData = this.props.stateFromParent;
-        if(parentData==null){
-            this.state = {
-                test:"",
-                submitted:false,
-                open:true
-            }
-        }else {
-            this.state = {
-                test: parentData[0],
-                submitted: parentData[1],
-                open:true
-            }
+        this.state = {
+            text: this.props.text,
+            submitted: !props.isNew,
+            open: true,
+            id: "",
         }
     }
+
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -33,31 +24,22 @@ class MemoInput extends Component {
     };
 
     handleSubmit = () => {
-        console.log("handleSubmit clicked");
         this.setState({
             submitted: true
         });
-        var toParent =[];
-        toParent[0] = this.state.test;
-        toParent[1] = true;
-        this.props.callbackFromParent(toParent);
 
+        const url = encodeURIComponent(this.props.url);
         var db = firebase.firestore();
-        db.collection("memo").doc("a").set({
-            memos: [{
-                text:this.state.test,
-                posX: 3,
-                posY: 4,
-            },
-            {
-                text:this.state.test+"asdgsdg",
-                posX: 37,
-                posY: 43,
-            }]
-        }).then(function() {
-            console.log("Document successfully written!");
-        });
 
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).update({
+            content: this.state.text
+        })
+        .then(function() {
+            console.log("Memo content data changed");
+        })
+        .catch(function(error) {
+            console.error("Error while changing memo content data", error);
+        });
     };
 
     handleRevise = ()=>{
@@ -65,14 +47,17 @@ class MemoInput extends Component {
         this.setState({
             submitted :false,
         })
-        var toParent =[];
-        toParent[0] = this.state.test;
-        toParent[1] = false;
-        this.props.callbackFromParent(toParent);
     };
 
     handleDelete = ()=>{
         console.log("handleDelete Mode");
+
+        const url = encodeURIComponent(this.props.url);
+        var db = firebase.firestore();
+
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).delete();
+
+        document.getElementById(`stickyMemo_${this.props.id}`).style.visibility = 'hidden';
     };
 
 
@@ -80,6 +65,7 @@ class MemoInput extends Component {
         return (
             <div className="memo-input-wrapper">
                 <div className="input-menu-wrapper">
+
                     {/*이부분에 최소화 버튼 네모가 좋을듯 --> 빨간 배경에 - */}
                     {/*체크버튼 , 펜 버튼 왔다갔다하게 만들기*/}
                     {/*삭제버튼(X버튼) 추가하기*/}
@@ -100,21 +86,21 @@ class MemoInput extends Component {
                     <div className="memo-text-wrapper">
                         {   this.state.open
                             ?
-
                                 this.state.submitted
                                     ?
                                     <div className="memo-text">
-                                        {this.state.test}
+                                        <textarea readOnly className="memo-input">
+                                            {this.state.text}
+                                        </textarea>
                                     </div>
                                     :
                                     <textarea
                                         onChange={this.handleChange}
-                                        name="test"
+                                        name="text"
                                         className="memo-input"
                                     >
-                                    {this.state.test}
+                                    {this.state.text}
                                     </textarea>
-
                             :
                             <div className="memo-minimize">
                             </div>
@@ -124,8 +110,5 @@ class MemoInput extends Component {
             </div>
         );
     }
-}
-MemoInput.defaultProps={
-    memos:'',
 }
 export default MemoInput;

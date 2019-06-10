@@ -1,0 +1,139 @@
+/*Text memo*/
+.pdf_popup{
+    display:table;
+    border: none;
+    padding: 30px;
+    box-shadow: 5px 5px 10px -2px rgba(33,33,33,.3);
+    align-items: center;
+    transition: transform .15s;
+    align-content: end;
+    background:#F9F9F9;
+    right:20px;
+    top:150px;
+    position:fixed;
+    z-index:999999;
+    vertical-align:middle;
+    text-align: center;
+    border-radius: 3px;
+
+    color          : #83b8f4;
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+    font-size      : 15px;      /* inline style */
+    letter-spacing : -0.34px;   /* -0.02em */
+    line-height    : 27.625px;  /* 1.625 */
+
+
+}
+
+
+.pdf_popup-iframe{
+    display:table;
+    border: none;
+    padding: 30px;
+    box-shadow: 5px 5px 10px -2px rgba(33,33,33,.3);
+    align-items: center;
+    transition: transform .15s;
+    align-content: end;
+    background:#F9F9F9;
+    right:370px;
+    top:150px;
+    position:fixed;
+    z-index:999999;
+    vertical-align:middle;
+    text-align: center;
+    border-radius: 3px;
+
+    color          : #83b8f4;;
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+    font-size      : 15px;      /* inline style */
+    letter-spacing : -0.34px;   /* -0.02em */
+    line-height    : 27.625px;  /* 1.625 */
+
+}
+.pdf_popup h1 {
+    margin:20px;
+    font-size: xx-large;
+}
+
+
+.pdf_checkbox{
+    width:200px;
+    margin-inline-start:-20px;
+    margin-bottom:20px
+}
+.pdf_popup button{
+    background-color: #83b8f4;
+    border:none;
+    width:200px;
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.2);
+    border-radius: 3px;
+    cursor:pointer;
+
+
+    color          : #ffffff;
+    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+    font-size      : 15px;      /* inline style */
+    letter-spacing : -0.34px;   /* -0.02em */
+    line-height    : 27.625px;  /* 1.625 */
+}
+.pdf_popup input[id="PDF_title"]{
+    margin: 40px 25px;
+    margin-bottom:10px;
+    width: 200px;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #83b8f4;
+    transition: all 0.3s cubic-bezier(.64,.09,.08,1);
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, #83b8f4 4%);
+    background-position: -200px 0;
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+
+}
+.pdf_popup input[id="checkStorage"] +label{
+    display: inline-block;
+    border: none;
+    font-weight:bold;
+}
+
+.pdf_popup-iframe h1 {
+    margin:20px;
+    font-size: xx-large;
+}
+.pdf_popup-iframe button {
+    background-color: #83b8f4;
+    border: none;
+    width: 200px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    cursor: pointer;
+
+
+    color: #ffffff;
+    font-family: AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
+    font-size: 15px; /* inline style */
+    letter-spacing: -0.34px; /* -0.02em */
+    line-height: 27.625px; /* 1.625 */
+}
+
+.pdf_popup-iframe input[id="PDF_title"]{
+    margin: 40px 25px;
+    margin-bottom:10px;
+    width: 200px;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #83b8f4;
+    transition: all 0.3s cubic-bezier(.64,.09,.08,1);
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, #83b8f4 4%);
+    background-position: -200px 0;
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+
+}
+.pdf_popup-iframe input[id="checkStorage"] +label{
+    display: inline-block;
+    border: none;
+    font-weight:bold;
+}

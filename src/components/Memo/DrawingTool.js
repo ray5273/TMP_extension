@@ -46,18 +46,17 @@ class DrawingTool extends Component {
 
 
         //여기서 url에 대한 image memo count가 존재하는지먼저 파악 없을시 새로 만들어줌.
-        database.collection("User").doc(uid).collection(url).doc("MemoImage").get().then(function(doc){
-            if(doc.exists){
-                console.log(doc.id,"=>",doc.data());
-            }else{
-                database.collection("User").doc(uid).collection(url).doc("MemoImage").set({
+        database.collection("User").doc(uid).collection("Url").doc(url).get().then(function(doc){
+            if(!doc.exists) {
+                database.collection("User").doc(uid).collection("Url").doc(url).set({
                     imageCount: 0
-                }).then(function() {
+                }).then(function () {
                     console.log("Memo Count firestore successfully added");
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.error("Error writing document: ", error);
                 });
             }
+
         });
 
         // url에 image 를 추가하고 해당 url의 memocount를 늘려줌
@@ -68,30 +67,28 @@ class DrawingTool extends Component {
                 var dataUrl = image.asDataURL();
                 var blob = dataURItoBlob(dataUrl);
 
-                //metadata에 x,y좌표 초기화 : (0,0)
                 //각각의 url에서 image는 1번부터 시작 ex) image1.png ...
-                database.collection("User").doc(uid).collection(url).doc("MemoImage").get().then(function(doc){
-                        console.log("value : "+doc.data().imageCount);
-                        var image_data_num = doc.data().imageCount+1;
-                        database.collection("User").doc(uid).collection(url).doc(`ImageMetadata${image_data_num}`).set({
-                            x:0,
-                            y:0
+                database.collection("User").doc(uid).collection("Url").doc(url).get().then(function(doc){
+                    //존재 할 시
+                    console.log("value : " + doc.data().imageCount);
+                    var image_data_num = doc.data().imageCount + 1;
+                    database.collection("User").doc(uid).collection("Url").doc(url).collection(`ImageMetadata${image_data_num}`).doc("pos").set({
+                        x: 0,
+                        y: 0
+                    });
+                    database.collection("User").doc(uid).collection("Url").doc(url).set({
+                        imageCount: image_data_num,
+                    }).then(function () {
+                        console.log("Document successfully written!");
+                        var imagePath = uid + '/' + url + '/' + 'image' + image_data_num + '.png';
+                        var dataRef = storage_ref.child(imagePath);
+                        dataRef.put(blob).then(function (snapshot) {
+                            console.log("uploaded a file!");
+                            done(true);
                         });
-                        database.collection("User").doc(uid).collection(url).doc("MemoImage").set({
-                            imageCount: image_data_num,
-                        }).then(function() {
-                            console.log("Document successfully written!");
-                            var imagePath = uid +'/'+url+'/'+'image'+image_data_num+'.png';
-                            var dataRef = storage_ref.child(imagePath);
-                            dataRef.put(blob).then(function (snapshot) {
-                                console.log("uploaded a file!");
-                                done(true);
-                            });
-
-
-                        }).catch(function(error) {
-                            console.error("Error writing document: ", error);
-                        });
+                    }).catch(function (error) {
+                        console.error("Error writing document: ", error);
+                    });
                 });
             }
         });

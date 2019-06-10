@@ -2,46 +2,60 @@ import React, { Component } from 'react';
 import Draggable from 'react-draggable-component';
 import Input from './MemoInput';
 import MemoIcon from 'assets/Memo-icon.png';
+import firebase from '../../Firebase'
 
 class DragText extends Component {
+    static defaultProps = {
+        posX:10,
+        posY:30,
+        text:'',
+        isNew: false
+    };
+
     constructor(props) {
         super(props);
         this.state = {
-            test: "",
-            open:false,
-            submit:false
+            open: false,
+            submit: false,
         }
     }
-    myCallback = (dataFromChild) => {
-        var childList = dataFromChild;
-        var text_data = childList[0];
-        var submit_data = childList[1];
-        console.log("get submit data : "+submit_data);
-        this.setState({
-             test:text_data,
-             submit:submit_data
+
+    handleStop = () => {
+        var e = window.event;
+
+        var changed_posX = window.scrollX + e.clientX;
+        var changed_posY = window.scrollY + e.clientY;
+
+        var db = firebase.firestore();
+        var url = encodeURIComponent(this.props.url);
+
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).update({
+            posX: changed_posX,
+            posY: changed_posY
+        })
+        .then(function() {
+            console.log("Memo position data changed");
+        })
+        .catch(function(error) {
+            console.error("Error while changing memo position data", error);
         });
-        // this.setState({ test: dataFromChild });
     };
 
     render() {
-        var text_submit = [];
-        text_submit[0] = this.state.test;
-        text_submit[1] = this.state.submit;
-        console.log("listname:"+text_submit);
         return (
             <Draggable
                 axis="x"
                 handle=".handle"
                 defaultPosition={{x: 0, y: 0}}
-                position={null}
+                position={{x: this.props.posX, y: this.props.posY}}
                 grid={[25, 25]}
                 scale={1}
                 dragStartCallback={this.handleStart}
                 dragCallback={this.handleDrag}
                 dragStopCallback={this.handleStop}>
                 <div className="input-wrapper">
-                    <Input stateFromParent={text_submit} callbackFromParent={this.myCallback}/>
+                    <Input isNew = {this.props.isNew} id={this.props.id} text={this.props.text} uid = {this.props.uid} url = {this.props.url}
+                     posX={this.props.posX} posY={this.props.posY} />
                 </div>
             </Draggable>
         );

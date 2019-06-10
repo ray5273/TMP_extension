@@ -3,15 +3,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from '../Firebase';
 import 'firebase/firestore';
-import styled, { css } from 'styled-components';
 import MenuBar from "./MenuBar";
-
-const Logo = styled.p`
-    font-size: 1.4rem;
-    color:#ffffff;
-    font-family    : AppleSDGothicNeo-Regular, "Malgun Gothic", "맑은 고딕", dotum, 돋움, sans-serif;
-
-`;
 
 class SimSearch extends Component {
     constructor(props) {
@@ -97,20 +89,7 @@ class SimSearch extends Component {
                 })
             });
     }
-
     render() {
-        let j = 0;
-        const open = this.state.search.map((memo,i) =>{
-            j = j + 1;
-            return(
-                //<React.Fragment key = {i}>
-                <div key = {i} className="search3" onClick={()=>window.open(memo.url)}>
-                    <div className="search4"> {memo.title} </div>
-                    <div className="search5"> {memo.content} </div>
-                </div>
-                //</React.Fragment>
-            )
-        });
         return (
             <React.Fragment>
                 <div className="search1">
@@ -153,7 +132,7 @@ check2.insertBefore(check1, check);
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if(request.message==="getID"){
-            ReactDOM.render(<SimSearch uid={request.id} url={request.url}/>, check1);
+            ReactDOM.render(<SimSearch uid={request.id}/>, check1);
         }
     }
 );

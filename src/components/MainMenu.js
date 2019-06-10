@@ -49,7 +49,7 @@ const styles = theme => ({
     },
     tabsRoot: {
     //    borderBottom: '1px solid #e2315a',
-        borderBottom: '1px solid #6B9900',
+        borderBottom: '1px solid #5d84af',
 
     },
     tabsIndicator: {
@@ -147,6 +147,12 @@ class CustomizedTabs extends React.Component {
                         label="BOOKMARK"
                         className="header-button"
                     />
+                    <Tab
+                        disableRipple
+                        classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
+                        label="PDF"
+                        className="header-button"
+                    />
                 </Tabs>
                 <SwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -154,6 +160,7 @@ class CustomizedTabs extends React.Component {
                     onChangeIndex={this.handleChangeIndex}
                 >
                     <TabContainer dir={theme.direction}><Content_Memo keyword={this.state.keyword}/></TabContainer>
+                    <TabContainer dir={theme.direction}><Content_Bookmark keyword={this.state.keyword}/></TabContainer>
                     <TabContainer dir={theme.direction}><Content_Bookmark keyword={this.state.keyword}/></TabContainer>
                 </SwipeableViews>
                  {/*<SearchBar
