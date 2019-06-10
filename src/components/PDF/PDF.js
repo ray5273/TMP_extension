@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import pdf_icon from "../../assets/menuBar/pdf.png";
-import jspdf from 'jspdf';
 
 class Pdf extends Component {
 
