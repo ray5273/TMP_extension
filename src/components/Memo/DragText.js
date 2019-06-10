@@ -28,7 +28,7 @@ class DragText extends Component {
         var db = firebase.firestore();
         var url = encodeURIComponent(this.props.url);
 
-        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).set({
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).update({
             posX: changed_posX,
             posY: changed_posY
         })
