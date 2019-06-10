@@ -30,7 +30,8 @@ class MenuBar extends Component {
         }
     }
     callStickyMemo = () => {
-        window.alert("sticky memo!");
+    //    window.alert("sticky memo!");
+        console.log("call sticky memo function");
         var i;
         for (i=0; i<this.state.data.length; i++) {
             console.log(i,"번쨰 posX",this.state.data[i].posX);
