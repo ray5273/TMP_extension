@@ -5,7 +5,13 @@ import jspdf from 'jspdf';
 class Pdf extends Component {
 
     addPDF = () =>{
-            console.log("pdf add!");
+        var pdf_popup = document.getElementById('pdf_popup');
+
+        if(pdf_popup.style.display=='none'){
+            pdf_popup.style.display='block';
+        }else{
+            pdf_popup.style.display='none';
+        }
     };
 
     render() {
