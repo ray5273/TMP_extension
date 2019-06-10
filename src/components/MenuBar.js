@@ -17,6 +17,9 @@ import pdf_icon from '../assets/menuBar/pdf.png';
 import left_arrow_icon from '../assets/menuBar/left_arrow.png';
 import right_arrow_icon from '../assets/menuBar/right_arrow.png';
 import DragText from './Memo/DragText';
+import * as rangy from 'rangy'
+import "rangy/lib/rangy-serializer";
+import Palette from "./Highlight/Palette";
 //const URL = "https://tmp-test-1a336.firebaseio.com/";
 
 class MenuBar extends Component {
@@ -29,36 +32,36 @@ class MenuBar extends Component {
             open:true
         }
     }
-    callStickyMemo = () => {
-    //    window.alert("sticky memo!");
-        console.log("call sticky memo function");
-        var i;
-        for (i=0; i<this.state.data.length; i++) {
-            console.log(i,"번쨰 posX",this.state.data[i].posX);
-            console.log(i,"번쨰 text",this.state.data[i].text);
-            if(document.getElementById(`stickyMemo${i}`)==null) {
-                var stickyMemo = document.createElement('div');
-                stickyMemo.setAttribute('id', `stickyMemo${i}`);
-                stickyMemo.style.position = 'absolute';
-                stickyMemo.style.width="300px";
-                stickyMemo.style.top = window.scrollY+'px';
-                stickyMemo.style.left = window.scrollX + i*50+'px';
-                stickyMemo.style.zIndex=2147483647;
-                stickyMemo.setAttribute('class', 'memo-before-render');
-                document.body.appendChild(stickyMemo);
-                // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
-                ReactDOM.render(<DragText
-                id={this.state.data[i].id}
-                index={i}
-                posX={this.state.data[i].posX}
-                posY={this.state.data[i].posY}
-                text={this.state.data[i].text}
-                uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${i}`));
-                //Painterro().show();
-            }
-
-        }
-    };
+    // callStickyMemo = () => {
+    // //    window.alert("sticky memo!");
+    //     console.log("call sticky memo function");
+    //     var i;
+    //     for (i=0; i<this.state.data.length; i++) {
+    //         console.log(i,"번쨰 posX",this.state.data[i].posX);
+    //         console.log(i,"번쨰 text",this.state.data[i].text);
+    //         if(document.getElementById(`stickyMemo${i}`)==null) {
+    //             var stickyMemo = document.createElement('div');
+    //             stickyMemo.setAttribute('id', `stickyMemo${i}`);
+    //             stickyMemo.style.position = 'absolute';
+    //             stickyMemo.style.width="300px";
+    //             stickyMemo.style.top = window.scrollY+'px';
+    //             stickyMemo.style.left = window.scrollX + i*50+'px';
+    //             stickyMemo.style.zIndex=2147483647;
+    //             stickyMemo.setAttribute('class', 'memo-before-render');
+    //             document.body.appendChild(stickyMemo);
+    //             // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
+    //             ReactDOM.render(<DragText
+    //             id={this.state.data[i].id}
+    //             index={i}
+    //             posX={this.state.data[i].posX}
+    //             posY={this.state.data[i].posY}
+    //             text={this.state.data[i].text}
+    //             uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${i}`));
+    //             //Painterro().show();
+    //         }
+    //
+    //     }
+    // };
 
     componentDidMount() {
         //bookmark div 부분 생성
@@ -89,6 +92,8 @@ class MenuBar extends Component {
             }
         )
        */
+
+        // Load Sticky Memo
         var i = 0;
 
         database.collection("User").doc(uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
@@ -117,7 +122,40 @@ class MenuBar extends Component {
                 i++;
             });
         });
+        // Load Sticky Memo End
 
+        // Load Highlights
+        rangy.init();
+        database.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                var data = doc.data();
+
+                var selRange = rangy.deserializeRange(data.serialized, document.getRootNode());
+
+                var newNode = document.createElement("span");
+                var color = data.color;
+
+                newNode.setAttribute(
+                    "style",
+                    `background-color: ${color}; display: inline;`
+                );
+                newNode.setAttribute('id', `highlight_${doc.id}`);
+                newNode.addEventListener('click', (e)=> {
+                    HighLight.addTool(e, newNode);
+                } );
+                //newNode.appendChild(selRange.extractContents());
+                //selRange.insertNode(newNode);
+                selRange.surroundContents(newNode);
+
+                ReactDOM.render(<Palette
+                    isNew={true}
+                    color={color}
+                    hid={doc.id}
+                    uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`Highlight_${doc.id}`));
+
+            });
+        });
+        // Load Highlights End
 
         //여기서 url에 대한 image memo count가 존재하는지 먼저 파악 없을시 아무것도 띄우지 않음
         //image memo count가 존재 할 시 존재하는 숫자만큼 이미지를 띄움.
