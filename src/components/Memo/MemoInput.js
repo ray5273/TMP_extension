@@ -11,9 +11,9 @@ class MemoInput extends Component {
         super(props);
         this.state = {
             text: this.props.text,
-            submitted: false,
+            submitted: !props.isNew,
             open: true,
-            id: ""
+            id: "",
         }
     }
 
@@ -31,21 +31,14 @@ class MemoInput extends Component {
         const url = encodeURIComponent(this.props.url);
         var db = firebase.firestore();
 
-        var title = document.getElementsByTagName('title')[0].innerHTML;
-
-        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").add({
-            title: title,
-            url: this.props.url,
-            posX: 10,
-            posY: 30,
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).update({
             content: this.state.text
         })
-        .then(function(docRef) {
-            console.log("Generated memo id: ", docRef.id);
-            this.setState({id: docRef.id});
+        .then(function() {
+            console.log("Memo content data changed");
         })
         .catch(function(error) {
-            console.error("Error inserting memo data: ", error);
+            console.error("Error while changing memo content data", error);
         });
     };
 
