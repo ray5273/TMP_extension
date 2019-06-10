@@ -90,6 +90,18 @@ class SimSearch extends Component {
             });
     }
     render() {
+        let j = 0;
+        const open = this.state.search.map((memo,i) =>{
+            j = j + 1;
+            return(
+                //<React.Fragment key = {i}>
+                <div key = {i} className="search3" onClick={()=>window.open(memo.url)}>
+                    <div className="search4"> {memo.title} </div>
+                    <div className="search5"> {memo.content} </div>
+                </div>
+                //</React.Fragment>
+            )
+        });
         return (
             <React.Fragment>
                 <div className="search1">
