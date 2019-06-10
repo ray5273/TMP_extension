@@ -52,6 +52,7 @@
 }
 .bookmark_popup h1 {
     margin:20px;
+    font-size: xx-large;
 }
 
 
@@ -102,6 +103,7 @@
 
 .bookmark_popup-iframe h1 {
     margin:20px;
+    font-size: xx-large;
 }
 .bookmark_popup-iframe button {
     background-color: #83b8f4;
