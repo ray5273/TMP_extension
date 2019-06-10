@@ -1,12 +1,22 @@
 
 export class Bookmark {
-    constructor(url= '', title= '', summary='', tag='', html = '') {
+    constructor(id='', url= '', title= '', summary='', tag='', html = '') {
         this._url = url;
         this._title = title;
         this._summary = summary;
         this._tag = tag;
         this._html = html;
+        this._id = id;
     }
+
+    set id(value) {
+        this._id = value;
+    }
+
+    get id() {
+        return this._id;
+    }
+
     get url() {
         return this._url;
     }
