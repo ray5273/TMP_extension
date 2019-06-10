@@ -66,12 +66,12 @@ class SimSearch extends Component {
                     });
                 })
             });*/
-        db.collection("User").doc(uid).collection("Urll").get()
+        db.collection("User").doc(uid).collection("Url").get()
             .then(docs => {
                 console.log(docs);
                 docs.forEach(doc => {
                     console.log(doc);
-                    db.collection("User").doc(uid).collection("Urll").doc(doc.id).collection("Memo").get()
+                    db.collection("User").doc(uid).collection("Url").doc(doc.id).collection("Memo").get()
                         .then(memos => {
                             console.log(memos);
                             memos.forEach(memo => {
