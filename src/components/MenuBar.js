@@ -59,11 +59,11 @@ class MenuBar extends Component {
 
         }
     };
+
     componentDidMount() {
         //bookmark div 부분 생성
         //ReactDOM.render(<BookMark_Form uid={this.props.uid} url={this.props.url} />, document.getElementById('bookmark_popup'));
        // ReactDOM.render(<BookMark_Form uid={this.props.uid} url={this.props.url} />, document.getElementById('bookmark_popup-iframe'));
-        console.log("uiduiduiduiduiduid",this.props.uid);
 
         let storage = Firebase.storage();
         let storageRef = storage.ref();
@@ -89,18 +89,35 @@ class MenuBar extends Component {
             }
         )
        */
-        database.collection("User").doc(uid).collection("Url").doc(url).get().then(
-            (doc) => {
-                if(doc.exists){
-                    this.setState({
-                        data: doc.data().memos
-                    });
-               }
-            }
-        ).then(()=> {
-               this.callStickyMemo();
-            }
-        )
+        var i = 0;
+
+        database.collection("User").doc(uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                var data = doc.data();
+
+                if (document.getElementById(`stickyMemo_${doc.id}`) == null) {
+                    var stickyMemo = document.createElement('div');
+                    stickyMemo.setAttribute('id', `stickyMemo_${doc.id}`);
+                    stickyMemo.style.position = 'absolute';
+                    stickyMemo.style.width="300px";
+                    stickyMemo.style.top = window.scrollY+'px';
+                    stickyMemo.style.left = window.scrollX +'px';
+                    stickyMemo.style.zIndex=2147483647;
+                    stickyMemo.setAttribute('class', 'memo-before-render');
+                    document.body.appendChild(stickyMemo);
+                    // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
+                    ReactDOM.render(<DragText
+                        id={doc.id}
+                        posX={data.posX}
+                        posY={data.posY}
+                        text={data.content}
+                        uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`stickyMemo_${doc.id}`));
+                    //Painterro().show();
+                }
+                i++;
+            });
+        });
+
 
         //여기서 url에 대한 image memo count가 존재하는지 먼저 파악 없을시 아무것도 띄우지 않음
         //image memo count가 존재 할 시 존재하는 숫자만큼 이미지를 띄움.
@@ -152,7 +169,6 @@ class MenuBar extends Component {
 
     }
 
-
     render() {
         return (
             <React.Fragment>
@@ -164,7 +180,7 @@ class MenuBar extends Component {
                         </div>
                         <BookMark uid = {this.props.uid} url = {this.props.url}/>
                         <PDF url={this.props.url}/>
-                        <DomMemo uid = {this.props.uid} url = {this.props.url} data={this.state.data}/>
+                        <DomMemo uid = {this.props.uid} url = {this.props.url}/>
                         <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
                         <HighLight uid = {this.props.uid} url = {this.props.url}/>
                     </div>

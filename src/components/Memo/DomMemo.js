@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import DragText from './DragText';
 import memo_add_icon from '../../assets/menuBar/add.png';
+import firebase from '../../Firebase'
 
 import Painterro from 'painterro_tmp'
 class DomMemo extends Component {
@@ -15,13 +16,35 @@ class DomMemo extends Component {
     }
 
     addStickyMemo = () => {
-        window.alert("sticky memo!");
         this.setState({
             t: this.state.t + 1,
         });
-        if(document.getElementById(`stickyMemo${this.state.t}`)==null) {
+
+        var db = firebase.firestore();
+        var url = encodeURIComponent(this.props.url);
+
+        var title = document.getElementsByTagName('title')[0].innerHTML;
+
+        var mid = "";
+
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").add({
+            title: title,
+            url: url,
+            posX: 10,
+            posY: 30,
+            content: ''
+        })
+        .then(function(docRef) {
+            console.log("Generated memo id: ", docRef.id);
+            mid = docRef.id;
+        })
+        .catch(function(error) {
+            console.error("Error inserting memo data: ", error);
+        });
+
+        if (document.getElementById(`stickyMemo_${mid}`) == null) {
             var stickyMemo = document.createElement('div');
-            stickyMemo.setAttribute('id', `stickyMemo${this.state.t}`);
+            stickyMemo.setAttribute('id', `stickyMemo_${mid}`);
             stickyMemo.style.position = 'absolute';
             stickyMemo.style.width="300px";
             //sticky memo 생성위치 조정
@@ -44,7 +67,7 @@ class DomMemo extends Component {
 
             //<DragText
             //    uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${i}`));
-            ReactDOM.render(<DragText isInserted = {true} uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${this.state.t}`));
+            ReactDOM.render(<DragText isNew = {true} id = {mid} uid = {this.props.uid} url = {this.props.url}/>, document.getElementById(`stickyMemo_${mid}`));
             //Painterro().show();
         }
     };

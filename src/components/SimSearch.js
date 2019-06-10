@@ -13,16 +13,12 @@ class SimSearch extends Component {
         }
     }
     componentDidMount(): void {
-        console.log("uid in Simsearch : "+this.props.uid);
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({ user: user });
                 var curUser = user.uid;
-                console.log("SimSearch: User value:"+curUser);
-
             } else {
                 this.setState({ user: user });
-                console.log("SimSearch: Signed Out");
             }
         });
     }
