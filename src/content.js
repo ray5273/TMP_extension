@@ -10,6 +10,7 @@ import { testNameToKey } from 'jest-snapshot/build/utils';
 import firebase from './Firebase';
 import 'firebase/firestore';
 import BookMark_Form from "./components/Bookmarks/Bookmark_Item_Form";
+import GetFileName from "./components/PDF/GetFileName";
 
 var uid = null;
 
@@ -57,6 +58,7 @@ chrome.runtime.onMessage.addListener(
             console.log("cur url:"+request.url);
             ReactDOM.render(<MenuBar uid={request.id} url ={request.url}/>, test);
             ReactDOM.render(<BookMark_Form uid={request.uid} url={request.url} />, document.getElementById('bookmark_popup'));
+            ReactDOM.render(<GetFileName/>,document.getElementById('pdf_popup'));
         }
     }
 );
@@ -92,7 +94,11 @@ document.body.appendChild(bookMark_popup);
 // ReactDOM.render(<BookMark_Form uid={uid} url={url} />, document.getElementById('bookmark_popup'));
 // ReactDOM.render(<BookMark_Form />, document.getElementById('BookMark_popup'));
 
-
+var pdf_popup = document.createElement('div');
+pdf_popup.setAttribute('id', 'pdf_popup');
+pdf_popup.style.zIndex=2147483647;
+pdf_popup.style.display='none';
+document.body.appendChild(pdf_popup);
 
 
 function toggle(){
@@ -101,6 +107,9 @@ function toggle(){
        test.setAttribute("id",'menu-bar-iframe');
        var bookmark_popup = document.getElementsByClassName('bookmark_popup');
        bookmark_popup[0].className='bookmark_popup-iframe';
+
+       pdf_popup = document.getElementsByClassName('pdf_popup');
+       pdf_popup[0].className = 'pdf_popup-iframe';
        // bookmark_popup[0].setAttribute("className",'bookmark_popup-iframe');
    }
    else {
@@ -108,6 +117,8 @@ function toggle(){
        test.setAttribute("id",'menu-bar');
        var bookmark_popup = document.getElementsByClassName('bookmark_popup-iframe');
        bookmark_popup[0].className='bookmark_popup';
+       pdf_popup = document.getElementsByClassName('pdf_popup-iframe');
+       pdf_popup[0].className = 'pdf_popup';
    }
 }
 
