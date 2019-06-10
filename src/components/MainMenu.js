@@ -14,6 +14,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import {Link, BrowserRouter as Router, Route, Switch  } from 'react-router-dom';
 import Content_Memo from "./Content_Memo";
 import Content_Bookmark from "./Content_Bookmark"
+import Content_Pdf from "./Content_Pdf"
 import Signin from "./Signin";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
@@ -161,7 +162,7 @@ class CustomizedTabs extends React.Component {
                 >
                     <TabContainer dir={theme.direction}><Content_Memo keyword={this.state.keyword}/></TabContainer>
                     <TabContainer dir={theme.direction}><Content_Bookmark keyword={this.state.keyword}/></TabContainer>
-                    <TabContainer dir={theme.direction}><Content_Bookmark keyword={this.state.keyword}/></TabContainer>
+                    <TabContainer dir={theme.direction}><Content_Pdf keyword={this.state.keyword}/></TabContainer>
                 </SwipeableViews>
                  {/*<SearchBar
                      // value={this.state.search_val}
