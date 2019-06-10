@@ -5,6 +5,7 @@ import HighLight from './Highlight/Tooltip';
 import DrawingTool from './Memo/DrawingTool'
 import Firebase from '../Firebase.js'
 import BookMark from './Bookmarks/Bookmark'
+import PDF from './PDF/PDF'
 import * as firebaseui from 'firebaseui'
 import "firebase/auth";
 import "firebase/storage";
@@ -179,9 +180,7 @@ class MenuBar extends Component {
                             <img src={right_arrow_icon} alt="" onClick={()=>this.setState({open:!this.state.open})}/>
                         </div>
                         <BookMark uid = {this.props.uid} url = {this.props.url}/>
-                        <div className="menus">
-                        <img src={pdf_icon} alt="" />
-                        </div>
+                        <PDF url={this.props.url}/>
                         <DomMemo uid = {this.props.uid} url = {this.props.url} data={this.state.data}/>
                         <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
                         <HighLight uid = {this.props.uid} url = {this.props.url}/>
