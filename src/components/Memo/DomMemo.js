@@ -44,7 +44,7 @@ class DomMemo extends Component {
 
             //<DragText
             //    uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${i}`));
-            ReactDOM.render(<DragText isInserted = {true} uid = {this.props.uid} url = {this.props.url} data={this.props.data}/>, document.getElementById(`stickyMemo${this.state.t}`));
+            ReactDOM.render(<DragText isNew = {true} id = {mid} uid = {this.props.uid} url = {this.props.url}/>, document.getElementById(`stickyMemo_${mid}`));
             //Painterro().show();
         }
     };

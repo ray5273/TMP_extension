@@ -6,20 +6,21 @@ import firebase from '../../Firebase'
 
 class DragText extends Component {
     static defaultProps = {
-        posX:0,
-        posY:0,
-        text:''
-    }
+        posX:10,
+        posY:30,
+        text:'',
+        isNew: false
+    };
 
     constructor(props) {
         super(props);
         this.state = {
-            open:false,
-            submit:false
+            open: false,
+            submit: false,
         }
     }
 
-    handleStop = ()=>{
+    handleStop = () => {
         var e = window.event;
 
         var changed_posX = window.scrollX + e.clientX;
@@ -54,7 +55,7 @@ class DragText extends Component {
                 dragStopCallback={this.handleStop}>
                 <div className="input-wrapper">
                     {console.log("in Draggable: ", this.props.text, this.props.posX,this.props.posY)}
-                    <Input id={this.props.id} text={this.props.text} uid = {this.props.uid} url = {this.props.url}
+                    <Input isNew = {this.props.isNew} id={this.props.id} text={this.props.text} uid = {this.props.uid} url = {this.props.url}
                      posX={this.props.posX} posY={this.props.posY} />
                 </div>
             </Draggable>
