@@ -27,6 +27,7 @@ class Bookmark_Category extends  Component {
         // 차 후 DB 에서 목록을 가져오는 것을 추가해야한다.
 
         this.state = {
+            categoryId: props.categoryId,
             isChangingName: false,
             categoryName : props.categoryName,
             changedCategoryName: props.categoryName,
@@ -49,45 +50,25 @@ class Bookmark_Category extends  Component {
         });
 
         if(this.state.categoryName !== this.state.changedCategoryName) {
-           this.props.handleChange(this.state);
+           this.props.handleChangeCategoryName(this.state);
         }
     };
 
     // 북마크 내용 편집 핸들링.
     handleEditBookmark = (bookmark) => {
 
-        this.setState({
-            // eslint-disable-next-line array-callback-return
-                 bookmarkList: this.state.bookmarkList.map( (item)=>{
-                     if(bookmark.url !== item.url) {
-                         return item;
-                     }
-                     else {
-                         item.title = bookmark.title;
-                         item.summary = bookmark.summary;
-                         item.tag = bookmark.tag;
-                         return item;
-                     }
-                 })
-        });
-        this.props.handleChange(this.state);
+        this.props.handleEditBookmark(this.state, bookmark);
     };
 
     // 북마크 삭제 핸들링.
     handleRemoveBookmark = (bookmark) => {
-        const { handleRemove } = this.props;
-
-        var newList = this.state.bookmarkList.filter( (book) => {
-            if(book.title !== bookmark.title)
-                return book;
-            });
-
-        handleRemove(this.state.categoryName, newList);
+        this.props.handleRemoveBookmark(this.state.categoryId, bookmark.id);
     };
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
         // console.log("nextCategoryName : " + nextProps.categoryName);
         this.setState({
+            categoryId: nextProps.categoryId,
             bookmarkList: nextProps.bookmarkList,
             categoryName: nextProps.categoryName,
             changedCategoryName: nextProps.categoryName
@@ -108,7 +89,7 @@ class Bookmark_Category extends  Component {
                                            autoFocus placeholder='카테고리명을 입력하세요.'/>
                         }
                         {this.props.openRemoveCategory ?
-                        <IconButton aria-label="Delete" onClick={(e) => { e.stopPropagation(); this.props.handleRemoveCategory(this.state.categoryName)
+                        <IconButton aria-label="Delete" onClick={(e) => { e.stopPropagation(); this.props.handleRemoveCategory(this.state.categoryId)
                         }}>
                             <DeleteIcon/>
                         </IconButton>
