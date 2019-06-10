@@ -86,7 +86,6 @@ class Bookmarks extends Component {
                                      _html = doc.data()[book][element];
                                  }
                              }
-                             // console.log("book : ", book);
                              bookmarkList.push(new Bookmark(book, _url, _title, _summary, '', _html));
                          }
                      }
@@ -244,7 +243,6 @@ class Bookmarks extends Component {
                     <BookmarkButton onClick={() => {
                         this.setState({openRemoveCategory: !this.state.openRemoveCategory});
                         }}>폴더 삭제</BookmarkButton>
-                    <BookmarkButton onClick={this.handleAddBookmark}>북마크 추가</BookmarkButton>
                 </div>
                 <div>
                     { this.state.addBookmark ? <Bookmark_Add_Form handleSubmit={this.handleSubmit} categories={this.state.categories} />  : "" }

@@ -1,6 +1,8 @@
 /*global chrome*/
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import firebase from '../../Firebase';
+import {Bookmark, Category} from "./BookmarkStructures";
 
 class Bookmark_Add_Form extends Component {
 
@@ -8,7 +10,9 @@ class Bookmark_Add_Form extends Component {
         super(props);
 
         this.state = {
-            // categoryName: props.categories[0].categoryName,
+            uid: this.props.uid,
+            categoryName: '',
+            categories: [],
             title: '',
             url:  this.props.url,
             summary:'',
@@ -18,45 +22,83 @@ class Bookmark_Add_Form extends Component {
 
     };
 
-    // componentDidMount(): void {
-    //     chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
-    //         var tabUrl = tabs[0].url;
-    //         console.log("tabUrl :" + tabUrl);
-    //         this.setState({
-    //             url: tabUrl
-    //         });
-    //     }.bind(this));
-    // }
-    //
-    // shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-    //     const isUrl = this.state.url !== nextState.url;
-    //     const isTitle = this.state.title !== nextState.title;
-    //     const isSummary = this.state.summary !== nextState.summary;
-    //     const isTag = this.state.tag !== nextState.tag;
-    //     if(isUrl) {
-    //         const request = require('request');
-    //         request(nextState.url, function (err, res, html) {
-    //             if (!err) {
-    //                 this.setState({
-    //                     html: html
-    //                 })
-    //             }
-    //
-    //         }.bind(this));
-    //     }
-    //     return isUrl || isTitle || isSummary || isTag || true;
-    // }
+    componentDidMount(): void {
+        var uid = this.props.uid;
+        var db = firebase.firestore();
+        var categoryList= [];
 
+
+        const request = require('request');
+        request(this.state.url, function (err, res, html) {
+            if (!err) {
+                this.setState({
+                    html: html
+                })
+            }
+
+        }.bind(this));
+        /*
+           DB 구조
+           (Collection) (Doc)     - Field
+           Bookmark - Category_Id - categoryCount (Field)
+                                  - categoryName  (Field)
+                                  - Boomark 1 ~ n
+           북마크 추가시 가져와야 할 것
+            1) category_id
+            2) categoryName
+         */
+
+        this.getCategoryListFromFirebase();
+    }
+
+    getCategoryListFromFirebase = () => {
+
+        var db = firebase.firestore();
+        var categoryList= [];
+
+        db.collection("User").doc(this.state.uid).collection("Bookmark").get().then((snapshot) => {
+            snapshot.docs.forEach(doc => {
+                if(doc.id !== "C_Info") {
+                    categoryList.push(new Category(doc.id, doc.data()['categoryName'], ''));
+                }
+            });
+            this.setState({
+                categories: categoryList
+            });
+        });
+    };
     handleChange = (e) => {
         this.setState({
             [e.target.id]: e.target.value
         });
     };
 
-    handleSubmit = () => {
+    handleSubmit = async () => {
         var bookMark_popup = document.getElementById('bookmark_popup');
         bookMark_popup.style.display='none';
+
+        var db = firebase.firestore().collection("User").doc(this.state.uid).collection("Bookmark");
+
+        var bookmarkNum = 'not';
+        await db.doc(this.state.categoryName).get().then( doc => {
+            bookmarkNum = doc.data().bookmarkCount;
+
+            db.doc(this.state.categoryName).update({
+                bookmarkCount: bookmarkNum + 1
+            });
+        });
+        var newId = 'bookmark'+bookmarkNum;
+
+        db.doc(this.state.categoryName).set({
+            [newId]: {
+                url: this.state.url,
+                title: this.state.title,
+                html: this.state.html,
+                summary:this.state.summary
+            }
+        }, {merge: true});
     };
+
 
     render() {
         const labelStyle = {
@@ -69,10 +111,13 @@ class Bookmark_Add_Form extends Component {
                 <h1>BookMark</h1>
                 <label>Select categories</label>
                 <select id='categoryName' name="categoryName" placeholder="Categories" onChange={this.handleChange}>
-                   <option>여기 디비랑 연동해주세요</option>
+                    {
+                        this.state.categories.map( data => {
+                        return <option value={data.id}> {data.categoryName} </option>
+                    })}
                 </select>
-                <input id="bookmark_title" placeholder="BookMark Title" value={this.props.title} onChange={this.handleChange}/>
-                <input id="bookmark_title" placeholder="Summary" value={this.props.summary} onChange={this.handleChange}/>
+                <input id="title" placeholder="BookMark Title" value={this.state.title} onChange={this.handleChange}/>
+                <input id="summary" placeholder="Summary" value={this.state.summary} onChange={this.handleChange}/>
                 <div>
                     <button onClick={this.handleSubmit}>Add Bookmark</button>
                 </div>
@@ -81,34 +126,3 @@ class Bookmark_Add_Form extends Component {
     };
 }
 export default Bookmark_Add_Form;
-
-
-{/*<form onSubmit={this.handleSubmit}>*/}
-{/*    <p>*/}
-{/*        <label style = {labelStyle}> category</label><br/>*/}
-{/*        <select id='categoryName' name="categoryName" onChange={this.handleChange}>*/}
-{/*            {this.props.categories.map((category) => {*/}
-{/*                return <option key={category.categoryName} value= {category.categoryName}> {category.categoryName} </option>*/}
-{/*            })}*/}
-{/*        </select>*/}
-{/*    </p>*/}
-{/*    <p>*/}
-{/*        <label  style = {labelStyle}> Title </label><br/>*/}
-{/*        <input id="title" value = {this.state.title} size = "20"  onChange={this.handleChange} />*/}
-{/*    </p>*/}
-{/*    <p>*/}
-{/*        <label style = {labelStyle}>Url</label><br/>*/}
-{/*        <input id="url" value={this.state.url} size="20"  onChange={this.handleChange}/>*/}
-{/*    </p>*/}
-{/*    <p>*/}
-{/*        <label  style = {labelStyle}>Summary</label><br/>*/}
-{/*        <input  id="summary" value={this.state.summary} size="20" onChange={this.handleChange}/>*/}
-{/*    </p>*/}
-{/*    <p>*/}
-{/*        <label  style = {labelStyle}>Tags</label><br/>*/}
-{/*        <input id="tag" value={this.state.tag} size="20"  onChange={this.handleChange}/>*/}
-{/*    </p>*/}
-{/*    <p>*/}
-{/*        <button type="submit">저장</button>*/}
-{/*    </p>*/}
-{/*</form>*/}
