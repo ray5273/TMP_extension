@@ -93,7 +93,6 @@ class MenuBar extends Component {
         database.collection("User").doc(uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 var data = doc.data();
-                console.log("data : ", data);
 
                 if (document.getElementById(`stickyMemo_${doc.id}`) == null) {
                     var stickyMemo = document.createElement('div');
@@ -101,7 +100,7 @@ class MenuBar extends Component {
                     stickyMemo.style.position = 'absolute';
                     stickyMemo.style.width="300px";
                     stickyMemo.style.top = window.scrollY+'px';
-                    stickyMemo.style.left = window.scrollX + i*50+'px';
+                    stickyMemo.style.left = window.scrollX +'px';
                     stickyMemo.style.zIndex=2147483647;
                     stickyMemo.setAttribute('class', 'memo-before-render');
                     document.body.appendChild(stickyMemo);
@@ -111,10 +110,9 @@ class MenuBar extends Component {
                         posX={data.posX}
                         posY={data.posY}
                         text={data.content}
-                        uid = {this.props.uid} url = {this.props.url}/>, document.getElementById(`stickyMemo_${doc.id}`));
+                        uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`stickyMemo_${doc.id}`));
                     //Painterro().show();
                 }
-
                 i++;
             });
         });
@@ -181,7 +179,7 @@ class MenuBar extends Component {
                         </div>
                         <BookMark uid = {this.props.uid} url = {this.props.url}/>
                         <PDF url={this.props.url}/>
-                        <DomMemo uid = {this.props.uid} url = {this.props.url} data={this.state.data}/>
+                        <DomMemo uid = {this.props.uid} url = {this.props.url}/>
                         <DrawingTool uid = {this.props.uid} url = {this.props.url}/>
                         <HighLight uid = {this.props.uid} url = {this.props.url}/>
                     </div>
