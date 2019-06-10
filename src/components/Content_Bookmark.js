@@ -7,12 +7,16 @@ import Bookmark_Category from "./Bookmarks/Bookmark_Category";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import {Bookmark, Category} from './Bookmarks/BookmarkStructures';
+import firebase from '../Firebase';
 
 const BookmarkButton = styled(Button)`
     variant: outlined;
     color: primary;
     margin: 5px
 `;
+
+const FirstCollection = "User";
+const C_Info = "C_Info";
 
 class Bookmarks extends Component {
     id = 1;
@@ -21,95 +25,178 @@ class Bookmarks extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            uid: firebase.auth().currentUser.uid,
             addBookmark: false,
-            categories: this.getCategoryListFromFirebase(),
+            categories: [],
             openRemoveCategory: false
         }
+
     };
 
-    // Content_Bookmark 초기 생성 시 fb에서 리스트를 가져옴.
-    // TODO: 파이어베이스 연동을 해야함. 북마크 관련해서 파이어베이스 연동을 아직 안함.
-    getCategoryListFromFirebase = () => {
-        var b1 = new Bookmark('https://www.naver.com', '네이버','testing....', '#연습');
-        var b2 = new Bookmark('https://www.google.com', '구글','testing....', "#연습");
-        const bookmarklist = [b1, b2];
-
-        return [].concat(new Category(this.categoryId++, '기본카테고리', bookmarklist))
+    componentWillUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void {
     }
 
-    componentDidUpdate(oldProps) {
-        const newProps = this.props;
- /*
-        if (oldProps.keyword !== newProps.keyword) {
-            this.setState({
-                searched: this.state.bookmarks.filter(
-                    x => x.title.indexOf(this.props.keyword) > -1
-                )
-            })
-        }
+    componentWillMount(): void {
 
-  */
+        var db = firebase.firestore().collection("User").doc(this.state.uid);
+        // console.log("this user uses it at first.111 : ", this.state.uid);
+        if(db === undefined) {
+            console.log("this user uses it at first.");
+            db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").doc(C_Info).set({
+                categoryCount:1
+            });
+            db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").doc('기본카테고리').set({
+                bookmarkCount:0
+            });
+        }
+        else {
+            console.log("componentWillMount : 이미 사용한 적이 있다. 파이어 베이스에서 불러와야 한다.");
+        }
+    }
+    componentDidMount(): void {
+        this.getCategoryListFromFirebase();
+    }
+
+    // Take a Categories from Firestore.
+     getCategoryListFromFirebase = () => {
+         var categoryList= [];
+         var db = firebase.firestore();
+
+        // console.log("Bookmark Collection exist. it means that user used it");
+        db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").get().then((snapshot) => {
+              snapshot.docs.forEach(doc => {
+                  var categoryName = "";
+                  var bookmarkList = [];
+                 if(doc.id !== C_Info) {
+                     for(var book in doc.data()) {
+                         if(book === 'bookmarkCount') {}
+                         else if(book === 'categoryName') {
+                             categoryName = doc.data()[book];
+                             // console.log("categoryName : ", categoryName);
+                         } else {
+                             var _url, _title, _summary, _html;
+                             for(var element in doc.data()[book]) {
+                                 if(element === 'url') {
+                                     _url = doc.data()[book][element];
+                                 } else if(element === 'title') {
+                                     _title = doc.data()[book][element];
+                                 } else if(element === 'summary') {
+                                     _summary = doc.data()[book][element];
+                                 } else if(element === 'html') {
+                                     _html = doc.data()[book][element];
+                                 }
+                             }
+                             bookmarkList.push(new Bookmark(book, _url, _title, _summary, '', _html));
+                         }
+                     }
+                     // console.log("doc ic : ", doc.id, ", name : ", categoryName);
+                     categoryList.push(new Category(doc.id, categoryName,bookmarkList));
+                 }
+             });
+             this.setState({
+                 categories: categoryList
+             })
+         });
     };
 
-    // 카테고리 이름(id), 북마크 리스트? ..... 아직 미정.
-    handleCreateFolder = () => {
-
-        this.setState( {
-            categories: this.state.categories.concat(new Category(this.categoryId++, '추가된 카테고리' + (this.categoryId-1), []))
+    // Create Category Folder
+    handleCreateFolder = async () => {
+        var db = firebase.firestore().collection(FirstCollection).doc(this.state.uid).collection("Bookmark");
+        var categoryNum = 'not';
+        await db.doc(C_Info).get().then( doc => {
+            categoryNum = doc.data().categoryCount;
         });
 
+        console.log("categoryNum : ", categoryNum);
+        db.doc(C_Info).set({
+           categoryCount: categoryNum+1
+        }).then(function () {
+            console.log("categoryCount successfully updated");
+        }).catch(function (error) {
+            console.error("Error writing document: ", error);
+        });
+
+        db.doc("category"+categoryNum).set({
+            categoryName: "생성된 카테고리",
+            bookmarkCount: 0
+        }).then(function () {
+            console.log("category successfully added");
+        }).catch(function (error) {
+            console.error("Error writing document: ", error);
+        });
+
+        // after update, re-take bookmarks.
+        this.getCategoryListFromFirebase();
     };
 
-    handleAddBookmark = () => {
+    // Remove Category Folder
+    handleRemoveCategory = (categoryId) => {
+        console.log("removed : " + categoryId);
 
+        var db = firebase.firestore().collection(FirstCollection).doc(this.state.uid).collection("Bookmark");
+        db.doc(categoryId).delete();
+
+        this.getCategoryListFromFirebase();
+
+        this.setState({
+            openRemoveCategory: !this.state.openRemoveCategory,
+        });
+    };
+
+    // Chane Category Name
+    handleChangeCategoryName = (category) => {
+        var db = firebase.firestore().collection(FirstCollection).doc(this.state.uid).collection("Bookmark");
+        db.doc(category.categoryId).update({
+            categoryName:category.changedCategoryName
+        }).then(function () {
+            console.log("changedCategoryName successfully updated");
+        }).catch(function (error) {
+            console.error("Error writing document: ", error);
+        });
+
+        this.getCategoryListFromFirebase();
+    };
+
+    // addBookmark open handling
+    handleAddBookmark = () => {
         this.setState({
             addBookmark: !this.state.addBookmark
         });
     };
 
-    // 카테고리의 변화를 핸들링.
-    handleChange = (changedCategory) => {
-        this.setState({
-            categories: this.state.categories.map((category)=> {
-                if(category.categoryName === changedCategory.categoryName) {
-                  //  category.categoryName = changedCategory.changedCategoryName;
-                  //  category.bookmarkList = changedCategory.bookmarkList;
-                    return new Category(category.id, changedCategory.changedCategoryName, changedCategory.bookmarkList);
-                }
-                else
-                    return category;
-            })
-        });
-    };
+    // handle boomark's edition in category
+    handleEditBookmark = (changedCategory, bookmark) => {
 
-    // 카테고리의 삭제 변화를 다룬다. 예를 들어, 북마크의 삭제 혹은 카테고리의 삭제.
-    handleRemove = (categoryName, list) => {
-        list.map( (item) => {
-            console.log("remove from Content_Bookmark : " + item.title);
+        var changedBookmark = {
+            html: bookmark.html,
+            summary: bookmark.summary,
+            title: bookmark.title,
+            url: bookmark.url
+        };
+        var db = firebase.firestore().collection(FirstCollection).doc(this.state.uid).collection("Bookmark");
+        console.log("handleEditBookmark : ", bookmark.id, ", ");
+        db.doc(changedCategory.categoryId).update({
+           [bookmark.id]: changedBookmark
+        }).then(function () {
+            console.log([bookmark.id], " successfully updated");
+        }).catch(function (error) {
+            console.error("Error writing document: ", error);
         });
 
-        this.setState({
-            categories: this.state.categories.map((category) => {
-                if (category.categoryName === categoryName) {
-                    category.categoryName = categoryName;
-                    category.bookmarkList = list;
-                    return category;
-                } else
-                    return category;
-            })
-        });
+        this.getCategoryListFromFirebase();
     };
 
-    // 카테고리 삭제
-    handleRemoveCategory = (categoryName) => {
-        console.log("removed : " + categoryName);
-        this.setState({
-            openRemoveCategory: !this.state.openRemoveCategory,
-            categories: this.state.categories.filter( cate => { if(cate.categoryName !== categoryName) { console.log(cate.categoryName); return cate;}
-            })
+    // handleRemove Bookmark in a category
+    handleRemoveBookmark = (categoryId, bookmarkId) => {
+
+        var db = firebase.firestore().collection(FirstCollection).doc(this.state.uid).collection("Bookmark");
+        db.doc(categoryId).update({
+           [bookmarkId]: firebase.firestore.FieldValue.delete()
         });
-        this.state.categories.map((c) => console.log("from removeCategory : " + c.categoryName));
+
+        this.getCategoryListFromFirebase();
     };
+
 
     handleSubmit = (data) => {
         var bookmark = new Bookmark(data.url, data.title, data.summary, data.tag, data.html);
@@ -137,12 +224,14 @@ class Bookmarks extends Component {
         return this.state.categories.map((item) => {
            // console.log("from showCategories : " + item.categoryName);
             return <Bookmark_Category
-                    categoryName={item.categoryName}
-                    bookmarkList={item.bookmarkList}
-                    openRemoveCategory = {this.state.openRemoveCategory}
-                    handleRemoveCategory = {this.handleRemoveCategory}
-                    handleRemove={this.handleRemove}
-                    handleChange={this.handleChange}/>
+                categoryId = {item.id}
+                categoryName={item.categoryName}
+                bookmarkList={item.bookmarkList}
+                handleChangeCategoryName = {this.handleChangeCategoryName}
+                openRemoveCategory = {this.state.openRemoveCategory}
+                handleRemoveCategory = {this.handleRemoveCategory}
+                handleRemoveBookmark={this.handleRemoveBookmark}
+                handleEditBookmark={this.handleEditBookmark}/>
         })
     }
 
@@ -154,7 +243,6 @@ class Bookmarks extends Component {
                     <BookmarkButton onClick={() => {
                         this.setState({openRemoveCategory: !this.state.openRemoveCategory});
                         }}>폴더 삭제</BookmarkButton>
-                    <BookmarkButton onClick={this.handleAddBookmark}>북마크 추가</BookmarkButton>
                 </div>
                 <div>
                     { this.state.addBookmark ? <Bookmark_Add_Form handleSubmit={this.handleSubmit} categories={this.state.categories} />  : "" }

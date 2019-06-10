@@ -5,12 +5,17 @@ import Icon from '../../assets/hlicon.png';
 import ReactDOM from 'react-dom';
 import HighlightMenu from './HighlightMenu';
 import Firebase from '../../Firebase'
+import * as rangy from 'rangy'
+import "rangy/lib/rangy-serializer";
 
 const Button = styled.button`
     background-color: ${props => props.color};
 `
 
 class Palette extends Component {
+    static defaultProps = {
+        isNew: false
+    };
     constructor(props) {
         super(props);
         this.state={
@@ -18,7 +23,8 @@ class Palette extends Component {
             nowNode: '',
             modifying: false,
             toModify:''
-        }
+        };
+        rangy.init();
     }
 
     /* 수정할색깔이 바뀌면 현재 state node의 색을 바꾸려 시도중
@@ -34,10 +40,18 @@ class Palette extends Component {
 
     //가장 최근에 select한 range를 state에 넣어두고 지울 수 있게(db없이 임시)
     removeHighlight = () => {
-        console.log(this.state.nowNode);
         //지우는코드 두줄. text를 따로 뽑은 뒤 element를 text로 대체하기
+        var uid = this.props.uid;
+        var url = encodeURIComponent(this.props.url);
+        var db = Firebase.firestore();
+
+        var hid = this.props.isNew ? this.props.hid : this.state.hid;
+        console.log("hid : ", hid);
+        db.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").doc(hid).delete();
+
         var toReplace = this.state.nowNode.textContent;
         this.state.nowNode.replaceWith(toReplace);
+
     }
 
     retModifiedColor=(color)=>{
@@ -45,8 +59,8 @@ class Palette extends Component {
             toModify:color
         })
     }
-    addTool = (e, newNode)=> {
 
+    addTool = (e, newNode)=> {
             console.log("inside addTooltip Func");
             var toolTipDiv = document.createElement('div');
             toolTipDiv.setAttribute('id', 'toolTipDiv');
@@ -87,27 +101,46 @@ class Palette extends Component {
         var url = encodeURIComponent(this.props.url);
         var db = Firebase.firestore();
 
+        var comp = this;
+
         if (selRange) {
-            newNode.setAttribute(
-                "style",
-                `background-color: ${color}; display: inline;`
-            );
-            newNode.setAttribute('id', `highlight${this.state.hlNum}`);
-            newNode.addEventListener('click', (e)=> {
-                this.addTool(e, newNode);
-                console.log("clickeventlistnenenened");
-            } );
-            //newNode.appendChild(selRange.extractContents());
-            //selRange.insertNode(newNode);
-            selRange.surroundContents(newNode);
-        } 
+            var serialized = rangy.serializeRange(selRange, false);
+            var hid = "";
+
+            db.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").add({
+                serialized: serialized,
+                color: color
+            })
+            .then(function(docRef) {
+                console.log("Generated highlight id: ", docRef.id);
+                hid = docRef.id;
+
+                newNode.setAttribute(
+                    "style",
+                    `background-color: ${color}; display: inline;`
+                );
+                newNode.setAttribute('id', `highlight_${hid}`);
+                newNode.addEventListener('click', (e)=> {
+                    comp.addTool(e, newNode);
+                } );
+                //newNode.appendChild(selRange.extractContents());
+                //selRange.insertNode(newNode);
+                selRange.surroundContents(newNode);
+
+                comp.setState({hid: hid});
+            })
+            .catch(function(error) {
+                console.error("Error inserting highlight data: ", error);
+            });
+
+        }
         else {
-            console.log("else else else");
+            console.log("No selected Range");
         }
         
         this.setState({
-            hlNum: this.state.hlNum + 1,
-            nowNode:newNode
+            hid: hid,
+            nowNode: newNode
         });
     }
 

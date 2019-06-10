@@ -57,7 +57,7 @@ chrome.runtime.onMessage.addListener(
             uid = request.id;
             console.log("cur url:"+request.url);
             ReactDOM.render(<MenuBar uid={request.id} url ={request.url}/>, test);
-            ReactDOM.render(<BookMark_Form uid={request.uid} url={request.url} />, document.getElementById('bookmark_popup'));
+            ReactDOM.render(<BookMark_Form uid={request.id} url={request.url} />, document.getElementById('bookmark_popup'));
             ReactDOM.render(<GetFileName uid={request.id} url={request.url}/>,document.getElementById('pdf_popup'));
         }
     }

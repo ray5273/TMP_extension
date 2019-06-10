@@ -8,6 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Launch from "@material-ui/icons/Launch";
 import BookmarkBorder from '@material-ui/icons/BookmarkBorder';
 import EditIcon from '@material-ui/icons/Edit';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { EditForm } from './EditForm';
 
@@ -17,7 +18,8 @@ export class BookmarkItem1 extends  Component {
         super(props);
 
         this.state = {
-            isEdit: false
+            isEdit: false,
+            isExpanded: false,
         };
     };
 
@@ -52,37 +54,54 @@ export class BookmarkItem1 extends  Component {
         return (
             <ListItem  key={bookmark.title} button onClick={() => window.open(bookmark.url) } >
                 {// 북마크의 편집 버튼을 눌렀을 때, 편집을 할 수 있는 창을 생성.
-                    !this.state.isEdit?
+                    !this.state.isEdit ?
                         <div>
                             <ListItemIcon>
                                 <BookmarkBorder/>
                             </ListItemIcon>
-                            < ListItemText insert primary={bookmark.title} secondary={bookmark.summary} />
+                            < ListItemText insert primary={bookmark.title} secondary={bookmark.summary}/>
                             <ListItemSecondaryAction>
-                                <IconButton aria-label="Edit" onClick={(e) => {
+                                {this.state.isExpanded ?
+                                    <IconButton aria-label="Edit" onClick={(e) => {
+                                        e.stopPropagation();
+                                        this.setState({isExpanded: !this.state.isExpanded});
+                                        this.handleEditBookmark();
+                                    }}>
+                                        <EditIcon/>
+                                    </IconButton> : ""
+                                }
+                                {this.state.isExpanded ?
+                                    <IconButton aria-label="OpenWebpage" onClick={(e) => {
+                                        e.stopPropagation();
+                                        console.log("before handleOpenHTML : \n" + bookmark.html);
+                                        this.setState({isExpanded: !this.state.isExpanded});
+                                        this.handleOpenHTML(bookmark.html);
+                                    }}>
+                                        <Launch/>
+                                    </IconButton>
+                                    : ""
+                                }
+                                {this.state.isExpanded ?
+                                    <IconButton aria-label="Delete" onClick={(e) => {
+                                        e.stopPropagation();
+                                        this.setState({isExpanded: !this.state.isExpanded});
+                                        this.handleRemoveBookmark(bookmark);
+                                    }}>
+                                        <DeleteIcon/>
+                                    </IconButton>
+                                    :
+                                    ""
+                                }
+                                <IconButton aria-label="Open" onClick={(e) => {
                                     e.stopPropagation();
-                                    this.handleEditBookmark();
+                                    this.setState({isExpanded: !this.state.isExpanded});
                                 }}>
-                                    <EditIcon/>
-                                </IconButton>
-                                <IconButton aria-label="OpenWebpage" onClick={(e) => {
-                                    e.stopPropagation();
-                                    console.log("before handleOpenHTML : \n"+bookmark.html);
-
-                                    this.handleOpenHTML(bookmark.html);
-                                }}>
-                                    <Launch/>
-                                </IconButton>
-                                <IconButton aria-label="Delete" onClick={(e) => {
-                                    e.stopPropagation();
-                                    this.handleRemoveBookmark(bookmark);
-                                }}>
-                                    <DeleteIcon/>
+                                    <MoreHorizIcon />
                                 </IconButton>
                             </ListItemSecondaryAction>
                         </div>
                         :
-                        <EditForm handleSubmit={this.handleSubmit} bookmark={ bookmark }/>
+                        < EditForm handleSubmit = {this.handleSubmit} bookmark={bookmark}/>
                 }
             </ListItem>
         );

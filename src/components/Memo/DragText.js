@@ -54,7 +54,6 @@ class DragText extends Component {
                 dragCallback={this.handleDrag}
                 dragStopCallback={this.handleStop}>
                 <div className="input-wrapper">
-                    {console.log("in Draggable: ", this.props.text, this.props.posX,this.props.posY)}
                     <Input isNew = {this.props.isNew} id={this.props.id} text={this.props.text} uid = {this.props.uid} url = {this.props.url}
                      posX={this.props.posX} posY={this.props.posY} />
                 </div>
