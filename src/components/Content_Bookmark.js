@@ -38,20 +38,41 @@ class Bookmarks extends Component {
 
     componentWillMount(): void {
 
-        var db = firebase.firestore().collection("User").doc(this.state.uid);
+        var db = firebase.firestore();
         // console.log("this user uses it at first.111 : ", this.state.uid);
-        if(db === undefined) {
-            console.log("this user uses it at first.");
-            db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").doc(C_Info).set({
-                categoryCount:1
-            });
-            db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").doc('기본카테고리').set({
-                bookmarkCount:0
-            });
-        }
-        else {
-            console.log("componentWillMount : 이미 사용한 적이 있다. 파이어 베이스에서 불러와야 한다.");
-        }
+        var dbRef = firebase.firestore().collection("User").doc(this.state.uid).collection("Bookmark").doc(C_Info);
+        const uid = this.state.uid;
+        dbRef.get().then(function(doc) {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                db.collection("User").doc(uid).collection("Bookmark").doc(C_Info).set({
+                    categoryCount:1
+                });
+                db.collection("User").doc(uid).collection("Bookmark").doc("Category0").set({
+                    bookmarkCount:0,
+                    categoryName:"기본 카테고리"
+                });
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+        console.log("componentWillMoutn!");
+        // if(db === undefined) {
+        //     console.log("this user uses it at first.");
+        //     db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").doc(C_Info).set({
+        //         categoryCount:1
+        //     });
+        //     db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").doc('기본카테고리').set({
+        //         bookmarkCount:0
+        //     });
+        // }
+        // else {
+        //     console.log("componentWillMount : 이미 사용한 적이 있다. 파이어 베이스에서 불러와야 한다.");
+        // }
     }
     componentDidMount(): void {
         this.getCategoryListFromFirebase();

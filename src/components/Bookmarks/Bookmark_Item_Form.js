@@ -28,6 +28,10 @@ class Bookmark_Add_Form extends Component {
         var categoryList= [];
 
 
+        // this.setState({
+        //     categoryName:default_category
+        // });
+
         const request = require('request');
         request(this.state.url, function (err, res, html) {
             if (!err) {
@@ -79,24 +83,51 @@ class Bookmark_Add_Form extends Component {
 
         var db = firebase.firestore().collection("User").doc(this.state.uid).collection("Bookmark");
 
-        var bookmarkNum = 'not';
-        await db.doc(this.state.categoryName).get().then( doc => {
-            bookmarkNum = doc.data().bookmarkCount;
+        const sel = document.getElementById("categoryName");
+        const default_category = 'Category0';
+        console.log("default name:",default_category);
+        let cur_categoryName = this.state.categoryName;
+        console.log("categoryname:"+cur_categoryName);
+        if(cur_categoryName==='') {
+            cur_categoryName = default_category;
+            var bookmarkNum = 'not';
+            await db.doc(cur_categoryName).get().then( doc => {
+                bookmarkNum = doc.data().bookmarkCount;
 
-            db.doc(this.state.categoryName).update({
-                bookmarkCount: bookmarkNum + 1
+                db.doc(cur_categoryName).update({
+                    bookmarkCount: bookmarkNum + 1
+                });
             });
-        });
-        var newId = 'bookmark'+bookmarkNum;
+            var newId = 'bookmark'+bookmarkNum;
 
-        db.doc(this.state.categoryName).set({
-            [newId]: {
-                url: this.state.url,
-                title: this.state.title,
-                html: this.state.html,
-                summary:this.state.summary
-            }
-        }, {merge: true});
+            db.doc(cur_categoryName).set({
+                [newId]: {
+                    url: this.state.url,
+                    title: this.state.title,
+                    html: this.state.html,
+                    summary:this.state.summary
+                }
+            }, {merge: true});
+        }else {
+            var bookmarkNum = 'not';
+            await db.doc(this.state.categoryName).get().then(doc => {
+                bookmarkNum = doc.data().bookmarkCount;
+
+                db.doc(this.state.categoryName).update({
+                    bookmarkCount: bookmarkNum + 1
+                });
+            });
+            var newId = 'bookmark' + bookmarkNum;
+
+            db.doc(this.state.categoryName).set({
+                [newId]: {
+                    url: this.state.url,
+                    title: this.state.title,
+                    html: this.state.html,
+                    summary: this.state.summary
+                }
+            }, {merge: true});
+        }
     };
 
 
