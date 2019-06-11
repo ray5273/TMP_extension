@@ -42,7 +42,7 @@ class Bookmark extends Component {
     render() {
         return (
             <div className="menus" onClick={this.addBookMark}>
-                <img src={memo_bookmark_icon} alt="" />
+                <img src={memo_bookmark_icon} id="menu_bookmark_icon" alt="" />
             </div>
         );
     }

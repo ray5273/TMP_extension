@@ -102,7 +102,7 @@ class DrawingTool extends Component {
     render() {
         return (
             <div className="menus" onClick={this.addDrawingMemo}>
-                <img src={memo_image_add_icon} alt=""/>
+                <img src={memo_image_add_icon} id="menu_image_icon"alt=""/>
             </div>
         );
     }

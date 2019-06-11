@@ -88,7 +88,7 @@ class DomMemo extends Component {
     render() {
         return (
             <div className="menus" onClick={this.addStickyMemo}>
-                <img src={memo_add_icon} alt=""/>
+                <img src={memo_add_icon} id="menu_add_icon" alt=""/>
             </div>
         );
     }

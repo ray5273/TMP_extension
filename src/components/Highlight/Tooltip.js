@@ -79,6 +79,11 @@ class Tooltip extends Component {
             var image = document.getElementsByTagName('img');
              for(var i = 0 ; i< image.length;i++){
                  var toolTipDiv = document.createElement('div');
+                 console.log("image id:"+image[i].id);
+                 if(image[i].id ==="menu_bar_right_icon" || image[i].id ==="menu_bookmark_icon"||
+                     image[i].id ==="menu_add_icon" || image[i].id ==="menu_pdf_icon"||
+                     image[i].id ==="menu_image_icon")
+                     continue;
                  image[i].addEventListener('mouseover',this.onMouseOver.bind(this,i));
                  image[i].addEventListener('mouseout',this.onMouseOut.bind(this,i));
                  toolTipDiv.setAttribute('id', `toolTipDivForImage${i}`);

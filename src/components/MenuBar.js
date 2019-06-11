@@ -259,8 +259,8 @@ class MenuBar extends Component {
                 {this.state.open
                     ?
                     <div className="menu-container">
-                        <div className="menus">
-                            <img src={right_arrow_icon} alt="" onClick={()=>this.setState({open:!this.state.open})}/>
+                        <div className="menus" >
+                            <img src={right_arrow_icon} id="menu_bar_right_icon" alt="" onClick={()=>this.setState({open:!this.state.open})}/>
                         </div>
                         <BookMark uid = {this.props.uid} url = {this.props.url}/>
                         <PDF url={this.props.url}/>

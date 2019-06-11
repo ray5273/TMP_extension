@@ -16,7 +16,7 @@ class Pdf extends Component {
     render() {
         return (
             <div className="menus" onClick={this.addPDF}>
-                <img src={pdf_icon} alt="" />
+                <img src={pdf_icon} id="menu_pdf_icon" alt="" />
             </div>
         );
     }
