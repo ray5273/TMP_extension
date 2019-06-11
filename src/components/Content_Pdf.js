@@ -25,9 +25,10 @@ class ContentPdf extends Component {
         var uid = firebase.auth().currentUser.uid;
         console.log("uid : "+uid);
         var firestore = firebase.firestore();
-        let cur_date_pdfs=[];
-        firestore.collection("User").doc(uid).collection("PDF").get().then(snapshot=>{
-            snapshot.forEach( doc =>{
+
+        firestore.collection("User").doc(uid).collection("PDF").onSnapshot( querySnapshot => {
+            let cur_date_pdfs=[];
+            querySnapshot.docs.forEach( doc => {
                 console.log("dates: "+doc.id);
                 let PDFS = doc.data().PDFS;
                 console.log("PDFS"+PDFS);
@@ -37,8 +38,7 @@ class ContentPdf extends Component {
                     arr.push(PDFS[i]);
                 }
                 cur_date_pdfs.push(arr);
-            })
-            //data parsing
+            });
             let datelists=[];
             let pdflists = [];
             for(let i =0;i<cur_date_pdfs.length;i++){
@@ -57,8 +57,6 @@ class ContentPdf extends Component {
             })
         });
     }
-
-
 
     showCategories() {
         return this.state.dates.map((item) => {
