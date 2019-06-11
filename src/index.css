@@ -21,6 +21,7 @@
 #menu-bar {
   /*background-color: transparent;*/
   display:flex !important;
+  opacity: 0.8;
   /*width:200px;*/
   /*height:30px;*/
   background:#bae1ff;
@@ -35,6 +36,8 @@
 #menu-bar-iframe{
   /*background-color: transparent;*/
   display:flex !important;
+
+  opacity: 0.8;
   /*width:200px;*/
   /*height:30px;*/
   /*background:#89D7F6;*/
