@@ -30,6 +30,14 @@ class DomMemo extends Component {
 
         var t = this.state.t;
 
+        db.collection("User").doc(this.props.uid).collection("Url").doc(url).set({
+            temp: "temp"
+        }).then(function() {
+            console.log("Document successfully written!");
+        }).catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
+
         db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").add({
             title: title,
             url: decodeURIComponent(url),

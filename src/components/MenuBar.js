@@ -96,7 +96,6 @@ class MenuBar extends Component {
         var i = 0;
 
         database.collection("User").doc(uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
-            console.log("LLLEEENNGGGTTTHHHH",querySnapshot);
             querySnapshot.forEach(function(doc) {
                 var data = doc.data();
 
