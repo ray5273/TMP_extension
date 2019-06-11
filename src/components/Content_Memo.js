@@ -77,45 +77,31 @@ class Memos extends Component {
         }
     
       handleSubmit = (e) => {
-        e.preventDefault();
-        /* 파이어베이스에 보낼 코드 */
-  
-        const {name, content, tag, memos} = this.state;
-        if (name !=='') {
-          this.setState({
-            memos: memos.concat({
-              id: this.id++,
-              name, content, tag
-            }),
-            name: '',
-            content: '',
-            tag: '',
-          });
-        } else {
-          alert("공백으로 만들 수 없습니다.");
-        }  
       }
 
     showMemos=()=>{
         
         const db=firebase.firestore();
+        let data=[];
         db.collection("User").doc(this.state.uid).collection("Url").get()
         .then(docs => {
             docs.forEach(doc => {
                 db.collection("User").doc(this.state.uid).collection("Url").doc(doc.id).collection("Memos").get()
                     .then(memos => {
+                        console.log(memos);
                         memos.forEach(memo => {
                             let temp = memo.data().content;
+                            console.log(temp);
                             temp = temp.replace(/(\s*)/g,"");
                             const decodedUrl = decodeURIComponent(memo.data().url);
-                            this.setState({
-                                data: this.state.data.concat({content: memo.data().content, url:decodedUrl, title: memo.data().title})
-                            })
-                            
+                            console.log(memo.data().content);
+                            data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title})
+
                         })
                     })
             })
-        });
+        }).then(()=>console.log("datadatadta",data));
+        
     }
 
     render() {
@@ -123,34 +109,8 @@ class Memos extends Component {
         return (
             <main className={classes.main}>
                 <div>             
-                    <form >
-                        <input
-                            name="name"
-                            value={this.state.name}
-                            placeholder="메모 제목"
-                            onChange={this.handleChange}
-                            className="memo-title-input"
-                            
-                        />
-                        <textarea
-                            name="content"
-                            value={this.state.content}
-                            placeholder="메모 내용"
-                            onChange={this.handleChange}
-                            className="memo-content-input"
-                            
-                        />
-                        <div className="tag-and-button-wrapper">
-                        <input
-                            name="tag"
-                            placeholder="태그"
-                            value={this.state.tag}
-                            onChange={this.handleChange}
-                            className="memo-content-tag"
-                        />
-                        <button type="submit" onClick={this.handleSubmit} className="iframe-buttons submit-memo-button">등록</button>
-                        </div>
-                    </form>
+                  
+                   
                     <br/>
                     <div>
                     {this.props.keyword === "" ? this.state.memos.map(
