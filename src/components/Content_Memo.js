@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Item from './Item';
-import SearchBar from 'material-ui-search-bar';
 import firebase from '../Firebase';
 import 'firebase/firestore';
 
@@ -45,16 +44,11 @@ class Memos extends Component {
       this.state = {
           memos:[],
           searchedMemos:[],
-          user:null
+          uid:firebase.auth().currentUser.uid,
       };
-      firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                this.setState({ user: user });
-            } else {
-                this.setState({ user: user });
-            }
-      });
+
     }
+
     componentDidUpdate(oldProps) {
         const newProps = this.props
         if(oldProps.keyword !== newProps.keyword) {
@@ -62,6 +56,8 @@ class Memos extends Component {
             x => x.name.indexOf(this.props.keyword) > -1
           ) })
         }
+
+        this.showMemos();
       }
 
       handleChange = (e) => {
@@ -99,6 +95,71 @@ class Memos extends Component {
         }  
       }
 
+    showMemos=()=>{
+        
+        const db=firebase.firestore();
+        
+        /* 
+        db.collection("User").doc(this.state.uid).collection("Url").get().then(function(docs1) {
+            console.log("docs1: ",docs1);
+            docs1.forEach(x=> {
+                console.log(x)
+            })
+        });
+
+        db.collection("User").doc(this.state.uid).collection("Url").doc("https%3A%2F%2Fconsole.firebase.google.com%2F").collection("Memos").doc("6kpiWJsU2ls7WdMqpQPv").get()
+        .then(x=>console.log("Teststset",x.data()));
+        */
+
+       db.collection("User").doc(this.state.uid).collection("Url")
+       .get()
+       .then(docs=>
+           {
+               docs.forEach(doc => {
+                   console.log(doc);
+               })
+           });
+       
+
+        db.collection("User").doc(this.state.uid).collection("Url")
+        .doc("https%3A%2F%2Fconsole.firebase.google.com%2F").collection("Memos")
+        .get()
+        .then(docs=>
+            {
+                docs.forEach(doc => {
+                    console.log(doc.data());
+                })
+            });
+        
+        /*
+        database.collection("User").doc(this.state.uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                var data = doc.data();
+
+                if (document.getElementById(`stickyMemo_${doc.id}`) == null) {
+                    var stickyMemo = document.createElement('div');
+                    stickyMemo.setAttribute('id', `stickyMemo_${doc.id}`);
+                    stickyMemo.style.position = 'absolute';
+                    stickyMemo.style.width="300px";
+                    stickyMemo.style.top = window.scrollY+'px';
+                    stickyMemo.style.left = window.scrollX +'px';
+                    stickyMemo.style.zIndex=2147483647;
+                    stickyMemo.setAttribute('class', 'memo-before-render');
+                    document.body.appendChild(stickyMemo);
+                    // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
+                    ReactDOM.render(<DragText
+                        id={doc.id}
+                        posX={data.posX}
+                        posY={data.posY}
+                        text={data.content}
+                        uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`stickyMemo_${doc.id}`));
+                    //Painterro().show();
+                }
+                i++;
+            });
+        });
+        */
+    }
 
     render() {
         const { classes } = this.props;
@@ -135,7 +196,7 @@ class Memos extends Component {
                     </form>
                     <br/>
                     <div>
-                    {this.props.keyword == "" ? this.state.memos.map(
+                    {this.props.keyword === "" ? this.state.memos.map(
                         ({id, name, content, tag }) => (
                         <Item
                             id={id}

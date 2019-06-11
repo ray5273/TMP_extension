@@ -31,14 +31,14 @@ class GetFileName extends Component {
             pdf_popup.style.display='none';
 
         let file_name = this.state.filename;
-        if(file_name=="")
+        if(file_name==="")
             file_name = "default";
         console.log("submit filename:"+file_name);
         //"//pdfcrowd.com/url_to_pdf/?width=210mm&height=297mm"+`?pdf_name${file_name}`
         const href_link =`//pdfcrowd.com/url_to_pdf/?pdf_name=${file_name}`;
         window.location.href=href_link;
         const uid = this.props.uid;
-        const url = this.props.url;
+        //const url = this.props.url;
 
         const result = document.getElementById("checkStorage");
         const check_result = result.checked;

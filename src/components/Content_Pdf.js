@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import Bookmark_Add_Form from "./Bookmarks/Bookmark_Item_Form";
-import {Bookmark, Category} from "./Bookmarks/BookmarkStructures";
 import Bookmark_Category from "./Bookmarks/Bookmark_Category";
 import PDF_Dates_lists from "./PDF/PDF_Date_Lists"
 import firebase from "../Firebase"

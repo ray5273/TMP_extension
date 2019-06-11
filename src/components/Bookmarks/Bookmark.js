@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import memo_bookmark_icon from "../../assets/menuBar/bookmark.png";
-import BookMark_Form from './Bookmark_Item_Form'
-import ReactDOM from "react-dom";
+//import BookMark_Form from './Bookmark_Item_Form'
+//import ReactDOM from "react-dom";
 import './CSS/BookMark.css'
-import DragText from "../Memo/DragText";
-import {Category} from "./BookmarkStructures";
+//import DragText from "../Memo/DragText";
+//import {Category} from "./BookmarkStructures";
 
 class Bookmark extends Component {
     constructor(props) {
@@ -17,8 +17,8 @@ class Bookmark extends Component {
 
     componentDidMount(){
 
-        const url = this.props.url;
-        const uid = this.props.uid;
+        //const url = this.props.url;
+        //const uid = this.props.uid;
 
     }
 

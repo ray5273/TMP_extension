@@ -7,7 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
-import {EditForm} from "../Bookmarks/EditForm";
+//import {EditForm} from "../Bookmarks/EditForm";
 import Firebase from '../../Firebase'
 import 'firebase/storage'
 import 'firebase/auth'

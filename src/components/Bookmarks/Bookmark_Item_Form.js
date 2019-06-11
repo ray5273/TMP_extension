@@ -1,8 +1,8 @@
 /*global chrome*/
 import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/styles';
+//import { makeStyles } from '@material-ui/styles';
 import firebase from '../../Firebase';
-import {Bookmark, Category} from "./BookmarkStructures";
+import {Category} from "./BookmarkStructures";
 
 class Bookmark_Add_Form extends Component {
 
@@ -23,9 +23,9 @@ class Bookmark_Add_Form extends Component {
     };
 
     componentDidMount(): void {
-        var uid = this.props.uid;
-        var db = firebase.firestore();
-        var categoryList= [];
+        //var uid = this.props.uid;
+        //var db = firebase.firestore();
+        //var categoryList= [];
 
 
         // this.setState({
@@ -83,7 +83,7 @@ class Bookmark_Add_Form extends Component {
 
         var db = firebase.firestore().collection("User").doc(this.state.uid).collection("Bookmark");
 
-        const sel = document.getElementById("categoryName");
+        //const sel = document.getElementById("categoryName");
         const default_category = 'category0';
         console.log("default name:",default_category);
         let cur_categoryName = this.state.categoryName;

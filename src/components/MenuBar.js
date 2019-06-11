@@ -6,14 +6,13 @@ import DrawingTool from './Memo/DrawingTool'
 import Firebase from '../Firebase.js'
 import BookMark from './Bookmarks/Bookmark'
 import PDF from './PDF/PDF'
-import * as firebaseui from 'firebaseui'
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 import DragImage from "./Memo/DragImage"
 import ReactDOM from 'react-dom';
-import memo_bookmark_icon from '../assets/menuBar/bookmark.png';
-import pdf_icon from '../assets/menuBar/pdf.png';
+//import memo_bookmark_icon from '../assets/menuBar/bookmark.png';
+//import pdf_icon from '../assets/menuBar/pdf.png';
 import left_arrow_icon from '../assets/menuBar/left_arrow.png';
 import right_arrow_icon from '../assets/menuBar/right_arrow.png';
 import DragText from './Memo/DragText';
@@ -97,6 +96,7 @@ class MenuBar extends Component {
         var i = 0;
 
         database.collection("User").doc(uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
+            console.log("LLLEEENNGGGTTTHHHH",querySnapshot);
             querySnapshot.forEach(function(doc) {
                 var data = doc.data();
 
@@ -127,6 +127,8 @@ class MenuBar extends Component {
         // Load Highlights
         rangy.init();
         database.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").get().then(function(querySnapshot) {
+            console.log("querySnapshot: ",querySnapshot);
+            console.log("querySnapshot length: ",querySnapshot.length);
             querySnapshot.forEach(function(doc) {
                 var data = doc.data();
 
@@ -166,7 +168,7 @@ class MenuBar extends Component {
                 var image_data_num = doc.data().imageCount;
                for(let i =1;i<=image_data_num;i++) {
                     var imagePath = uid + '/' + url + '/' + `image${i}.png`;
-                    var dataRef = storageRef.child(imagePath);
+                    //var dataRef = storageRef.child(imagePath);
                     console.log("image path : " + imagePath);
 
                     let imageMemo = document.createElement('div');
