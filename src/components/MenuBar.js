@@ -127,8 +127,6 @@ class MenuBar extends Component {
         // Load Highlights
         rangy.init();
         database.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").get().then(function(querySnapshot) {
-            console.log("querySnapshot: ",querySnapshot);
-            console.log("querySnapshot length: ",querySnapshot.length);
             querySnapshot.forEach(function(doc) {
                 var data = doc.data();
 

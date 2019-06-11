@@ -125,7 +125,8 @@ class Memos extends Component {
         .doc("https%3A%2F%2Fconsole.firebase.google.com%2F").collection("Memos")
         .get()
         .then(docs=>
-            {
+            {   
+                console.log(docs);
                 docs.forEach(doc => {
                     console.log(doc.data());
                 })
