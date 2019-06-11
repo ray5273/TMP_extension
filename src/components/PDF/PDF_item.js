@@ -52,8 +52,11 @@ class PdfItem extends Component {
             // Handle any errors
             console.log("download error!");
         });
-    }
+    };
 
+    handleDelete=(file_name)=>{
+        this.props.handleDelete(file_name);
+    };
 
     render() {
         const file_name =this.state.name+".pdf";
@@ -68,6 +71,7 @@ class PdfItem extends Component {
                 <ListItemSecondaryAction>
                     <IconButton aria-label="Delete" onClick={(e) => {
                         e.stopPropagation();
+                        this.handleDelete(file_name);
                     }}>
                         <DeleteIcon/>
                     </IconButton>

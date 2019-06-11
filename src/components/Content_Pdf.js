@@ -60,15 +60,6 @@ class ContentPdf extends Component {
         });
     }
 
-    //여기서 날짜들을 다 불러와서 추가해주기
-    //componentDidMount에다가 해야할듯
-    handleCreateFolder = () => {
-        //
-        // this.setState( {
-        //     categories: this.state.categories.concat(new Category(this.categoryId++, '추가된 카테고리' + (this.categoryId-1), []))
-        // });
-
-    };
 
 
     showCategories() {
@@ -84,15 +75,57 @@ class ContentPdf extends Component {
         })
     }
 
+    handleRemovePDF = (date, filename) => {
+        console.log("date : "+date+" filename : "+filename);
+        var uid = firebase.auth().currentUser.uid;
+        const path = uid+'/PDF/'+date+'/'+filename;
+        let filenameArr = filename.split('.');
+        filename = filenameArr[0];
+        console.log("uid : "+uid);
+        var firestore = firebase.firestore();
+        var storage = firebase.storage();
+        var storageRef = storage.ref();
+        firestore.collection("User").doc(uid).collection("PDF").doc(date).get().then(doc=>{
+            let data = doc.data().PDFS;
+            let PDFS = [];
+            for(let i =0; i<data.length;i++){
+                if(data[i]!==filename){
+                    PDFS.push(data[i]);
+                }
+            }
+            console.log("PDFS"+PDFS);
+            firestore.collection("User").doc(uid).collection("PDF").doc(date).set({
+               PDFS:PDFS
+            });
+            storageRef.child(path).delete().then(function() {
+                // File deleted successfully
+                console.log("file successfully deleted");
+            }).catch(function(error) {
+                // Uh-oh, an error occurred!
+
+                console.log("file deleted error");
+            });
+
+        })
+        // var db = firebase.firestore().collection(FirstCollection).doc(this.state.uid).collection("Bookmark");
+        // db.doc(categoryId).update({
+        //     [bookmarkId]: firebase.firestore.FieldValue.delete()
+        // });
+
+        // this.getCategoryListFromFirebase();
+    };
+
     showLists(){
         return this.state.date_lists.map((item,index)=>{
-
             return <PDF_Dates_lists
                     listName={item}
                     pdfs={this.state.pdf_lists[index]}
-                    />
+                    handleChange={this.handleChange}
+                    handleRemovePDF={this.handleRemovePDF}
+            />
         })
     }
+
     showObj=()=>{
         console.log("datelists:"+this.date_lists);
 

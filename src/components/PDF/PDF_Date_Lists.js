@@ -17,22 +17,37 @@ class PdfDateLists extends Component {
         this.state={
             open:false,
             pdfs:this.props.pdfs,
-            dates:this.props.dates
+            dates:this.props.dates,
+            date:''
         }
     }
+    componentDidMount(): void {
+        this.setState({
+            date:this.props.listName
+        })
+    }
+
     handleClick = () => {
         this.setState(state => ({ open: !state.open }));
     };
 
+    //PDF 삭제 핸들링
+    handleDelete = (file_name)=>{
+        const date = this.state.date;
+        console.log("date in dates lists:"+date);
+        this.props.handleRemovePDF(date,file_name);
+    };
     showPDFS = ()=>{
         console.log("in show pdfs pdfs:"+this.props.pdfs);
         return this.props.pdfs.map((item,index)=>{
             return <PdfItem
                 name={item}
                 date={this.props.listName}
+                handleDelete={this.handleDelete}
                 />
         })
-    }
+    };
+
     render() {
         const listName= this.props.listName;
         const strArray = listName.split('_');
