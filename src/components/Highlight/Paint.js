@@ -102,19 +102,22 @@ class Paint extends Component {
                     database.collection("User").doc(uid).collection("Url").doc(url).collection(`ImageMetadata${image_data_num}`).doc("pos").set({
                         x: 0,
                         y: 0
-                    });
-                    database.collection("User").doc(uid).collection("Url").doc(url).set({
-                        imageCount: image_data_num,
-                    }).then(function () {
-                        console.log("Document successfully written!");
+                    }).then(function(){
                         var imagePath = uid + '/' + url + '/' + 'image' + image_data_num + '.png';
                         var dataRef = storage_ref.child(imagePath);
                         dataRef.put(blob).then(function (snapshot) {
                             console.log("uploaded a file!");
                             done(true);
+                        }).then(function(){
+                            database.collection("User").doc(uid).collection("Url").doc(url).set({
+                                imageCount: image_data_num,
+                            }).then(function () {
+                                console.log("Document successfully written!");
+
+                            }).catch(function (error) {
+                                console.error("Error writing document: ", error);
+                            });
                         });
-                    }).catch(function (error) {
-                        console.error("Error writing document: ", error);
                     });
                 });
                 // //metadata에 x,y좌표 초기화 : (0,0)
