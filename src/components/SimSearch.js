@@ -71,17 +71,17 @@ class SimSearch extends Component {
                 console.log(docs);
                 docs.forEach(doc => {
                     console.log(doc);
-                    db.collection("User").doc(uid).collection("Url").doc(doc.id).collection("Memo").get()
+                    db.collection("User").doc(uid).collection("Url").doc(doc.id).collection("Memos").get()
                         .then(memos => {
                             console.log(memos);
                             memos.forEach(memo => {
                                 let temp = memo.data().content;
                                 console.log(temp);
                                 temp = temp.replace(/(\s*)/g,"");
-
+                                const decodedUrl = decodeURIComponent(memo.data().url);
                                 if(temp.indexOf(this.state.abc) !== -1){
                                     this.setState({
-                                        search: this.state.search.concat({content: memo.data().content, url: memo.data().url, title: memo.data().title})
+                                        search: this.state.search.concat({content: memo.data().content, url:decodedUrl, title: memo.data().title})
                                     })
                                 }
                             })
