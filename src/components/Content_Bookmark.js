@@ -51,7 +51,7 @@ class Bookmarks extends Component {
                 db.collection("User").doc(uid).collection("Bookmark").doc(C_Info).set({
                     categoryCount:1
                 });
-                db.collection("User").doc(uid).collection("Bookmark").doc("Category0").set({
+                db.collection("User").doc(uid).collection("Bookmark").doc("category0").set({
                     bookmarkCount:0,
                     categoryName:"기본 카테고리"
                 });

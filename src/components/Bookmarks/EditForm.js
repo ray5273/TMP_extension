@@ -26,6 +26,7 @@ export class EditForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: props.bookmark.id,
             title: props.bookmark.title,
             summary: props.bookmark.summary,
             tag: props.bookmark.tag,
@@ -71,13 +72,6 @@ export class EditForm extends Component {
                       onChange={this.handleChange}
 
                   /><br/>
-                  <TextField
-                      id="tag"
-                      label="Tag"
-                      defaultValue={ bookmark.tag }
-                      className={ classes.textField }
-                      onChange={this.handleChange}
-                  />
                   <IconButton type="submit"> <EditIcon/> </IconButton>
               </fieldset>
 
