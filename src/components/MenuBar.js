@@ -159,12 +159,12 @@ class MenuBar extends Component {
 
         //여기서 url에 대한 image memo count가 존재하는지 먼저 파악 없을시 아무것도 띄우지 않음
         //image memo count가 존재 할 시 존재하는 숫자만큼 이미지를 띄움.
-        database.collection("User").doc(uid).collection("Url").doc(url).get().then(function(doc){
+        database.collection("User").doc(uid).collection("Url").doc(url).onSnapshot(function(doc){
             //존재 할 시
             if(doc.exists){
                 console.log("in database doc");
                 var image_data_num = doc.data().imageCount;
-               for(let i =1;i<=image_data_num;i++) {
+                for(let i =1;i<=image_data_num;i++) {
                     var imagePath = uid + '/' + url + '/' + `image${i}.png`;
                     //var dataRef = storageRef.child(imagePath);
                     console.log("image path : " + imagePath);
@@ -199,11 +199,58 @@ class MenuBar extends Component {
                         });
 
                     });
-                 }
+                }
             }else{
-               console.log("image memo not founded");
+                console.log("image memo not founded");
             }
         });
+
+        //image memo count가 존재 할 시 존재하는 숫자만큼 이미지를 띄움.
+        // database.collection("User").doc(uid).collection("Url").doc(url).get().then(function(doc){
+        //     //존재 할 시
+        //     if(doc.exists){
+        //         console.log("in database doc");
+        //         var image_data_num = doc.data().imageCount;
+        //        for(let i =1;i<=image_data_num;i++) {
+        //             var imagePath = uid + '/' + url + '/' + `image${i}.png`;
+        //             //var dataRef = storageRef.child(imagePath);
+        //             console.log("image path : " + imagePath);
+        //
+        //             let imageMemo = document.createElement('div');
+        //             imageMemo.setAttribute('id', `imageMemo${i}`);
+        //             imageMemo.style.position = 'absolute';
+        //             imageMemo.style.width = "300px";
+        //             //sticky memo 생성위치 조정
+        //             imageMemo.style.top = '0px';
+        //             imageMemo.style.left = '0px';
+        //             //stickymemo를 z-index 통해 최상위로 올려줌
+        //             imageMemo.style.zIndex = 2147483647;
+        //             document.body.appendChild(imageMemo);
+        //             var curpage = url;
+        //
+        //             let real_image = storageRef.child(imagePath);
+        //             console.log("real image : " + real_image);
+        //             database.collection("User").doc(uid).collection("Url").doc(url).collection(`ImageMetadata${i}`).doc("pos").get().then(function(doc){
+        //
+        //                 const x_pos = doc.data().x;
+        //                 const y_pos = doc.data().y;
+        //                 // console.log("xpos : ",x_pos);
+        //                 // console.log("ypos :",y_pos);
+        //                 real_image.getDownloadURL().then(function (url) {
+        //                     console.log("get image data!");
+        //                     ReactDOM.render(<DragImage src={url} push_x={x_pos} url={curpage}
+        //                                                push_y={y_pos} idx={i} uid={uid}/>, document.getElementById(`imageMemo${i}`));
+        //                 }).catch(function (error) {
+        //                     // Handle any errors
+        //                     console.log("cannot get image data!"+error);
+        //                 });
+        //
+        //             });
+        //          }
+        //     }else{
+        //        console.log("image memo not founded");
+        //     }
+        // });
 
     }
 
