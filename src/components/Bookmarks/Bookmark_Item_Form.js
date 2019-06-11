@@ -58,17 +58,17 @@ class Bookmark_Add_Form extends Component {
     getCategoryListFromFirebase = () => {
 
         var db = firebase.firestore();
-        var categoryList= [];
 
-        db.collection("User").doc(this.state.uid).collection("Bookmark").get().then((snapshot) => {
-            snapshot.docs.forEach(doc => {
+        db.collection("User").doc(this.state.uid).collection("Bookmark").onSnapshot( snapshot => {
+            var categoryList= [];
+            snapshot.forEach( doc => {
                 if(doc.id !== "C_Info") {
                     categoryList.push(new Category(doc.id, doc.data()['categoryName'], ''));
                 }
-            });
-            this.setState({
-                categories: categoryList
-            });
+                this.setState({
+                    categories: categoryList
+                });
+            })
         });
     };
     handleChange = (e) => {

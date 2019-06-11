@@ -80,10 +80,47 @@ class Bookmarks extends Component {
 
     // Take a Categories from Firestore.
      getCategoryListFromFirebase = () => {
-         var categoryList= [];
+
          var db = firebase.firestore();
 
         // console.log("Bookmark Collection exist. it means that user used it");
+         db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").onSnapshot( querySnapshot => {
+             var categoryList= [];
+             querySnapshot.forEach( (doc) => {
+                 var categoryName = "";
+                 var bookmarkList = [];
+                 if(doc.id !== C_Info) {
+                     for(var book in doc.data()) {
+                         if(book === 'bookmarkCount') {}
+                         else if(book === 'categoryName') {
+                             categoryName = doc.data()[book];
+                             // console.log("categoryName : ", categoryName);
+                         } else {
+                             var _url, _title, _summary, _html;
+                             for(var element in doc.data()[book]) {
+                                 if(element === 'url') {
+                                     _url = doc.data()[book][element];
+                                 } else if(element === 'title') {
+                                     _title = doc.data()[book][element];
+                                 } else if(element === 'summary') {
+                                     _summary = doc.data()[book][element];
+                                 } else if(element === 'html') {
+                                     _html = doc.data()[book][element];
+                                 }
+                             }
+                             bookmarkList.push(new Bookmark(book, _url, _title, _summary, '', _html));
+                         }
+                     }
+                     // console.log("doc ic : ", doc.id, ", name : ", categoryName);
+                     categoryList.push(new Category(doc.id, categoryName,bookmarkList));
+                 }
+             });
+             this.setState({
+                 categories: categoryList
+             })
+         });
+
+         /*
         db.collection(FirstCollection).doc(this.state.uid).collection("Bookmark").get().then((snapshot) => {
               snapshot.docs.forEach(doc => {
                   var categoryName = "";
@@ -118,6 +155,8 @@ class Bookmarks extends Component {
                  categories: categoryList
              })
          });
+
+          */
     };
 
     // Create Category Folder
@@ -147,7 +186,7 @@ class Bookmarks extends Component {
         });
 
         // after update, re-take bookmarks.
-        this.getCategoryListFromFirebase();
+        // this.getCategoryListFromFirebase();
     };
 
     // Remove Category Folder
@@ -175,7 +214,7 @@ class Bookmarks extends Component {
             console.error("Error writing document: ", error);
         });
 
-        this.getCategoryListFromFirebase();
+       // this.getCategoryListFromFirebase();
     };
 
     // addBookmark open handling
@@ -204,7 +243,7 @@ class Bookmarks extends Component {
             console.error("Error writing document: ", error);
         });
 
-        this.getCategoryListFromFirebase();
+       //  this.getCategoryListFromFirebase();
     };
 
     // handleRemove Bookmark in a category
@@ -215,13 +254,13 @@ class Bookmarks extends Component {
            [bookmarkId]: firebase.firestore.FieldValue.delete()
         });
 
-        this.getCategoryListFromFirebase();
+        // this.getCategoryListFromFirebase();
     };
 
 
     handleSubmit = (data) => {
         var bookmark = new Bookmark(data.url, data.title, data.summary, data.tag, data.html);
-        console.log("HTML from Content_bookmark : arg : \n"+ data.html);
+        // console.log("HTML from Content_bookmark : arg : \n"+ data.html);
 
         var newCategories = this.state.categories.map( (category) => {
             if(data.categoryName === category.categoryName) {
