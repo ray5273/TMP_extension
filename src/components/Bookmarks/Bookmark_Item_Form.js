@@ -84,7 +84,7 @@ class Bookmark_Add_Form extends Component {
         var db = firebase.firestore().collection("User").doc(this.state.uid).collection("Bookmark");
 
         const sel = document.getElementById("categoryName");
-        const default_category = 'Category0';
+        const default_category = 'category0';
         console.log("default name:",default_category);
         let cur_categoryName = this.state.categoryName;
         console.log("categoryname:"+cur_categoryName);
