@@ -45,6 +45,7 @@ class Memos extends Component {
           memos:[],
           searchedMemos:[],
           uid:firebase.auth().currentUser.uid,
+          data:[]
       };
 
     }
@@ -98,68 +99,23 @@ class Memos extends Component {
     showMemos=()=>{
         
         const db=firebase.firestore();
-        
-        /* 
-        db.collection("User").doc(this.state.uid).collection("Url").get().then(function(docs1) {
-            console.log("docs1: ",docs1);
-            docs1.forEach(x=> {
-                console.log(x)
+        db.collection("User").doc(this.state.uid).collection("Url").get()
+        .then(docs => {
+            docs.forEach(doc => {
+                db.collection("User").doc(this.state.uid).collection("Url").doc(doc.id).collection("Memos").get()
+                    .then(memos => {
+                        memos.forEach(memo => {
+                            let temp = memo.data().content;
+                            temp = temp.replace(/(\s*)/g,"");
+                            const decodedUrl = decodeURIComponent(memo.data().url);
+                            this.setState({
+                                data: this.state.data.concat({content: memo.data().content, url:decodedUrl, title: memo.data().title})
+                            })
+                            
+                        })
+                    })
             })
         });
-
-        db.collection("User").doc(this.state.uid).collection("Url").doc("https%3A%2F%2Fconsole.firebase.google.com%2F").collection("Memos").doc("6kpiWJsU2ls7WdMqpQPv").get()
-        .then(x=>console.log("Teststset",x.data()));
-        */
-
-       db.collection("User").doc(this.state.uid).collection("Url")
-       .get()
-       .then(docs=>
-           {
-               docs.forEach(doc => {
-                   console.log(doc);
-               })
-           });
-       
-
-        db.collection("User").doc(this.state.uid).collection("Url")
-        .doc("https%3A%2F%2Fconsole.firebase.google.com%2F").collection("Memos")
-        .get()
-        .then(docs=>
-            {   
-                console.log(docs);
-                docs.forEach(doc => {
-                    console.log(doc.data());
-                })
-            });
-        
-        /*
-        database.collection("User").doc(this.state.uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
-                var data = doc.data();
-
-                if (document.getElementById(`stickyMemo_${doc.id}`) == null) {
-                    var stickyMemo = document.createElement('div');
-                    stickyMemo.setAttribute('id', `stickyMemo_${doc.id}`);
-                    stickyMemo.style.position = 'absolute';
-                    stickyMemo.style.width="300px";
-                    stickyMemo.style.top = window.scrollY+'px';
-                    stickyMemo.style.left = window.scrollX +'px';
-                    stickyMemo.style.zIndex=2147483647;
-                    stickyMemo.setAttribute('class', 'memo-before-render');
-                    document.body.appendChild(stickyMemo);
-                    // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
-                    ReactDOM.render(<DragText
-                        id={doc.id}
-                        posX={data.posX}
-                        posY={data.posY}
-                        text={data.content}
-                        uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`stickyMemo_${doc.id}`));
-                    //Painterro().show();
-                }
-                i++;
-            });
-        });
-        */
     }
 
     render() {
