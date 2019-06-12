@@ -138,7 +138,7 @@ class Bookmark_Add_Form extends Component {
         };
 
         return (
-            <div className="bookmark_popup">
+            <div className="bookmark_popup-iframe">
                 <h1>BookMark</h1>
                 <label>Select categories</label>
                 <select id='categoryName' name="categoryName" placeholder="Categories" onChange={this.handleChange}>
