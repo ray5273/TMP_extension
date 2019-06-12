@@ -53,6 +53,10 @@
     border: 1px solid white;
     margin: 1px;
 }
+.iframe-memo-url{
+    word-wrap: break-word;
+    
+}
 
 .submit-memo-button {
     width:20%;
@@ -60,7 +64,11 @@
 
 .tag-and-button-wrapper, .memo-top-wrapper {
     display:flex;
-    justify-content: space-between;
+    justify-content: space-around;
+}
+
+.memo-top-wrapper, .iframe-memo-title, .iframe-memo-url  {
+    width:95%;
 }
 .temp-text-wrapper {
     display:flex;
