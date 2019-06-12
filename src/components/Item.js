@@ -35,7 +35,7 @@ class Item extends Component {
                
                 <div className="url-container">
                     <img className="clip-image" src={Clip} alt="" />
-                    <div className="iframe-memo-url"> <span className="iframe-memo-link"><a href={url}> {url} </a></span></div>
+                    <div className="iframe-memo-url"> <span className="iframe-memo-link"><div className="link-text" onClick={()=>window.open(url)}> {url} </div></span></div>
                 </div>
             </div>
         );
