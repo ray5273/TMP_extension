@@ -52,5 +52,10 @@ chrome.runtime.onMessage.addListener(
                 chrome.tabs.sendMessage(tabs[0].id, {message: "getID", id: request.id,url:curURL}, function(response) {});
             });
         }
+        if (request.contentScriptQuery == "SignedOut") {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                chrome.tabs.sendMessage(tabs[0].id, {message: "SignedOut"}, function(response) {});
+            });
+        }
     }
 )

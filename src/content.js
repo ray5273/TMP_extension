@@ -30,6 +30,9 @@ chrome.runtime.onMessage.addListener(
             ReactDOM.render(<BookMark_Form uid={request.id} url={request.url} />, document.getElementById('bookmark_popup'));
             ReactDOM.render(<GetFileName uid={request.id} url={request.url}/>,document.getElementById('pdf_popup'));
         }
+        if (request.message === "SignedOut") {
+            window.location.reload();
+        }
     }
 );
 
@@ -50,7 +53,7 @@ iframe.src = chrome.extension.getURL("index.html");
 document.body.appendChild(iframe);
 
 const test = document.createElement('div');
-test.setAttribute("id",'menu-bar');
+test.setAttribute("id",'trendy-menu-bar');
 document.body.insertBefore(test, document.body.firstChild);
 
 //app.style.display = "none";
@@ -74,7 +77,7 @@ document.body.appendChild(pdf_popup);
 function toggle(){
    if (iframe.style.display === "none") {
        iframe.style.display = "block";
-       test.setAttribute("id",'menu-bar-iframe');
+       test.setAttribute("id",'trendy-menu-bar-iframe');
        var bookmark_popup = document.getElementsByClassName('bookmark_popup');
        bookmark_popup[0].className='bookmark_popup-iframe';
 
@@ -84,7 +87,7 @@ function toggle(){
    }
    else {
        iframe.style.display = "none";
-       test.setAttribute("id",'menu-bar');
+       test.setAttribute("id",'trendy-menu-bar');
        var bookmark_popup = document.getElementsByClassName('bookmark_popup-iframe');
        bookmark_popup[0].className='bookmark_popup';
        pdf_popup = document.getElementsByClassName('pdf_popup-iframe');

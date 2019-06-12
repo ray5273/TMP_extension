@@ -28,7 +28,9 @@ class MenuBar extends Component {
             words:{},
             url:'',
             data:'',
-            open:true
+            open:true,
+
+
         }
     }
     // callStickyMemo = () => {
