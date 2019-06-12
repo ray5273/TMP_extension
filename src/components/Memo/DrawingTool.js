@@ -26,6 +26,30 @@ function dataURItoBlob(dataURI)
 }
 
 class DrawingTool extends Component {
+    componentDidMount(): void {
+        //여기서 url에 대한 image memo count가 존재하는지먼저 파악 없을시 새로 만들어줌.
+        var uid = this.props.uid;
+        var url = this.props.url;
+        url = encodeURIComponent(url);
+
+        var storage = Firebase.storage();
+        var storage_ref = storage.ref();
+        var database = Firebase.firestore();
+
+        database.collection("User").doc(uid).collection("Url").doc(url).get().then(function(doc){
+            if(!doc.exists) {
+                database.collection("User").doc(uid).collection("Url").doc(url).set({
+                    imageCount: 0
+                }).then(function () {
+                    console.log("Memo Count firestore successfully added");
+                }).catch(function (error) {
+                    console.error("Error writing document: ", error);
+                });
+            }
+
+        });
+    }
+
     addDrawingMemo = () => {
 
         //이미지를 올리는 기능 존재
@@ -45,19 +69,6 @@ class DrawingTool extends Component {
         console.log("decoded url : "+ decodeURIComponent(url));
 
 
-        //여기서 url에 대한 image memo count가 존재하는지먼저 파악 없을시 새로 만들어줌.
-        database.collection("User").doc(uid).collection("Url").doc(url).get().then(function(doc){
-            if(!doc.exists) {
-                database.collection("User").doc(uid).collection("Url").doc(url).set({
-                    imageCount: 0
-                }).then(function () {
-                    console.log("Memo Count firestore successfully added");
-                }).catch(function (error) {
-                    console.error("Error writing document: ", error);
-                });
-            }
-
-        });
 
         // url에 image 를 추가하고 해당 url의 memocount를 늘려줌
         var ptro = Painterro({

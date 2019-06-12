@@ -46,15 +46,20 @@ class DragImage extends Component {
     deleteImage = () =>{
         console.log("delete Image");
         console.log("");
-        const storage = Firebase.storage();
-        const storage_ref = storage.ref();
-        const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
-        imageMemo.style.display = 'none';
-        const imagePath = this.props.uid +'/'+this.props.url+'/'+'image'+this.props.idx+'.png';
-        const dataRef = storage_ref.child(imagePath);
-        dataRef.delete().then(function (snapshot) {
-            console.log("deleted file!");
-        });
+        const ask = window.confirm("정말 삭제하시겠습니까?");
+        if(ask) {
+            const storage = Firebase.storage();
+            const storage_ref = storage.ref();
+            const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
+            imageMemo.style.display = 'none';
+            const imagePath = this.props.uid + '/' + this.props.url + '/' + 'image' + this.props.idx + '.png';
+            const dataRef = storage_ref.child(imagePath);
+            dataRef.delete().then(function (snapshot) {
+                console.log("deleted file!");
+            });
+        }else{
+
+        }
 
     }
     render() {
