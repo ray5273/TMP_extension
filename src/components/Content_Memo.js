@@ -43,12 +43,11 @@ class Memos extends Component {
       super(props);
       this.state = {
          
-          searchedMemos:[],
+
           uid:firebase.auth().currentUser.uid,
           data:[],
           currentPage: 1,
-          datasPerPage: 6,
-          limit: 7,
+          datasPerPage: 5,
           top:0
       };
 
@@ -87,12 +86,7 @@ class Memos extends Component {
     }
 
     componentDidUpdate(oldProps) {
-        const newProps = this.props
-        if(oldProps.keyword !== newProps.keyword) {
-          this.setState({ searchedMemos: this.state.data.filter(
-            x => x.content.indexOf(this.props.keyword) > -1
-          ) })
-        }
+   
         //this.showMemos();
       }
 
@@ -205,8 +199,8 @@ class Memos extends Component {
                 )
             );
 
-            const s=this.state.data.filter(
-                x => x.url.indexOf(this.props.keyword) > -1
+            const searched=this.state.data.filter(
+                x => x.content.indexOf(this.props.keyword) > -1
               ).slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
                 ({url, title, content, fid}) => (
                 <Item
@@ -273,7 +267,7 @@ class Memos extends Component {
                         
                         (this.state.data.filter(
                             x => x.url.indexOf(this.props.keyword) > -1
-                        ).length ? s : <div className="memo-none">
+                        ).length ? searched : <div className="memo-none">
                         <p>검색 결과가 없습니다.</p>
                      </div>))
                         :
