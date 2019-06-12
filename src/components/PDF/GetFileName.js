@@ -104,7 +104,7 @@ class GetFileName extends Component {
     }
     render() {
         return (
-            <div className="pdf_popup">
+            <div className="pdf_popup-iframe">
                 <h1>PDF</h1>
                 <input id="PDF_title" placeholder="Enter PDF FileName" value={this.props.title} onChange={this.handleChange}/>
                 <div className="pdf_checkbox">
