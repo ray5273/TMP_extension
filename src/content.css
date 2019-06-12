@@ -54,10 +54,26 @@
     margin: 1px;
 }
 .iframe-memo-url{
+}
+.iframe-memo-link {
+    
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width:90%;
     word-wrap: break-word;
+    -webkit-line-clamp: 1;
+    visibility: visible;
+    /* autoprefixer: ignore next */
+    -webkit-box-orient: vertical;
     
 }
-
+.iframe-memo-link > a{
+    color:black;
+}
+.iframe-memo-link > a:hover{
+    color:white;
+}
 .submit-memo-button {
     width:20%;
 }
@@ -75,15 +91,42 @@
 }
 
 .memo-item {
-    background-color:white;
+    background-color:#83b8f4;
     border: 1px solid white;
     margin-bottom:3px;
+    padding:4px 10px;
+
+}
+
+.iframe-memo-buttons-container {
+    display:flex;
+}
+.max-icon {
+    width:15px;
+    height:15px;
+}
+.url-container {
+    display:flex;
+}
+.clip-image {
+    width:15px;
+    height:15px;
 }
 .iframe-memo-content {
     overflow: auto;
     word-break: break-word;
+    background-color:white;
+    padding:5px 5px;
+    border-radius: 10px;
+    height:70px;
 }
 
+.iframe-memo-content.over {
+    height:auto !important;
+}
+.iframe-memo-content::-webkit-scrollbar { 
+    display: none; 
+}
 
 
 svg {
