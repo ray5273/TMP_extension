@@ -16,6 +16,10 @@ class SimSearch extends Component {
     componentDidMount(): void {
         console.log("uid in Simsearch : " + this.props.uid);
 
+        this.setState({
+            abc: this.state.abc.replace(/(\s*)/g,"")
+        });
+
         var uid = this.props.uid;
         var url = this.props.url;
 
@@ -108,7 +112,7 @@ class SimSearch extends Component {
                     Trendy Memo Project
                 </div>
                 <div className="search2">
-                    {j === 0 ? <div className="search6"> 관련된 데이터가 없습니다. </div> : open}
+                    {j === 0 ? <div> 관련된 데이터가 없습니다. </div> : open}
                 </div>
             </React.Fragment>
         /*<div className="search1">
