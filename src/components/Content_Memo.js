@@ -126,6 +126,7 @@ class Memos extends Component {
         const db=firebase.firestore();
         let data=[];
 
+        /*
         db.collection("User").doc(this.state.uid).collection("Url").get()
         .then(docs => {
             docs.forEach(doc => {
@@ -145,11 +146,30 @@ class Memos extends Component {
                     })
             })
         })
+        */
+       db.collection("User").doc(this.state.uid).collection("Url").doc("list").get().then(x=>{
+           x.data().list.forEach(y=>{
+            db.collection("User").doc(this.state.uid).collection("Url").doc(y).collection("Memos").get()
+            .then(memos => {
+                console.log(memos);
+                memos.forEach(memo => {
+                    let temp = memo.data().content;
+                    
+                    temp = temp.replace(/(\s*)/g,"");
+                    const decodedUrl = decodeURIComponent(memo.data().url);
+                    
+                    data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title});
+               
+                    //test=test.concat(memo.data().content);
+                })
+            })}
+           )})
+
         setTimeout(()=> {
             this.setState({
                 data:data
             })
-        }, 500)
+        }, 2000)
         
     }
 
@@ -169,7 +189,7 @@ class Memos extends Component {
             console.log("RENDERREDENRDERENDERNERDNERN", this.state.reports);
             
             
-            const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
+            const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage, this.state.currentPage*datasPerPage).map(
                 ({url, title, content}) => (
                 <Item
                     id={url}
