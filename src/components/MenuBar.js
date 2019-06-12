@@ -153,6 +153,9 @@ class MenuBar extends Component {
                     color={color}
                     hid={doc.id}
                     uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`Highlight_${doc.id}`));
+                        setTimeout(function(){
+                            toolTipDiv.parentElement.removeChild(toolTipDiv);
+                        }, 3000);
 
             });
         });

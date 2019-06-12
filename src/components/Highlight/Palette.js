@@ -62,6 +62,9 @@ class Palette extends Component {
             document.body.appendChild(toolTipDiv);
             ReactDOM.render(<HighlightMenu rmfunc={this.removeHighlight}/>, toolTipDiv); //ret={this.retModifiedColor}
         
+        setTimeout(function(){
+            toolTipDiv.parentElement.removeChild(toolTipDiv);
+        }, 3000);
 /* 
        // Close the bubble when we click on the screen.
         document.addEventListener('mousedown', function (e) {
