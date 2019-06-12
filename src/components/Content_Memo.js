@@ -4,7 +4,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Item from './Item';
 import firebase from '../Firebase';
 import 'firebase/firestore';
-
+let data=[];
+let test=[];
 const styles = theme => ({
     main: {
         width: 'auto',
@@ -42,23 +43,63 @@ class Memos extends Component {
     constructor(props) {
       super(props);
       this.state = {
-          memos:[],
+          memos:[{
+              id: 3,
+            name:"asgdasdf",
+            content: "sdsa",
+
+          }],
           searchedMemos:[],
           uid:firebase.auth().currentUser.uid,
-          data:[]
+          data:[],
+          currentPage: 1,
+          datasPerPage: 6,
+          limit: 7,
+          top:0
       };
 
+    }
+    goLowest = () => {
+        this.setState({
+            currentPage: 1
+        });
+    }
+
+    goHighest = (e) => {
+        const highest = Number(Math.ceil(this.state.data.length / this.state.datasPerPage));
+        this.setState({
+            currentPage: highest
+        });
+    }
+    handleClick(event) {
+        this.setState({
+            currentPage: Number(event.target.text),
+        });
+    }
+    handlePrevClick = () => {
+        if (this.state.currentPage > 1) {
+            this.setState({
+                currentPage: this.state.currentPage - 1
+            })
+        }
+    }
+
+    handleNextClick = () => {
+        if (this.state.currentPage < Math.ceil(this.state.data.length / this.state.datasPerPage)) { 
+            this.setState({
+                currentPage: this.state.currentPage + 1
+            })
+        }
     }
 
     componentDidUpdate(oldProps) {
         const newProps = this.props
         if(oldProps.keyword !== newProps.keyword) {
-          this.setState({ searchedMemos: this.state.memos.filter(
+          this.setState({ searchedMemos: this.state.data.filter(
             x => x.name.indexOf(this.props.keyword) > -1
           ) })
         }
 
-        this.showMemos();
       }
 
       handleChange = (e) => {
@@ -82,7 +123,7 @@ class Memos extends Component {
     showMemos=()=>{
         
         const db=firebase.firestore();
-        let data=[];
+        
         db.collection("User").doc(this.state.uid).collection("Url").get()
         .then(docs => {
             docs.forEach(doc => {
@@ -91,35 +132,104 @@ class Memos extends Component {
                         console.log(memos);
                         memos.forEach(memo => {
                             let temp = memo.data().content;
-                            console.log(temp);
+                            
                             temp = temp.replace(/(\s*)/g,"");
                             const decodedUrl = decodeURIComponent(memo.data().url);
-                            console.log(memo.data().content);
-                            data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title})
-
+                            
+                            data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title});
+                       
+                            //test=test.concat(memo.data().content);
                         })
                     })
             })
-        }).then(()=>console.log("datadatadta",data));
+        }).then(()=> {
+            console.log("datadatadta",data);
+            //console.log("testestetest",test);
+        });
+        
         
     }
 
+    testFunc=()=>{
+        console.log("testffff data",data);
+        this.setState({
+            data: data
+        })
+        //console.log("testffff test",test);
+    }
+
     render() {
+
+        const { datasPerPage } = this.state;
+            console.log("RENDERREDENRDERENDERNERDNERN", this.state.reports);
+            
+            const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
+                ({url, title, content}) => (
+                <Item
+                    id={url}
+                    name={title}
+                    content={content}
+                   
+                    handleRemove={this.handleRemove}
+                />
+                )
+            );
+
+            const highest = Math.ceil(this.state.data.length / datasPerPage);
+            const pageNumbers = [];
+            for (let i = 1; i <= highest; i++) {
+                pageNumbers.push(i);
+            }
+
+            const renderPageNumbers = pageNumbers.map(number => {
+                return (
+                    <a
+                        key={number}
+                        onClick={(e) => this.handleClick(e, number)}
+                        className={Number(this.state.currentPage) === number ? "on_pager" : null}
+                        style={(this.state.currentPage - 2 <= number && number <= this.state.currentPage + 2)
+                            ||
+                            ((this.state.currentPage < 3 && number < 6)
+                                ||
+                                (this.state.currentPage > highest - 3 && number > highest - 5)
+                            )
+                            ? null : styles.nonee
+                        }
+                    >
+                        {number} &nbsp;
+                    </a>
+                );
+            });
+
+
         const { classes } = this.props;
         return (
             <main className={classes.main}>
-                <div>             
-                  
-                   
+                <div>     
+                <button onClick={this.showMemos}>메모불러오기</button>        
+                  <button onClick={this.testFunc}>state에담기</button>
+
                     <br/>
                     <div>
-                    {this.props.keyword === "" ? this.state.memos.map(
+
+                    {Number(this.state.datas) === 0 ?
+                                <div className="memo-none">
+                                    
+                                        <p>메모 목록이 없습니다.</p>
+                                   
+                                </div>
+                                :
+                                datas
+                            }
+
+                            {/* 
+                    {this.props.keyword === "" ? this.state.data.map(
                         ({id, name, content, tag }) => (
                         <Item
                             id={id}
                             name={name}
                             content={content}
-                            tag={tag}
+                           
                             handleRemove={this.handleRemove}
                         />
                     )) :
@@ -133,9 +243,22 @@ class Memos extends Component {
                             handleRemove={this.handleRemove}
                         />
                     ))
-                    }         
+                    }  
+                    */}       
                     </div>
+                        <div className="pagination">
+                            <div className="prev">
+                                <a onClick={this.goLowest} className="prev02"> &lt;&lt; </a> &nbsp;
+                                <a onClick={this.handlePrevClick} className="prev01"> &lt; </a>
+                            </div>
+                            {/*  pageination 선택 클래스 - on_pager */}
 
+                            {renderPageNumbers}
+                            <div className="next">
+                                <a onClick={this.handleNextClick} className="next02"> &gt;</a> &nbsp;
+                                <a onClick={this.goHighest} className="next01"> &gt;&gt; </a>
+                            </div>
+                        </div>
                 </div>
             </main>
         );

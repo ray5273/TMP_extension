@@ -76,14 +76,13 @@
     word-break: break-word;
 }
 
-.iframe-memo-tag {
-    background-color: #E7E7E7;
-    width:auto;
-    border-radius: 25px;
-    margin: 3px;
-    padding: 3px 3px;
-}
+
 
 svg {
     width:50px;
+}
+
+.on_pager {
+    background-color: #83b8f4;
+    font-weight:900;
 }
