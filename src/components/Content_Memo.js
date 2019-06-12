@@ -83,6 +83,10 @@ class Memos extends Component {
             })
         }
     }
+    componentWillMount(){
+        this.showAllMemos();
+    }
+
 
     componentDidUpdate(oldProps) {
    
@@ -121,7 +125,6 @@ class Memos extends Component {
     showAllMemos=()=>{
         
         const db=firebase.firestore();
-        let data=[];
 
         /*
         db.collection("User").doc(this.state.uid).collection("Url").get()
@@ -146,29 +149,30 @@ class Memos extends Component {
         */
        db.collection("User").doc(this.state.uid).collection("Url").doc("list").get().then(x=>{
            x.data().list.forEach(y=>{
-            db.collection("User").doc(this.state.uid).collection("Url").doc(y).collection("Memos").get()
-            .then(memos => {
+               db.collection("User").doc(this.state.uid).collection("Url").doc(y).collection("Memos").onSnapshot(memos => {
                 //console.log(memos);
+                   let data_modified=[];
                 memos.forEach(memo => {
                     let temp = memo.data().content;
                     
                     temp = temp.replace(/(\s*)/g,"");
                     const decodedUrl = decodeURIComponent(memo.data().url);
                     console.log("IDIDIDID", memo.id);
-                    data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title, fid: memo.id});
-               
+                    data_modified.push({content: memo.data().content, url:decodedUrl, title: memo.data().title, fid: memo.id});
+                    console.log("data_modified:"+data_modified);
                     //test=test.concat(memo.data().content);
+                });
+                this.setState({
+                    data:data_modified
                 })
-            })}
-           )})
+                   data_modified=[];
+               })
 
-        setTimeout(()=> {
-            this.setState({
-                data:data
-            })
-        }, 1000)
-        
-    }
+           });
+
+       });
+
+    };
 
     /* 
     testFunc=()=>{
