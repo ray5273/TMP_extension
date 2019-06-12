@@ -4,6 +4,28 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Item from './Item';
 import firebase from '../Firebase';
 import 'firebase/firestore';
+
+
+
+import BookmarksIcon from '@material-ui/icons/Bookmarks';
+import ListItemText from "@material-ui/core/ListItemText";
+import IconButton from "@material-ui/core/IconButton";
+import Collapse from "@material-ui/core/Collapse";
+import List from "@material-ui/core/List";
+
+
+
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import BookmarkBorder from "@material-ui/core/SvgIcon/SvgIcon";
+import DeleteIcon from '@material-ui/icons/Delete';
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+
+
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+
+
 const styles = theme => ({
     main: {
         width: 'auto',
@@ -44,9 +66,10 @@ class Memos extends Component {
           uid:firebase.auth().currentUser.uid,
           data:[],
           currentPage: 1,
-          datasPerPage: 5,
+          datasPerPage: 6,
           top:0,
-          map:''
+          map:'',
+          open:false
       };
 
     }
@@ -134,7 +157,7 @@ class Memos extends Component {
 
         //사이트 개수가 추가되는경우 tracking
         db.collection("User").doc(this.state.uid).collection("Url").doc("list").onSnapshot(doc=>{
-                console.log("doc data"+doc.data().list.length);
+                //console.log("doc data"+doc.data().list.length);
                 console.log("doc data ddd");
                 sites = doc.data().list;
                 var component = this;
@@ -151,7 +174,7 @@ class Memos extends Component {
                                     content:change.doc.data().content,
                                     url:decodedUrl,
                                     title:change.doc.data().title,
-                                    fid:change.doc.id
+                                    id:change.doc.id
                                 };
                                 mapping.set(change.doc.id,map_content);
                                 component.setState ({map: mapping});
@@ -181,7 +204,11 @@ class Memos extends Component {
         //console.log("testffff test",test);
     }
     */
-   
+   handleToggle=()=>{
+       this.setState({
+           open: !this.state.open
+       })
+   }
     render() {
 
         const { datasPerPage } = this.state;
@@ -244,58 +271,43 @@ class Memos extends Component {
         const { classes } = this.props;
         return (
             <main className={classes.main}>
-                <div>     
-                <button onClick={this.showAllMemos}>메모불러오기</button>        
-                 <br />
                     
-                    <br/>
-                    <div>
-
-{/* 
-                    {this.state.data.length ?
-                    datas
-                    :
-                    <div className="memo-none">
-                        <p>메모 목록이 없습니다.</p>
-                     </div>
-                    }
-*/}
+                        {this.state.data.length ?
                             
+                            (this.props.keyword === "" ?
+                            datas : 
+                            
+                            (this.state.data.filter(
+                                x => x.url.indexOf(this.props.keyword) > -1
+                            ).length ? searched :
+                            <div className="memo-none">
+                                <p>검색 결과가 없습니다.</p>
+                            </div>))
+                            :
+                            <div className="memo-none">
+                                <p>메모 목록이 없습니다.</p>
+                            </div>
+                        }  
+                        
+                      
                     {this.state.data.length ?
+                        <div className="pagination">
+                            <div className="prev">
+                                <a onClick={this.goLowest} className="prev02"> &lt;&lt; </a> &nbsp;
+                                <a onClick={this.handlePrevClick} className="prev01"> &lt; </a>
+                            </div>
                         
-                        (this.props.keyword === "" ?
-                        datas : 
-                        
-                        (this.state.data.filter(
-                            x => x.url.indexOf(this.props.keyword) > -1
-                        ).length ? searched : <div className="memo-none">
-                        <p>검색 결과가 없습니다.</p>
-                     </div>))
-                        :
-                        <div className="memo-none">
-                        <p>메모 목록이 없습니다.</p>
-                     </div>
-                    }  
-                       
-                </div>
-                {this.state.data.length ?
-                <div className="pagination">
-                <div className="prev">
-                    <a onClick={this.goLowest} className="prev02"> &lt;&lt; </a> &nbsp;
-                    <a onClick={this.handlePrevClick} className="prev01"> &lt; </a>
-                </div>
-                {/*  pageination 선택 클래스 - on_pager */}
 
-                {renderPageNumbers}
-                <div className="next">
-                    <a onClick={this.handleNextClick} className="next02"> &gt;</a> &nbsp;
-                    <a onClick={this.goHighest} className="next01"> &gt;&gt; </a>
-                </div>
-            </div>
-            : null
-            }
-                        
-                </div>
+                            {renderPageNumbers}
+                            <div className="next">
+                                <a onClick={this.handleNextClick} className="next02"> &gt;</a> &nbsp;
+                                <a onClick={this.goHighest} className="next01"> &gt;&gt; </a>
+                            </div>
+                        </div>
+                        :
+                        null
+                    }
+                     
             </main>
         );
     }
