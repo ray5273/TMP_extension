@@ -94,34 +94,46 @@ class MenuBar extends Component {
        */
 
         // Load Sticky Memo
-        var i = 0;
 
-        database.collection("User").doc(uid).collection("Url").doc(url).collection("Memos").get().then(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
-                var data = doc.data();
+        database.collection("User").doc(uid).collection("Url").doc(url).collection("Memos")
+            .onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(change => {
+                    if (change.type === 'added') {
+                        var data = change.doc.data();
 
-                if (document.getElementById(`stickyMemo_${doc.id}`) == null) {
-                    var stickyMemo = document.createElement('div');
-                    stickyMemo.setAttribute('id', `stickyMemo_${doc.id}`);
-                    stickyMemo.style.position = 'absolute';
-                    stickyMemo.style.width="300px";
-                    stickyMemo.style.top = window.scrollY+'px';
-                    stickyMemo.style.left = window.scrollX +'px';
-                    stickyMemo.style.zIndex=2147483647;
-                    stickyMemo.setAttribute('class', 'memo-before-render');
-                    document.body.appendChild(stickyMemo);
-                    // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
-                    ReactDOM.render(<DragText
-                        id={doc.id}
-                        posX={data.posX}
-                        posY={data.posY}
-                        text={data.content}
-                        uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`stickyMemo_${doc.id}`));
-                    //Painterro().show();
-                }
-                i++;
-            });
+                        if (document.getElementById(`stickyMemo_${change.doc.id}`) == null) {
+                            var stickyMemo = document.createElement('div');
+                            stickyMemo.setAttribute('id', `stickyMemo_${change.doc.id}`);
+                            stickyMemo.style.position = 'absolute';
+                            stickyMemo.style.width="300px";
+                            stickyMemo.style.top = window.scrollY+'px';
+                            stickyMemo.style.left = window.scrollX +'px';
+                            stickyMemo.style.zIndex=2147483647;
+                            stickyMemo.setAttribute('class', 'memo-before-render');
+                            document.body.appendChild(stickyMemo);
+                            // ReactDOM.render(<Input />, document.getElementById(`stickyMemo${this.state.t}`));
+                            ReactDOM.render(<DragText
+                                id={change.doc.id}
+                                posX={data.posX}
+                                posY={data.posY}
+                                text={data.content}
+                                uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`stickyMemo_${change.doc.id}`));
+                            //Painterro().show();
+                        }
+                    }
+                    if (change.type === 'modified') {
+                    }
+                    if (change.type === 'removed') {
+                        document.getElementById(`stickyMemo_${change.doc.id}`).remove();
+                    }
+                });
+
         });
+        // get().then(function(querySnapshot) {
+        //     querySnapshot.forEach(function(doc) {
+        //     });
+        //
+        // });
         // Load Sticky Memo End
 
         // Load Highlights
