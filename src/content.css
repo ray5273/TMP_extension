@@ -83,8 +83,14 @@
     justify-content: space-around;
 }
 
-.memo-top-wrapper, .iframe-memo-title, .iframe-memo-url  {
+.iframe-memo-title {
+    width:80%;
+} 
+.iframe-memo-url  {
     width:95%;
+}
+.iframe-memo-title{
+    word-break: break-all;
 }
 .temp-text-wrapper {
     display:flex;
@@ -94,7 +100,7 @@
     background-color:#83b8f4;
     border: 1px solid white;
     margin-bottom:3px;
-    padding:4px 10px;
+    padding:6px 10px;
 
 }
 
@@ -112,9 +118,15 @@
     width:15px;
     height:15px;
 }
+
+.iframe-memo-xbutton {    
+    width:16px;
+    height:16px;
+}
+
 .iframe-memo-content {
     overflow: auto;
-    word-break: break-word;
+    word-break: break-all;
     background-color:white;
     padding:5px 5px;
     border-radius: 10px;

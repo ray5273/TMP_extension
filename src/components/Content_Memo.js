@@ -4,7 +4,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Item from './Item';
 import firebase from '../Firebase';
 import 'firebase/firestore';
-
 const styles = theme => ({
     main: {
         width: 'auto',

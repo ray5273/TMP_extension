@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Clip from '../assets/clip.png';
 import Max from '../assets/max.png';
+import XIcon from '../assets/xicon.png';
+
 class Item extends Component {
     constructor(props) {
         super(props);
@@ -21,18 +23,16 @@ class Item extends Component {
                             null
                         }
 
-                        <button onClick={(e) => {
+                        <img src={XIcon} alt="" onClick={(e) => {
                             e.stopPropagation();
                             handleRemove(fid, url)
-                        }} className="iframe-buttons">
-                            X</button>
+                        }} className="iframe-memo-xbutton"
+                            />
                     </div>
                 </div>
-                <br />
-
-
+                
                 <div className={`iframe-memo-content ${this.state.overClicked ? "over" : ""}`}>{content}</div>
-                <br />
+               
                 <div className="url-container">
                     <img className="clip-image" src={Clip} alt="" />
                     <div className="iframe-memo-url"> <span className="iframe-memo-link"><a href={url}> {url} </a></span></div>
