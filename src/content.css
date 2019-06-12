@@ -161,6 +161,15 @@ html,body,div,span,iframe,h1,h2,h3,h4,h5,h6,p,pre,a,em,img,ol,ul,li,fieldset,lab
     display: none; 
 }
 
+.link-text{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.link-text:hover{
+    color: #ffffff;
+}
+
 
 svg {
     width:50px;
