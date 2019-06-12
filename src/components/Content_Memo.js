@@ -118,8 +118,10 @@ class Memos extends Component {
     
       handleSubmit = (e) => {
       }
-
-    showMemos=()=>{
+    showNowMemos=()=>{
+        //TODO: 현재URL
+    }
+    showAllMemos=()=>{
         
         const db=firebase.firestore();
         let data=[];
@@ -224,7 +226,7 @@ class Memos extends Component {
         return (
             <main className={classes.main}>
                 <div>     
-                <button onClick={this.showMemos}>메모불러오기</button>        
+                <button onClick={this.showAllMemos}>메모불러오기</button>        
                  <br />
                     
                     <br/>
