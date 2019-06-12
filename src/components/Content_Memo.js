@@ -41,13 +41,12 @@ class Memos extends Component {
     constructor(props) {
       super(props);
       this.state = {
-         
-
           uid:firebase.auth().currentUser.uid,
           data:[],
           currentPage: 1,
           datasPerPage: 5,
-          top:0
+          top:0,
+          map:''
       };
 
     }
@@ -126,51 +125,50 @@ class Memos extends Component {
         
         const db=firebase.firestore();
 
-        /*
-        db.collection("User").doc(this.state.uid).collection("Url").get()
-        .then(docs => {
-            docs.forEach(doc => {
-                db.collection("User").doc(this.state.uid).collection("Url").doc(doc.id).collection("Memos").get()
-                    .then(memos => {
-                        console.log(memos);
-                        memos.forEach(memo => {
-                            let temp = memo.data().content;
-                            
-                            temp = temp.replace(/(\s*)/g,"");
-                            const decodedUrl = decodeURIComponent(memo.data().url);
-                            
-                            data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title});
-                       
-                            //test=test.concat(memo.data().content);
-                        })
+
+        //list 가 바뀌는경우: 사이트가 추가되는경우,  삭제되는경우? 있나
+        //사이트 개수 만큼 배열이 필요?
+
+        let sites = [];
+        let mapping = new Map();
+
+        //사이트 개수가 추가되는경우 tracking
+        db.collection("User").doc(this.state.uid).collection("Url").doc("list").onSnapshot(doc=>{
+                console.log("doc data"+doc.data().list.length);
+                console.log("doc data ddd");
+                sites = doc.data().list;
+                var component = this;
+                for(let i=0;i<sites.length;i++) {
+                    //메모 갯수가 추가되는경우
+                    db.collection("User").doc(this.state.uid).collection("Url").doc(sites[i]).collection("Memos").onSnapshot(function(snapshot){
+                        snapshot.docChanges().forEach( function(change){
+                            if(change.type==="added" || change.type==="modified"){
+                                let temp = change.doc.data().content;
+                                temp = temp.replace(/(\s*)/g,"");
+                                const decodedUrl = decodeURIComponent(change.doc.data().url);
+
+                                let map_content = {
+                                    content:change.doc.data().content,
+                                    url:decodedUrl,
+                                    title:change.doc.data().title,
+                                    id:change.doc.id
+                                };
+                                mapping.set(change.doc.id,map_content);
+                                component.setState ({map: mapping});
+                            }else{
+                                mapping.delete(change.doc.id);
+                                component.setState ({map: mapping});
+                            }
+                        });
+                        let data = Array.from(component.state.map.values());
+                        console.log("data values"+data);
+                        component.setState({
+                            data :data
+                        });
                     })
-            })
-        })
-        */
-       db.collection("User").doc(this.state.uid).collection("Url").doc("list").get().then(x=>{
-           x.data().list.forEach(y=>{
-               db.collection("User").doc(this.state.uid).collection("Url").doc(y).collection("Memos").onSnapshot(memos => {
-                //console.log(memos);
-                   let data_modified=[];
-                memos.forEach(memo => {
-                    let temp = memo.data().content;
-                    
-                    temp = temp.replace(/(\s*)/g,"");
-                    const decodedUrl = decodeURIComponent(memo.data().url);
-                    console.log("IDIDIDID", memo.id);
-                    data_modified.push({content: memo.data().content, url:decodedUrl, title: memo.data().title, fid: memo.id});
-                    console.log("data_modified:"+data_modified);
-                    //test=test.concat(memo.data().content);
-                });
-                this.setState({
-                    data:data_modified
-                })
-                   data_modified=[];
-               })
+                }
+        });
 
-           });
-
-       });
 
     };
 
