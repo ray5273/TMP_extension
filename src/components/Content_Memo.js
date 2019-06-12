@@ -85,9 +85,9 @@ class Memos extends Component {
             currentPage: highest
         });
     }
-    handleClick(event) {
+    handleClick(event, number) {
         this.setState({
-            currentPage: Number(event.target.text),
+            currentPage: number,
         });
     }
     handlePrevClick = () => {
@@ -131,12 +131,13 @@ class Memos extends Component {
             var db = firebase.firestore();
             console.log("eeeeencodedUUUURRRRLLLLL:",encodedUrl);
             db.collection("User").doc(this.state.uid).collection("Url").doc(encodedUrl).collection("Memos").doc(fid).delete();
+            const {data} = this.state;
+            this.setState({
+              data: data.filter(d=> d.fid !== fid)
+            });
         }
 
-          const {data} = this.state;
-          this.setState({
-            data: data.filter(d=> d.fid !== fid)
-          });
+         
         }
     
       handleSubmit = (e) => {
@@ -174,7 +175,7 @@ class Memos extends Component {
                                     content:change.doc.data().content,
                                     url:decodedUrl,
                                     title:change.doc.data().title,
-                                    id:change.doc.id
+                                    fid:change.doc.id
                                 };
                                 mapping.set(change.doc.id,map_content);
                                 component.setState ({map: mapping});
@@ -249,10 +250,11 @@ class Memos extends Component {
 
             const renderPageNumbers = pageNumbers.map(number => {
                 return (
-                    <a
+                    <div className="page-num-item-wrapper">
+                    <div
                         key={number}
-                        onClick={(e) => this.handleClick(e, number)}
-                        className={Number(this.state.currentPage) === number ? "on_pager" : null}
+                        
+                        className={`page-num ${Number(this.state.currentPage) === number ? "on_pager" : null}`}
                         style={(this.state.currentPage - 2 <= number && number <= this.state.currentPage + 2)
                             ||
                             ((this.state.currentPage < 3 && number < 6)
@@ -262,8 +264,9 @@ class Memos extends Component {
                             ? null : styles.nonee
                         }
                     >
-                        {number} &nbsp;
-                    </a>
+                        <p onClick={(e) => this.handleClick(e, number)}>{number}</p>
+                    </div>
+                    </div>
                 );
             });
 
@@ -297,8 +300,9 @@ class Memos extends Component {
                                 <a onClick={this.handlePrevClick} className="prev01"> &lt; </a>
                             </div>
                         
-
-                            {renderPageNumbers}
+                            <div className="page-numbers-container">
+                                {renderPageNumbers}
+                            </div>
                             <div className="next">
                                 <a onClick={this.handleNextClick} className="next02"> &gt;</a> &nbsp;
                                 <a onClick={this.goHighest} className="next01"> &gt;&gt; </a>

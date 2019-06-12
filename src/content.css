@@ -236,15 +236,41 @@ div.jss45.jss54 {
 svg {
     width:50px;
 }
+.pagination {
+    display:flex;
+    margin-top:20px;
+}
 
+.prev {
+    margin-right:5px;
+}
+
+.next {
+    margin-left:5px;
+}
+.page-numbers-container {
+    display:flex;
+    height:auto;
+}
+.page-num-item-wrapper {
+    
+  
+ 
+}
+
+.page-num {
+    width:20px;
+    text-align: center;
+}
+.page-num>p {
+    margin:0;
+}
 .on_pager {
     background-color: black;
     color:white;
-   
-    text-align: center;
-    padding: 1px 1px ;
+
     font-weight:900;
-    width: 10px;
+    width: 20px;
 }
 
 
