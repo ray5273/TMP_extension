@@ -42,12 +42,7 @@ class Memos extends Component {
     constructor(props) {
       super(props);
       this.state = {
-          memos:[{
-              id: 3,
-            name:"asgdasdf",
-            content: "sdsa",
-
-          }],
+         
           searchedMemos:[],
           uid:firebase.auth().currentUser.uid,
           data:[],
@@ -107,12 +102,11 @@ class Memos extends Component {
           })
       }
   
-      handleRemove= (id) => {
-          /* 파이어베이스에 보낼 코드 */
-  
-          const {memos} = this.state;
+      handleRemove= (fid) => {
+          
+          const {data} = this.state;
           this.setState({
-            memos: memos.filter(memo=> memo.id !== id)
+            data: data.filter(d=> d.fid !== fid)
           });
         }
     
@@ -151,14 +145,14 @@ class Memos extends Component {
            x.data().list.forEach(y=>{
             db.collection("User").doc(this.state.uid).collection("Url").doc(y).collection("Memos").get()
             .then(memos => {
-                console.log(memos);
+                //console.log(memos);
                 memos.forEach(memo => {
                     let temp = memo.data().content;
                     
                     temp = temp.replace(/(\s*)/g,"");
                     const decodedUrl = decodeURIComponent(memo.data().url);
-                    
-                    data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title});
+                    console.log("IDIDIDID", memo.id);
+                    data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title, fid: memo.id});
                
                     //test=test.concat(memo.data().content);
                 })
@@ -169,7 +163,7 @@ class Memos extends Component {
             this.setState({
                 data:data
             })
-        }, 2000)
+        }, 1000)
         
     }
 
@@ -190,12 +184,12 @@ class Memos extends Component {
             
             
             const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage, this.state.currentPage*datasPerPage).map(
-                ({url, title, content}) => (
+                ({url, title, content, fid}) => (
                 <Item
                     id={url}
                     name={title}
                     content={content}
-                   
+                    fid={fid}
                     handleRemove={this.handleRemove}
                 />
                 )
@@ -204,12 +198,12 @@ class Memos extends Component {
             const s=this.state.data.filter(
                 x => x.url.indexOf(this.props.keyword) > -1
               ).slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
-                ({url, title, content}) => (
+                ({url, title, content, fid}) => (
                 <Item
                     id={url}
                     name={title}
                     content={content}
-                   
+                    fid={fid}
                     handleRemove={this.handleRemove}
                 />
                 )
