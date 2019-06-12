@@ -87,7 +87,7 @@ class Memos extends Component {
 
     componentDidUpdate(oldProps) {
    
-        //this.showMemos();
+        //this.showAllMemos();
       }
 
       handleChange = (e) => {
@@ -105,7 +105,7 @@ class Memos extends Component {
           if(ask) {
             var db = firebase.firestore();
             console.log("eeeeencodedUUUURRRRLLLLL:",encodedUrl);
-            db.collection("User").doc(this.state.uid).collection("Url").doc("https%3A%2F%2Fcareers.ncsoft.com%2F").collection("Memos").doc(fid).delete();
+            db.collection("User").doc(this.state.uid).collection("Url").doc(encodedUrl).collection("Memos").doc(fid).delete();
         }
 
           const {data} = this.state;
