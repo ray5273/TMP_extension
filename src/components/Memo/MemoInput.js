@@ -16,6 +16,32 @@ class MemoInput extends Component {
             id: "",
         }
     }
+    componentDidMount(){
+
+        const open = this.state.open;
+        const imageMemo = document.getElementById(`stickyMemo_${this.props.id}`);
+        const child = imageMemo.children;
+
+        if(!open)
+            child[0].children[0].setAttribute('class',"input-wrapper-minimized");
+        else
+            child[0].children[0].setAttribute('class',"input-wrapper");
+    }
+
+    handleMinimize = ()=> {
+        const cur_state = this.state.open;
+        const open = this.state.open;
+        const imageMemo = document.getElementById(`stickyMemo_${this.props.id}`);
+        const child = imageMemo.children;
+
+        if(open)
+            child[0].children[0].setAttribute('class',"input-wrapper-minimized");
+        else
+            child[0].children[0].setAttribute('class',"input-wrapper");
+        this.setState({open:!this.state.open});
+
+    };
+
 
     handleChange = (e) => {
         this.setState({
@@ -77,7 +103,7 @@ class MemoInput extends Component {
                     <a className="delete-btn" onClick={this.handleDelete}>
                         <img src={close_icon} alt=""/>
                     </a>
-                    <a onClick={()=>this.setState({open:!this.state.open})}>
+                    <a onClick={this.handleMinimize}>
                         <img src={minimize_icon} alt=""/>
                     </a>
                     {this.state.submitted

@@ -21,8 +21,32 @@ class DragImage extends Component {
             y : 0
         }
     }
-    componentDidUpdate=()=>{
+    componentDidMount(){
+        const open = this.state.open;
+        const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
+        const child = imageMemo.children;
+
+        if(!open)
+            child[0].children[0].setAttribute('class',"image-wrapper-minimized");
+        else
+            child[0].children[0].setAttribute('class',"image-wrapper");
     };
+
+    handleMinimize=()=>{
+        const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
+        const open = this.state.open;
+        const child = imageMemo.children;
+
+        if(open)
+            child[0].children[0].setAttribute('class',"image-wrapper-minimized");
+        else
+            child[0].children[0].setAttribute('class',"image-wrapper");
+
+        this.setState({open:!this.state.open});
+
+    };
+
+
     handleStart = () =>{
         var str = "x pos: "+ this.props.push_x + " y pos: "+this.props.push_y;
         console.log(str);
@@ -79,7 +103,7 @@ class DragImage extends Component {
                         <a className="image-move">
                             <img src={move_icon} alt=""/>
                         </a>
-                        <a onClick={()=>this.setState({open:!this.state.open})}>
+                        <a onClick={this.handleMinimize}>
                             <img src={minimize_icon} alt=""/>
                         </a>
                         <a onClick={this.deleteImage}>
