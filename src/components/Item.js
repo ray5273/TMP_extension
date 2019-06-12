@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 class Item extends Component {
     render() {
-        const { id, name, content,fid, handleRemove} = this.props;
+        const { url, name, content,fid, handleRemove} = this.props;
         return (
             <div className="memo-item">
                 <div className="memo-top-wrapper">
-                    <div className="iframe-memo-url"> URL:<a href={id}> {id} </a></div>
+                    <div className="iframe-memo-url"> URL:<span className="iframe-memo-link"><a href={url}> {url} </a></span></div>
                     <button onClick={(e)=> {
                             e.stopPropagation();
-                            handleRemove(fid)
+                            handleRemove(fid, url)
                         }} className="iframe-buttons">
                         X</button>
                 </div>

@@ -102,8 +102,18 @@ class Memos extends Component {
           })
       }
   
-      handleRemove= (fid) => {
+      handleRemove= (fid, url) => {
+        console.log("UUUURRRRLLLLL:",url);
+          const encodedUrl = encodeURIComponent(url);
           
+          const ask = window.confirm("정말 삭제하시겠습니까?");
+
+          if(ask) {
+            var db = firebase.firestore();
+            console.log("eeeeencodedUUUURRRRLLLLL:",encodedUrl);
+            db.collection("User").doc(this.state.uid).collection("Url").doc("https%3A%2F%2Fcareers.ncsoft.com%2F").collection("Memos").doc(fid).delete();
+        }
+
           const {data} = this.state;
           this.setState({
             data: data.filter(d=> d.fid !== fid)
@@ -186,7 +196,7 @@ class Memos extends Component {
             const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage, this.state.currentPage*datasPerPage).map(
                 ({url, title, content, fid}) => (
                 <Item
-                    id={url}
+                    url={url}
                     name={title}
                     content={content}
                     fid={fid}
@@ -200,7 +210,7 @@ class Memos extends Component {
               ).slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
                 ({url, title, content, fid}) => (
                 <Item
-                    id={url}
+                    url={url}
                     name={title}
                     content={content}
                     fid={fid}
