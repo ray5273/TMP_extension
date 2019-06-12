@@ -39,20 +39,6 @@ class Palette extends Component {
     */
 
     //가장 최근에 select한 range를 state에 넣어두고 지울 수 있게(db없이 임시)
-    removeHighlight = () => {
-        //지우는코드 두줄. text를 따로 뽑은 뒤 element를 text로 대체하기
-        var uid = this.props.uid;
-        var url = encodeURIComponent(this.props.url);
-        var db = Firebase.firestore();
-
-        var hid = this.props.isNew ? this.props.hid : this.state.hid;
-        console.log("hid : ", hid);
-        db.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").doc(hid).delete();
-
-        var toReplace = this.state.nowNode.textContent;
-        this.state.nowNode.replaceWith(toReplace);
-
-    }
 
     retModifiedColor=(color)=>{
         this.setState({

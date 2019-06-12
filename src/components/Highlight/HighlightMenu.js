@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ModifyPalette from './ModifyPalette';
 import Trash from '../../assets/trashcan.png';
 import Icon from '../../assets/hlicon.png';
+import Firebase from '../../Firebase.js'
 
 class HighlightMenu extends Component {
     addTool = (e)=> {
@@ -21,24 +22,38 @@ class HighlightMenu extends Component {
         document.body.appendChild(toolTipDiv);
         ReactDOM.render(<ModifyPalette ret={this.props.ret}/>, toolTipDiv);
     
-/* 
-   // Close the bubble when we click on the screen.
-    document.addEventListener('mousedown', function (e) {
+        /*
+       // Close the bubble when we click on the screen.
+        document.addEventListener('mousedown', function (e) {
         //hidden시 a태그를 클릭해도 a tag가 실행이 안되는 문제 settimeout을 통해서 해결!
         setTimeout(function(){
             toolTipDiv.style.display='none';
         },200);
 
-    }, false);
-*/
-};
+        }, false);
+        */
+    };
+
+    removeHighlight = () => {
+        //지우는코드 두줄. text를 따로 뽑은 뒤 element를 text로 대체하기
+        var uid = this.props.uid;
+        var url = encodeURIComponent(this.props.url);
+        var db = Firebase.firestore();
+
+        var node = this.props.node;
+
+        db.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").doc(node.id.substr("highlight_".length)).delete();
+
+        var toReplace = node.textContent;
+        node.replaceWith(toReplace);
+    }
 
 
     render() {
         return (
             <div className="highlight-menu">
                 <img alt="" src={Icon} className="Highlight-icon"/>
-                <img alt="" src={Trash} className="Highlight-icon" onClick={this.props.rmfunc}/>
+                <img alt="" src={Trash} className="Highlight-icon" onClick={this.removeHighlight}/>
             </div>
         );
     }
