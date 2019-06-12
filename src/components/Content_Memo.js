@@ -151,7 +151,7 @@ class Memos extends Component {
                                     content:change.doc.data().content,
                                     url:decodedUrl,
                                     title:change.doc.data().title,
-                                    id:change.doc.id
+                                    fid:change.doc.id
                                 };
                                 mapping.set(change.doc.id,map_content);
                                 component.setState ({map: mapping});
