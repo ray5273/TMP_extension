@@ -119,6 +119,11 @@ class CustomizedTabs extends React.Component {
             }
         });
     }
+    handleKeywordChange=(e)=>{
+        this.setState({
+          [e.target.name] : e.target.value
+        })
+    }
 
 
     render() {
@@ -179,8 +184,9 @@ class CustomizedTabs extends React.Component {
                      onChange={(keyword) => this.setState({ keyword })}
                      // onRequestSearch={() => doSomethingWith(this.state.value)}
                     />*/}
-                 <input 
-                    onChange={(keyword) => this.setState({ keyword })}
+                 <input
+                    name="keyword"
+                    onChange={this.handleKeywordChange}
                     placeholder="검색하세요.."
                     className="search-input"
                     />

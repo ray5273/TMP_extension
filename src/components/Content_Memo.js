@@ -4,8 +4,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Item from './Item';
 import firebase from '../Firebase';
 import 'firebase/firestore';
-let data=[];
-let test=[];
+
 const styles = theme => ({
     main: {
         width: 'auto',
@@ -96,10 +95,10 @@ class Memos extends Component {
         const newProps = this.props
         if(oldProps.keyword !== newProps.keyword) {
           this.setState({ searchedMemos: this.state.data.filter(
-            x => x.name.indexOf(this.props.keyword) > -1
+            x => x.content.indexOf(this.props.keyword) > -1
           ) })
         }
-
+        //this.showMemos();
       }
 
       handleChange = (e) => {
@@ -123,7 +122,8 @@ class Memos extends Component {
     showMemos=()=>{
         
         const db=firebase.firestore();
-        
+        let data=[];
+
         db.collection("User").doc(this.state.uid).collection("Url").get()
         .then(docs => {
             docs.forEach(doc => {
@@ -142,14 +142,16 @@ class Memos extends Component {
                         })
                     })
             })
-        }).then(()=> {
-            console.log("datadatadta",data);
-            //console.log("testestetest",test);
-        });
-        
+        })
+        setTimeout(()=> {
+            this.setState({
+                data:data
+            })
+        }, 500)
         
     }
 
+    /* 
     testFunc=()=>{
         console.log("testffff data",data);
         this.setState({
@@ -157,13 +159,29 @@ class Memos extends Component {
         })
         //console.log("testffff test",test);
     }
-
+    */
+   
     render() {
 
         const { datasPerPage } = this.state;
             console.log("RENDERREDENRDERENDERNERDNERN", this.state.reports);
             
+            
             const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
+                ({url, title, content}) => (
+                <Item
+                    id={url}
+                    name={title}
+                    content={content}
+                   
+                    handleRemove={this.handleRemove}
+                />
+                )
+            );
+
+            const s=this.state.data.filter(
+                x => x.url.indexOf(this.props.keyword) > -1
+              ).slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
                 ({url, title, content}) => (
                 <Item
                     id={url}
@@ -207,58 +225,55 @@ class Memos extends Component {
             <main className={classes.main}>
                 <div>     
                 <button onClick={this.showMemos}>메모불러오기</button>        
-                  <button onClick={this.testFunc}>state에담기</button>
-
+                 <br />
+                    
                     <br/>
                     <div>
 
-                    {Number(this.state.datas) === 0 ?
-                                <div className="memo-none">
-                                    
-                                        <p>메모 목록이 없습니다.</p>
-                                   
-                                </div>
-                                :
-                                datas
-                            }
-
-                            {/* 
-                    {this.props.keyword === "" ? this.state.data.map(
-                        ({id, name, content, tag }) => (
-                        <Item
-                            id={id}
-                            name={name}
-                            content={content}
-                           
-                            handleRemove={this.handleRemove}
-                        />
-                    )) :
-                    this.state.searchedMemos.map(
-                        ({id, name, content, tag }) => (
-                        <Item
-                            id={id}
-                            name={name}
-                            content={content}
-                            tag={tag}
-                            handleRemove={this.handleRemove}
-                        />
-                    ))
+{/* 
+                    {this.state.data.length ?
+                    datas
+                    :
+                    <div className="memo-none">
+                        <p>메모 목록이 없습니다.</p>
+                     </div>
+                    }
+*/}
+                            
+                    {this.state.data.length ?
+                        
+                        (this.props.keyword === "" ?
+                        datas : 
+                        
+                        (this.state.data.filter(
+                            x => x.url.indexOf(this.props.keyword) > -1
+                        ).length ? s : <div className="memo-none">
+                        <p>검색 결과가 없습니다.</p>
+                     </div>))
+                        :
+                        <div className="memo-none">
+                        <p>메모 목록이 없습니다.</p>
+                     </div>
                     }  
-                    */}       
-                    </div>
-                        <div className="pagination">
-                            <div className="prev">
-                                <a onClick={this.goLowest} className="prev02"> &lt;&lt; </a> &nbsp;
-                                <a onClick={this.handlePrevClick} className="prev01"> &lt; </a>
-                            </div>
-                            {/*  pageination 선택 클래스 - on_pager */}
+                       
+                </div>
+                {this.state.data.length ?
+                <div className="pagination">
+                <div className="prev">
+                    <a onClick={this.goLowest} className="prev02"> &lt;&lt; </a> &nbsp;
+                    <a onClick={this.handlePrevClick} className="prev01"> &lt; </a>
+                </div>
+                {/*  pageination 선택 클래스 - on_pager */}
 
-                            {renderPageNumbers}
-                            <div className="next">
-                                <a onClick={this.handleNextClick} className="next02"> &gt;</a> &nbsp;
-                                <a onClick={this.goHighest} className="next01"> &gt;&gt; </a>
-                            </div>
-                        </div>
+                {renderPageNumbers}
+                <div className="next">
+                    <a onClick={this.handleNextClick} className="next02"> &gt;</a> &nbsp;
+                    <a onClick={this.goHighest} className="next01"> &gt;&gt; </a>
+                </div>
+            </div>
+            : null
+            }
+                        
                 </div>
             </main>
         );
