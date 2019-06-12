@@ -19,6 +19,7 @@ import DragText from './Memo/DragText';
 import * as rangy from 'rangy'
 import "rangy/lib/rangy-serializer";
 import Palette from "./Highlight/Palette";
+import HighlightMenu from "./Highlight/HighlightMenu";
 //const URL = "https://tmp-test-1a336.firebaseio.com/";
 
 class MenuBar extends Component {
@@ -125,34 +126,56 @@ class MenuBar extends Component {
 
         // Load Highlights
         rangy.init();
-        database.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").get().then(function(querySnapshot) {
+        database.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").get()
+        .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 var data = doc.data();
 
-                var selRange = rangy.deserializeRange(data.serialized, document.getRootNode());
+                var rootNode = document.evaluate(data.ancestorXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                console.log("rootNode : ", rootNode);
+                var selRange = rangy.deserializeRange(data.serialized, rootNode);
 
-                var newNode = document.createElement("span");
-                var color = data.color;
+                if (selRange.toString() === data.text) {
+                    var newNode = document.createElement("span");
+                    var color = data.color;
 
-                newNode.setAttribute(
-                    "style",
-                    `background-color: ${color}; display: inline;`
-                );
-                newNode.setAttribute('id', `highlight_${doc.id}`);
-                newNode.addEventListener('click', (e)=> {
-                    HighLight.addTool(e, newNode);
-                } );
-                //newNode.appendChild(selRange.extractContents());
-                //selRange.insertNode(newNode);
-                selRange.surroundContents(newNode);
+                    newNode.setAttribute(
+                        "style",
+                        `background-color: ${color}; display: inline;`
+                    );
+                    newNode.setAttribute('id', `highlight_${doc.id}`);
+                    newNode.addEventListener('click', (e)=> {
+                        var toolTipDiv = document.createElement('div');
+                        toolTipDiv.setAttribute('id', 'toolTipDiv');
 
-                ReactDOM.render(<Palette
-                    isNew={true}
-                    color={color}
-                    hid={doc.id}
-                    uid = {uid} url = {decodeURIComponent(url)}/>, document.getElementById(`Highlight_${doc.id}`));
+                        toolTipDiv.style.position = 'absolute';
+                        toolTipDiv.style.top = window.scrollY+ e.clientY + "px";
+                        // toolTipDiv.style.visibility = "visible";
+                        toolTipDiv.style.left = window.scrollX+ e.clientX + "px";
+                        // toolTipDiv.style.top = selection_pos.top + 40 + "px";
+                        // toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
+                        toolTipDiv.style.visibility = "visible";
+                        toolTipDiv.style.display="block";
+                        document.body.appendChild(toolTipDiv);
+                        ReactDOM.render(<HighlightMenu uid={uid} url={decodeURIComponent(url)} node={e.target}/>, toolTipDiv); //ret={this.retModifiedColor}
+                        setTimeout(function(){
+                            toolTipDiv.parentElement.removeChild(toolTipDiv);
+                        }, 3000);
+                    } );
+                    //newNode.appendChild(selRange.extractContents());
+                    //selRange.insertNode(newNode);
+                    selRange.surroundContents(newNode);
 
+                    // ReactDOM.render(<Palette
+                    //     isNew={true}
+                    //     color={color}
+                    //     hid={doc.id}
+                    //     uid = {uid} url = {decodeURIComponent(url)}/>, newNode);
+                }
             });
+        })
+        .catch(function(err) {
+            console.log(err);
         });
         // Load Highlights End
 

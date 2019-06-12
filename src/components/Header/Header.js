@@ -105,6 +105,9 @@ class Header extends Component {
                 this.setState({
                     user: null
                 });
+                chrome.runtime.sendMessage({
+                    contentScriptQuery:"SignedOut"
+                });
             });
     };
 

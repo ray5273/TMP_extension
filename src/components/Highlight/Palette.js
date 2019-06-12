@@ -39,20 +39,6 @@ class Palette extends Component {
     */
 
     //가장 최근에 select한 range를 state에 넣어두고 지울 수 있게(db없이 임시)
-    removeHighlight = () => {
-        //지우는코드 두줄. text를 따로 뽑은 뒤 element를 text로 대체하기
-        var uid = this.props.uid;
-        var url = encodeURIComponent(this.props.url);
-        var db = Firebase.firestore();
-
-        var hid = this.props.isNew ? this.props.hid : this.state.hid;
-        console.log("hid : ", hid);
-        db.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").doc(hid).delete();
-
-        var toReplace = this.state.nowNode.textContent;
-        this.state.nowNode.replaceWith(toReplace);
-
-    }
 
     retModifiedColor=(color)=>{
         this.setState({
@@ -61,21 +47,28 @@ class Palette extends Component {
     }
 
     addTool = (e, newNode)=> {
-            console.log("inside addTooltip Func");
-            var toolTipDiv = document.createElement('div');
-            toolTipDiv.setAttribute('id', 'toolTipDiv');
+        var uid = this.props.uid;
+        var url = encodeURIComponent(this.props.url);
+        var hid = this.props.isNew ? this.props.hid : this.state.hid;
 
-            toolTipDiv.style.position = 'absolute';
-            toolTipDiv.style.top = window.scrollY+ e.clientY + "px";
-            // toolTipDiv.style.visibility = "visible";
-            toolTipDiv.style.left = window.scrollX+ e.clientX + "px";
-            // toolTipDiv.style.top = selection_pos.top + 40 + "px";
-            // toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
-            toolTipDiv.style.visibility = "visible";
-            toolTipDiv.style.display="block";
-            document.body.appendChild(toolTipDiv);
-            ReactDOM.render(<HighlightMenu rmfunc={this.removeHighlight}/>, toolTipDiv); //ret={this.retModifiedColor}
-        
+        console.log("inside addTooltip Func");
+        var toolTipDiv = document.createElement('div');
+        toolTipDiv.setAttribute('id', 'toolTipDiv');
+
+        toolTipDiv.style.position = 'absolute';
+        toolTipDiv.style.top = window.scrollY+ e.clientY + "px";
+        // toolTipDiv.style.visibility = "visible";
+        toolTipDiv.style.left = window.scrollX+ e.clientX + "px";
+        // toolTipDiv.style.top = selection_pos.top + 40 + "px";
+        // toolTipDiv.style.left = selection_pos.left + selection_pos.width + "px";
+        toolTipDiv.style.visibility = "visible";
+        toolTipDiv.style.display="block";
+        document.body.appendChild(toolTipDiv);
+        ReactDOM.render(<HighlightMenu uid={uid} url={decodeURIComponent(url)} node={e.target}/>, toolTipDiv); //ret={this.retModifiedColor}
+        setTimeout(function(){
+            toolTipDiv.parentElement.removeChild(toolTipDiv);
+        }, 3000);
+
 /* 
        // Close the bubble when we click on the screen.
         document.addEventListener('mousedown', function (e) {
@@ -88,6 +81,33 @@ class Palette extends Component {
 */
     };
 
+    createXPathFromElement = (elm) => {
+        var allNodes = document.getElementsByTagName('*');
+        for (var segs = []; elm && elm.nodeType == 1; elm = elm.parentNode)
+        {
+            if (elm.hasAttribute('id')) {
+                var uniqueIdCount = 0;
+                for (var n=0;n < allNodes.length;n++) {
+                    if (allNodes[n].hasAttribute('id') && allNodes[n].id == elm.id) uniqueIdCount++;
+                    if (uniqueIdCount > 1) break;
+                };
+                if ( uniqueIdCount == 1) {
+                    segs.unshift('id("' + elm.getAttribute('id') + '")');
+                    return segs.join('/');
+                } else {
+                    segs.unshift(elm.localName.toLowerCase() + '[@id="' + elm.getAttribute('id') + '"]');
+                }
+            } else if (elm.hasAttribute('class')) {
+                segs.unshift(elm.localName.toLowerCase() + '[@class="' + elm.getAttribute('class') + '"]');
+            } else {
+                var i, sib;
+                for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) {
+                    if (sib.localName == elm.localName)  i++; };
+                segs.unshift(elm.localName.toLowerCase() + '[' + i + ']');
+            };
+        };
+        return segs.length ? '/' + segs.join('/') : null;
+    };
 
 
     addHighlight = (e, color) => {
@@ -104,11 +124,13 @@ class Palette extends Component {
         var comp = this;
 
         if (selRange) {
-            var serialized = rangy.serializeRange(selRange, false);
+            var serialized = rangy.serializeRange(selRange, true, selRange.commonAncestorContainer.parentElement);
             var hid = "";
 
             db.collection("User").doc(uid).collection("Url").doc(url).collection("Highlights").add({
                 serialized: serialized,
+                ancestorXPath: this.createXPathFromElement(selRange.commonAncestorContainer.parentElement),
+                text:selRange.toString(),
                 color: color
             })
             .then(function(docRef) {

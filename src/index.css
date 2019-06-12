@@ -18,7 +18,7 @@
   height: 100%;
   border: none;
 }
-#menu-bar {
+#trendy-menu-bar {
   /*background-color: transparent;*/
   display:flex !important;
   opacity: 0.8;
@@ -33,7 +33,7 @@
   border-radius:10px;
 }
 
-#menu-bar-iframe{
+#trendy-menu-bar-iframe{
   /*background-color: transparent;*/
   display:flex !important;
 

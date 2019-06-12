@@ -42,18 +42,12 @@ class Memos extends Component {
     constructor(props) {
       super(props);
       this.state = {
-          memos:[{
-              id: 3,
-            name:"asgdasdf",
-            content: "sdsa",
+         
 
-          }],
-          searchedMemos:[],
           uid:firebase.auth().currentUser.uid,
           data:[],
           currentPage: 1,
-          datasPerPage: 6,
-          limit: 7,
+          datasPerPage: 5,
           top:0
       };
 
@@ -92,13 +86,8 @@ class Memos extends Component {
     }
 
     componentDidUpdate(oldProps) {
-        const newProps = this.props
-        if(oldProps.keyword !== newProps.keyword) {
-          this.setState({ searchedMemos: this.state.data.filter(
-            x => x.content.indexOf(this.props.keyword) > -1
-          ) })
-        }
-        //this.showMemos();
+   
+        //this.showAllMemos();
       }
 
       handleChange = (e) => {
@@ -107,12 +96,21 @@ class Memos extends Component {
           })
       }
   
-      handleRemove= (id) => {
-          /* 파이어베이스에 보낼 코드 */
-  
-          const {memos} = this.state;
+      handleRemove= (fid, url) => {
+        console.log("UUUURRRRLLLLL:",url);
+          const encodedUrl = encodeURIComponent(url);
+          
+          const ask = window.confirm("정말 삭제하시겠습니까?");
+
+          if(ask) {
+            var db = firebase.firestore();
+            console.log("eeeeencodedUUUURRRRLLLLL:",encodedUrl);
+            db.collection("User").doc(this.state.uid).collection("Url").doc(encodedUrl).collection("Memos").doc(fid).delete();
+        }
+
+          const {data} = this.state;
           this.setState({
-            memos: memos.filter(memo=> memo.id !== id)
+            data: data.filter(d=> d.fid !== fid)
           });
         }
     
@@ -126,6 +124,7 @@ class Memos extends Component {
         const db=firebase.firestore();
         let data=[];
 
+        /*
         db.collection("User").doc(this.state.uid).collection("Url").get()
         .then(docs => {
             docs.forEach(doc => {
@@ -145,11 +144,30 @@ class Memos extends Component {
                     })
             })
         })
+        */
+       db.collection("User").doc(this.state.uid).collection("Url").doc("list").get().then(x=>{
+           x.data().list.forEach(y=>{
+            db.collection("User").doc(this.state.uid).collection("Url").doc(y).collection("Memos").get()
+            .then(memos => {
+                //console.log(memos);
+                memos.forEach(memo => {
+                    let temp = memo.data().content;
+                    
+                    temp = temp.replace(/(\s*)/g,"");
+                    const decodedUrl = decodeURIComponent(memo.data().url);
+                    console.log("IDIDIDID", memo.id);
+                    data.push({content: memo.data().content, url:decodedUrl, title: memo.data().title, fid: memo.id});
+               
+                    //test=test.concat(memo.data().content);
+                })
+            })}
+           )})
+
         setTimeout(()=> {
             this.setState({
                 data:data
             })
-        }, 500)
+        }, 1000)
         
     }
 
@@ -169,27 +187,27 @@ class Memos extends Component {
             console.log("RENDERREDENRDERENDERNERDNERN", this.state.reports);
             
             
-            const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
-                ({url, title, content}) => (
+            const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage, this.state.currentPage*datasPerPage).map(
+                ({url, title, content, fid}) => (
                 <Item
-                    id={url}
+                    url={url}
                     name={title}
                     content={content}
-                   
+                    fid={fid}
                     handleRemove={this.handleRemove}
                 />
                 )
             );
 
-            const s=this.state.data.filter(
-                x => x.url.indexOf(this.props.keyword) > -1
+            const searched=this.state.data.filter(
+                x => x.content.indexOf(this.props.keyword) > -1
               ).slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
-                ({url, title, content}) => (
+                ({url, title, content, fid}) => (
                 <Item
-                    id={url}
+                    url={url}
                     name={title}
                     content={content}
-                   
+                    fid={fid}
                     handleRemove={this.handleRemove}
                 />
                 )
@@ -249,7 +267,7 @@ class Memos extends Component {
                         
                         (this.state.data.filter(
                             x => x.url.indexOf(this.props.keyword) > -1
-                        ).length ? s : <div className="memo-none">
+                        ).length ? searched : <div className="memo-none">
                         <p>검색 결과가 없습니다.</p>
                      </div>))
                         :

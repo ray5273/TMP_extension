@@ -29,6 +29,20 @@ class DomMemo extends Component {
         let mid = "";
 
         var t = this.state.t;
+        
+        //db.collection("User").doc(this.props.uid).collection("Url").doc("list").set({list:["test"]}); //
+
+        db.collection("User").doc(this.props.uid).collection("Url").doc("list").get().then((x)=>{
+            
+            if ( !x.exists) 
+            db.collection("User").doc(this.props.uid).collection("Url").doc("list").set({list: [url]}); //
+            else {
+                var arr = x.data().list;
+                if (arr.indexOf(url) == -1)
+                db.collection("User").doc(this.props.uid).collection("Url").doc("list").set({list: arr.concat(url)}); //
+            }
+        })
+ 
 
 
         db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").add({
