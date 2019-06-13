@@ -52,7 +52,6 @@ class HighlightMenu extends Component {
     render() {
         return (
             <div className="highlight-menu">
-                <img alt="" src={Icon} className="Highlight-icon"/>
                 <img alt="" src={Trash} className="Highlight-icon" onClick={this.removeHighlight}/>
             </div>
         );
