@@ -148,6 +148,11 @@
     visibility: visible;
     /* autoprefixer: ignore next */
     -webkit-box-orient: vertical;
+    cursor: pointer;
+}
+
+.iframe-memo-title:hover{
+    color: blue;
 }
 
 .iframe-memo-title.over {
@@ -189,6 +194,7 @@
 .iframe-memo-x-button {
     width: 10px;
     height: 10px;
+    cursor: pointer;
 }
 
 .iframe-pagination {
@@ -200,6 +206,7 @@
 .iframe-memo-page-button {
     width: 10px;
     height: 10px;
+    cursor: pointer;
 }
 
 div.jss45.jss54 {
@@ -224,7 +231,7 @@ div.jss45.jss54 {
     display: inline-block;
     height: auto;
     width: 120px;
-    cursor: pointer;
+
 }
 
 .iframe-memo-content {
@@ -286,7 +293,7 @@ svg {
 }
 
 .page-num-item-wrapper {
-
+    cursor: pointer;
 
 }
 
