@@ -129,7 +129,7 @@ class Memos extends Component {
         console.log("UUUURRRRLLLLL:",url);
           const encodedUrl = encodeURIComponent(url);
           
-          const ask = window.confirm("정말 삭제하시겠습니까?");
+          const ask = window.confirm("Are you sure you want to delete this memo?");
 
           if(ask) {
             var db = firebase.firestore();

@@ -70,7 +70,7 @@ class DragImage extends Component {
     deleteImage = () =>{
         console.log("delete Image");
         console.log("");
-        const ask = window.confirm("정말 삭제하시겠습니까?");
+        const ask = window.confirm("Are you sure you want to delete this memo?");
         if(ask) {
             const storage = Firebase.storage();
             const storage_ref = storage.ref();
