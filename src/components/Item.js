@@ -13,7 +13,7 @@ class Item extends Component {
     render() {
         const { url, name, content, fid, handleRemove } = this.props;
         return (
-            <div className={`memo-item-wrapper ${this.state.overClicked ? "over" : ""}`}>
+            <div className={`memo-item-wrapper ${this.state.overClicked ? "over" : ""}`} onClick={()=>window.open(url)} >
                 <div className="memo-top-wrapper">
                     <div className={`iframe-memo-title ${this.state.overClicked ? "over" : ""}`}>{name}</div>
                     <div className="iframe-memo-buttons-container">
@@ -32,11 +32,11 @@ class Item extends Component {
                 </div>
                 
                 <div className={`iframe-memo-content ${this.state.overClicked ? "over" : ""}`}>{content}</div>
-               
-                <div className="url-container">
-                    <img className="clip-image" src={Clip} alt="" />
-                    <div className="iframe-memo-url"> <span className={`iframe-memo-link ${this.state.overClicked ? "over" : ""}`}><div className="link-text" onClick={()=>window.open(url)}> {url} </div></span></div>
-                </div>
+
+                {/*<div className="url-container">*/}
+                {/*    <img className="clip-image" src={Clip} alt="" />*/}
+                {/*    <div className="iframe-memo-url"> <span className={`iframe-memo-link ${this.state.overClicked ? "over" : ""}`}><div className="link-text"  </div></span></div>*/}
+                {/*</div>*/}
             </div>
         );
     }

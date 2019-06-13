@@ -28,7 +28,8 @@
 
 .iframe-memo-title,
 .iframe-memo-url {
-    font-weight:300;
+    font-weight:bold;
+
 }
 .iframe-memo-content {
     font-weight: 400;
