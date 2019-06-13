@@ -1,10 +1,7 @@
 /*global chrome*/
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import firebase from '../../Firebase.js'
-import styled, { css } from 'styled-components';
-import oc from 'open-color';
-import { Redirect } from 'react-router-dom';
-import LoginButton from "./LoginButton";
+import styled, {css} from 'styled-components';
 import MainMenu from "../MainMenu";
 import Signin from '../Signin';
 
@@ -106,7 +103,7 @@ class Header extends Component {
                     user: null
                 });
                 chrome.runtime.sendMessage({
-                    contentScriptQuery:"SignedOut"
+                    contentScriptQuery: "SignedOut"
                 });
             });
     };
@@ -114,10 +111,10 @@ class Header extends Component {
     componentDidMount() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.setState({ user: user });
+                this.setState({user: user});
                 chrome.runtime.sendMessage({
-                    contentScriptQuery:"getID",
-                    id:user.uid
+                    contentScriptQuery: "getID",
+                    id: user.uid
                 });
             } else {
                 this.props.history.push('index.html');
@@ -132,20 +129,20 @@ class Header extends Component {
                     <WhiteBackground>
                         <HeaderContents>
                             <Logo>TMP</Logo>
-                            <Spacer />
+                            <Spacer/>
                             {this.state.user == null ?
-                           null
-                            :
+                                null
+                                :
                                 <BorderedButton types="out" onClick={this.clickSignOut}>로그아웃</BorderedButton>
                             }
                         </HeaderContents>
                     </WhiteBackground>
-                    <GradientBorder />
+                    <GradientBorder/>
                 </Positioner>
                 {this.state.user == null ?
-                    <div><Signin /></div>
+                    <div><Signin/></div>
                     :
-                    <div><MainMenu /></div>
+                    <div><MainMenu/></div>
                 }
             </div>
         )

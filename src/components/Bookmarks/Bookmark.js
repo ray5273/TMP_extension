@@ -15,7 +15,7 @@ class Bookmark extends Component {
         }
     };
 
-    componentDidMount(){
+    componentDidMount() {
 
         //const url = this.props.url;
         //const uid = this.props.uid;
@@ -26,15 +26,15 @@ class Bookmark extends Component {
 
         const url = this.props.url;
         const uid = this.props.uid;
-        console.log("in bookmark url:"+url);
-        console.log("in bookmark uid:"+uid);
+        console.log("in bookmark url:" + url);
+        console.log("in bookmark uid:" + uid);
         var bookMark_popup = document.getElementById('bookmark_popup');
 
-        if(bookMark_popup.style.display=='none'){
+        if (bookMark_popup.style.display == 'none') {
 
-            bookMark_popup.style.display='block';
-        }else{
-            bookMark_popup.style.display='none';
+            bookMark_popup.style.display = 'block';
+        } else {
+            bookMark_popup.style.display = 'none';
         }
     };
 
@@ -42,7 +42,7 @@ class Bookmark extends Component {
     render() {
         return (
             <div className="menus" onClick={this.addBookMark}>
-                <img src={memo_bookmark_icon} id="menu_bookmark_icon" alt="" />
+                <img src={memo_bookmark_icon} id="menu_bookmark_icon" alt=""/>
             </div>
         );
     }

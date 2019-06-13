@@ -1,10 +1,7 @@
 /*global chrome*/
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import Frame, { FrameContextConsumer }from 'react-frame-component';
 import "./content.css";
-
-import MainMenu from './components/MainMenu';
 import MenuBar from './components/MenuBar';
 
 import 'firebase/firestore';
@@ -16,19 +13,20 @@ var uid = null;
 //여기서 background script의 메세지를 받고
 //위에 MemoButton을 DB에서 가져와서 띄워주는 형식으로 해야할것 같다.
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+    function (request, sender, sendResponse) {
         if (request.message === "clicked_browser_action") {
             toggle();
             chrome.runtime.sendMessage({
-                contentScriptQuery:"queryPrice"
+                contentScriptQuery: "queryPrice"
             });
         }
         if (request.message === "getID") {
             uid = request.id;
-            console.log("cur url:"+request.url);
-            ReactDOM.render(<MenuBar uid={request.id} url ={request.url}/>, test);
-            ReactDOM.render(<BookMark_Form uid={request.id} url={request.url} />, document.getElementById('bookmark_popup'));
-            ReactDOM.render(<GetFileName uid={request.id} url={request.url}/>,document.getElementById('pdf_popup'));
+            console.log("cur url:" + request.url);
+            ReactDOM.render(<MenuBar uid={request.id} url={request.url}/>, test);
+            ReactDOM.render(<BookMark_Form uid={request.id}
+                                           url={request.url}/>, document.getElementById('bookmark_popup'));
+            ReactDOM.render(<GetFileName uid={request.id} url={request.url}/>, document.getElementById('pdf_popup'));
         }
         if (request.message === "SignedOut") {
             window.location.reload();
@@ -53,7 +51,7 @@ iframe.src = chrome.extension.getURL("index.html");
 document.body.appendChild(iframe);
 
 const test = document.createElement('div');
-test.setAttribute("id",'trendy-menu-bar');
+test.setAttribute("id", 'trendy-menu-bar');
 document.body.insertBefore(test, document.body.firstChild);
 
 //app.style.display = "none";
@@ -61,38 +59,37 @@ iframe.style.display = "none";
 
 var bookMark_popup = document.createElement('div');
 bookMark_popup.setAttribute('id', 'bookmark_popup');
-bookMark_popup.style.zIndex=2147483647;
-bookMark_popup.style.display='none';
+bookMark_popup.style.zIndex = 2147483647;
+bookMark_popup.style.display = 'none';
 document.body.appendChild(bookMark_popup);
 // ReactDOM.render(<BookMark_Form uid={uid} url={url} />, document.getElementById('bookmark_popup'));
 // ReactDOM.render(<BookMark_Form />, document.getElementById('BookMark_popup'));
 
 var pdf_popup = document.createElement('div');
 pdf_popup.setAttribute('id', 'pdf_popup');
-pdf_popup.style.zIndex=2147483647;
-pdf_popup.style.display='none';
+pdf_popup.style.zIndex = 2147483647;
+pdf_popup.style.display = 'none';
 document.body.appendChild(pdf_popup);
 
 
-function toggle(){
-   if (iframe.style.display === "none") {
-       iframe.style.display = "block";
-       test.setAttribute("id",'trendy-menu-bar-iframe');
-       var bookmark_popup = document.getElementsByClassName('bookmark_popup');
-       bookmark_popup[0].className='bookmark_popup-iframe';
+function toggle() {
+    if (iframe.style.display === "none") {
+        iframe.style.display = "block";
+        test.setAttribute("id", 'trendy-menu-bar-iframe');
+        var bookmark_popup = document.getElementsByClassName('bookmark_popup');
+        bookmark_popup[0].className = 'bookmark_popup-iframe';
 
-       pdf_popup = document.getElementsByClassName('pdf_popup');
-       pdf_popup[0].className = 'pdf_popup-iframe';
-       // bookmark_popup[0].setAttribute("className",'bookmark_popup-iframe');
-   }
-   else {
-       iframe.style.display = "none";
-       test.setAttribute("id",'trendy-menu-bar');
-       var bookmark_popup = document.getElementsByClassName('bookmark_popup-iframe');
-       bookmark_popup[0].className='bookmark_popup';
-       pdf_popup = document.getElementsByClassName('pdf_popup-iframe');
-       pdf_popup[0].className = 'pdf_popup';
-   }
+        pdf_popup = document.getElementsByClassName('pdf_popup');
+        pdf_popup[0].className = 'pdf_popup-iframe';
+        // bookmark_popup[0].setAttribute("className",'bookmark_popup-iframe');
+    } else {
+        iframe.style.display = "none";
+        test.setAttribute("id", 'trendy-menu-bar');
+        var bookmark_popup = document.getElementsByClassName('bookmark_popup-iframe');
+        bookmark_popup[0].className = 'bookmark_popup';
+        pdf_popup = document.getElementsByClassName('pdf_popup-iframe');
+        pdf_popup[0].className = 'pdf_popup';
+    }
 }
 
 

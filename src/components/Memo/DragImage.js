@@ -8,50 +8,49 @@ import minimize_icon from '../../assets/stickyNote/minimize.png';
 import close_icon from '../../assets/stickyNote/close.png';
 import move_icon from '../../assets/stickyNote/move.png';
 
-import ReactDOM from "react-dom";
-
 class DragImage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             test: "",
-            open:false,
-            submit:false,
-            x : 0,
-            y : 0
+            open: false,
+            submit: false,
+            x: 0,
+            y: 0
         }
     }
-    componentDidMount(){
+
+    componentDidMount() {
         const open = this.state.open;
         const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
         const child = imageMemo.children;
 
-        if(!open)
-            child[0].children[0].setAttribute('class',"image-wrapper-minimized");
+        if (!open)
+            child[0].children[0].setAttribute('class', "image-wrapper-minimized");
         else
-            child[0].children[0].setAttribute('class',"image-wrapper");
+            child[0].children[0].setAttribute('class', "image-wrapper");
     };
 
-    handleMinimize=()=>{
+    handleMinimize = () => {
         const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
         const open = this.state.open;
         const child = imageMemo.children;
 
-        if(open)
-            child[0].children[0].setAttribute('class',"image-wrapper-minimized");
+        if (open)
+            child[0].children[0].setAttribute('class', "image-wrapper-minimized");
         else
-            child[0].children[0].setAttribute('class',"image-wrapper");
+            child[0].children[0].setAttribute('class', "image-wrapper");
 
-        this.setState({open:!this.state.open});
+        this.setState({open: !this.state.open});
 
     };
 
 
-    handleStart = () =>{
-        var str = "x pos: "+ this.props.push_x + " y pos: "+this.props.push_y;
+    handleStart = () => {
+        var str = "x pos: " + this.props.push_x + " y pos: " + this.props.push_y;
         console.log(str);
     };
-    handleStop = ()=> {
+    handleStop = () => {
         console.log("handle stop!");
         var e = window.event;
         console.log("this.props.uid:" + this.props.uid);
@@ -66,12 +65,12 @@ class DragImage extends Component {
             x: changed_posX,
             y: changed_posY
         });
-    }
-    deleteImage = () =>{
+    };
+    deleteImage = () => {
         console.log("delete Image");
         console.log("");
         const ask = window.confirm("Are you sure you want to delete this memo?");
-        if(ask) {
+        if (ask) {
             const storage = Firebase.storage();
             const storage_ref = storage.ref();
             const imageMemo = document.getElementById(`imageMemo${this.props.idx}`);
@@ -81,18 +80,19 @@ class DragImage extends Component {
             dataRef.delete().then(function (snapshot) {
                 console.log("deleted file!");
             });
-        }else{
+        } else {
 
         }
 
-    }
+    };
+
     render() {
         return (
             <Draggable
                 axis="x"
                 handle=".handle"
-                defaultPosition={{x:0, y:0}}
-                position={{x:this.props.push_x,y:this.props.push_y}}
+                defaultPosition={{x: 0, y: 0}}
+                position={{x: this.props.push_x, y: this.props.push_y}}
                 grid={[25, 25]}
                 scale={1}
                 dragStartCallback={this.handleStart}

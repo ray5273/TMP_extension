@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import EditIcon from '@material-ui/icons/Edit'
 import styled from "styled-components";
-import { BookmarkItem1 } from './BookmarkItem1';
+import {BookmarkItem1} from './BookmarkItem1';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const ChangeTitle = styled.input`
@@ -21,7 +20,7 @@ const ChangeTitle = styled.input`
     font-size: 15px;
 `;
 
-class Bookmark_Category extends  Component {
+class Bookmark_Category extends Component {
     constructor(props) {
         super(props);
         // 차 후 DB 에서 목록을 가져오는 것을 추가해야한다.
@@ -29,7 +28,7 @@ class Bookmark_Category extends  Component {
         this.state = {
             categoryId: props.categoryId,
             isChangingName: false,
-            categoryName : props.categoryName,
+            categoryName: props.categoryName,
             changedCategoryName: props.categoryName,
             bookmarkList: props.bookmarkList,
             open: false,
@@ -39,7 +38,7 @@ class Bookmark_Category extends  Component {
 
 // 클릭마다, 북마크 리스트 open / close
     handleClick = () => {
-        this.setState(state => ({ open: !state.open }));
+        this.setState(state => ({open: !state.open}));
     };
 
     handleEditCategoryName = (e) => {
@@ -49,8 +48,8 @@ class Bookmark_Category extends  Component {
             isChangingName: !this.state.isChangingName,
         });
 
-        if(this.state.categoryName !== this.state.changedCategoryName) {
-           this.props.handleChangeCategoryName(this.state);
+        if (this.state.categoryName !== this.state.changedCategoryName) {
+            this.props.handleChangeCategoryName(this.state);
         }
     };
 
@@ -78,18 +77,22 @@ class Bookmark_Category extends  Component {
     render() {
         return (
             <div>
-                <ListItem button onClick={this.handleClick} id='list' >
+                <ListItem button onClick={this.handleClick} id='list'>
                     <ListItemIcon>
-                        <BookmarksIcon />
+                        <BookmarksIcon/>
                     </ListItemIcon>
-                        {!this.state.isChangingName ?
-                            <ListItemText insert primary={this.state.changedCategoryName} />
-                            : <ChangeTitle type='text' id='changedCategoryName' value={ this.state.changedCategoryName }
-                                           onChange={(e)=>{this.setState({[e.target.id]: e.target.value})}}
-                                           autoFocus placeholder='카테고리명을 입력하세요.'/>
-                        }
-                        {this.props.openRemoveCategory ?
-                        <IconButton aria-label="Delete" onClick={(e) => { e.stopPropagation(); this.props.handleRemoveCategory(this.state.categoryId)
+                    {!this.state.isChangingName ?
+                        <ListItemText insert primary={this.state.changedCategoryName}/>
+                        : <ChangeTitle type='text' id='changedCategoryName' value={this.state.changedCategoryName}
+                                       onChange={(e) => {
+                                           this.setState({[e.target.id]: e.target.value})
+                                       }}
+                                       autoFocus placeholder='카테고리명을 입력하세요.'/>
+                    }
+                    {this.props.openRemoveCategory ?
+                        <IconButton aria-label="Delete" onClick={(e) => {
+                            e.stopPropagation();
+                            this.props.handleRemoveCategory(this.state.categoryId)
                         }}>
                             <DeleteIcon/>
                         </IconButton>
@@ -97,17 +100,17 @@ class Bookmark_Category extends  Component {
                         <IconButton aria-label="Edit" onClick={this.handleEditCategoryName}>
                             <EditIcon/>
                         </IconButton>
-                        }
+                    }
 
-                        {this.state.open ? <ExpandLess /> : <ExpandMore />}
+                    {this.state.open ? <ExpandLess/> : <ExpandMore/>}
                 </ListItem>
-                <Collapse in={this.state.open} timeout = "auto" unmountOnExit>
-                    <List component="div" disablePadding >
-                        {this.props.bookmarkList.map( (bookmark) => (
+                <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        {this.props.bookmarkList.map((bookmark) => (
                             <BookmarkItem1
-                                bookmark = { bookmark }
+                                bookmark={bookmark}
                                 handleRemoveBookmark={this.handleRemoveBookmark}
-                                handleEditBookmark = {this.handleEditBookmark}/>
+                                handleEditBookmark={this.handleEditBookmark}/>
                         ))}
                     </List>
                 </Collapse>

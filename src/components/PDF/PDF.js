@@ -3,20 +3,20 @@ import pdf_icon from "../../assets/menuBar/pdf.png";
 
 class Pdf extends Component {
 
-    addPDF = () =>{
+    addPDF = () => {
         var pdf_popup = document.getElementById('pdf_popup');
 
-        if(pdf_popup.style.display=='none'){
-            pdf_popup.style.display='block';
-        }else{
-            pdf_popup.style.display='none';
+        if (pdf_popup.style.display == 'none') {
+            pdf_popup.style.display = 'block';
+        } else {
+            pdf_popup.style.display = 'none';
         }
     };
 
     render() {
         return (
             <div className="menus" onClick={this.addPDF}>
-                <img src={pdf_icon} id="menu_pdf_icon" alt="" />
+                <img src={pdf_icon} id="menu_pdf_icon" alt=""/>
             </div>
         );
     }

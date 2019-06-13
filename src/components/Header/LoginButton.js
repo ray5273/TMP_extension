@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import oc from 'open-color';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import PropTypes from "prop-types";
 
 /*
@@ -49,16 +48,17 @@ class LoginButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLogin : false
+            isLogin: false
         }
     }
+
     render() {
         const {types} = this.props;
 
         if (types === 'in') {
             return (
                 <div>
-                    <BorderedButton to ='/signin'>
+                    <BorderedButton to='/signin'>
                         sign in / up
                     </BorderedButton>
                 </div>
@@ -76,6 +76,6 @@ class LoginButton extends React.Component {
 
 LoginButton.propTypes = {
     type: PropTypes.string
-}
+};
 
 export default LoginButton;

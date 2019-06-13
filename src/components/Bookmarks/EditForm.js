@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import React, {Component} from 'react';
+import {makeStyles} from '@material-ui/styles';
 import TextField from '@material-ui/core/TextField';
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from '@material-ui/icons/Edit';
@@ -44,39 +44,40 @@ export class EditForm extends Component {
 
     handleChange = (e) => {
         this.setState({
-            [e.target.id] : e.target.value
+            [e.target.id]: e.target.value
         })
     };
 
     render() {
-      const classes = useStyles;
+        const classes = useStyles;
 
-      const { bookmark } = this.props;
-      return (
-          <form id='bookmarkEdit' className={classes.container} onSubmit={this.handleSubmit} noValidate autoComplete="off" onClick={(e) => e.stopPropagation()}>
-              <fieldset>
-                  <legend>북마크 편집</legend>
-                  <TextField
-                      required
-                      id="title"
-                      label="Bookmark Name"
-                      defaultValue={ bookmark.title }
-                      className={ classes.textField }
-                      onChange={this.handleChange}
-                  /><br/>
-                  <TextField
-                      id="summary"
-                      label="Bookmark Summary"
-                      defaultValue={ bookmark.summary }
-                      className={ classes.textField }
-                      onChange={this.handleChange}
+        const {bookmark} = this.props;
+        return (
+            <form id='bookmarkEdit' className={classes.container} onSubmit={this.handleSubmit} noValidate
+                  autoComplete="off" onClick={(e) => e.stopPropagation()}>
+                <fieldset>
+                    <legend>북마크 편집</legend>
+                    <TextField
+                        required
+                        id="title"
+                        label="Bookmark Name"
+                        defaultValue={bookmark.title}
+                        className={classes.textField}
+                        onChange={this.handleChange}
+                    /><br/>
+                    <TextField
+                        id="summary"
+                        label="Bookmark Summary"
+                        defaultValue={bookmark.summary}
+                        className={classes.textField}
+                        onChange={this.handleChange}
 
-                  /><br/>
-                  <IconButton type="submit"> <EditIcon/> </IconButton>
-              </fieldset>
+                    /><br/>
+                    <IconButton type="submit"> <EditIcon/> </IconButton>
+                </fieldset>
 
-          </form>
-      );
+            </form>
+        );
     }
 
 }

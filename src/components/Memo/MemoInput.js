@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import firebase from '../../Firebase';
 import './CSS/stickyNote.css';
 import minimize_icon from '../../assets/stickyNote/minimize.png';
@@ -16,29 +16,30 @@ class MemoInput extends Component {
             id: "",
         }
     }
-    componentDidMount(){
+
+    componentDidMount() {
 
         const open = this.state.open;
         const imageMemo = document.getElementById(`stickyMemo_${this.props.id}`);
         const child = imageMemo.children;
 
-        if(!open)
-            child[0].children[0].setAttribute('class',"input-wrapper-minimized");
+        if (!open)
+            child[0].children[0].setAttribute('class', "input-wrapper-minimized");
         else
-            child[0].children[0].setAttribute('class',"input-wrapper");
+            child[0].children[0].setAttribute('class', "input-wrapper");
     }
 
-    handleMinimize = ()=> {
+    handleMinimize = () => {
         const cur_state = this.state.open;
         const open = this.state.open;
         const imageMemo = document.getElementById(`stickyMemo_${this.props.id}`);
         const child = imageMemo.children;
 
-        if(open)
-            child[0].children[0].setAttribute('class',"input-wrapper-minimized");
+        if (open)
+            child[0].children[0].setAttribute('class', "input-wrapper-minimized");
         else
-            child[0].children[0].setAttribute('class',"input-wrapper");
-        this.setState({open:!this.state.open});
+            child[0].children[0].setAttribute('class', "input-wrapper");
+        this.setState({open: !this.state.open});
 
     };
 
@@ -60,33 +61,33 @@ class MemoInput extends Component {
         db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).update({
             content: this.state.text
         })
-        .then(function() {
-            console.log("Memo content data changed");
-        })
-        .catch(function(error) {
-            console.error("Error while changing memo content data", error);
-        });
+            .then(function () {
+                console.log("Memo content data changed");
+            })
+            .catch(function (error) {
+                console.error("Error while changing memo content data", error);
+            });
     };
 
-    handleRevise = ()=>{
+    handleRevise = () => {
         console.log("handleRevise Mode");
         this.setState({
-            submitted :false,
+            submitted: false,
         })
     };
 
-    handleDelete = ()=>{
+    handleDelete = () => {
         console.log("handleDelete Mode");
 
         const url = encodeURIComponent(this.props.url);
         const ask = window.confirm("Are you sure you want to delete this memo?");
-        if(ask) {
+        if (ask) {
             var db = firebase.firestore();
 
             db.collection("User").doc(this.props.uid).collection("Url").doc(url).collection("Memos").doc(this.props.id).delete();
 
             document.getElementById(`stickyMemo_${this.props.id}`).style.visibility = 'hidden';
-        }else{
+        } else {
 
         }
     };
@@ -115,21 +116,21 @@ class MemoInput extends Component {
                             <img src={check_icon} alt=""/>
                         </a>}
                     <div className="memo-text-wrapper">
-                        {   this.state.open
+                        {this.state.open
                             ?
-                                this.state.submitted
-                                    ?
-                                    <div className="memo-text">
+                            this.state.submitted
+                                ?
+                                <div className="memo-text">
                                         <textarea readOnly className="memo-input">
                                             {this.state.text}
                                         </textarea>
-                                    </div>
-                                    :
-                                    <textarea
-                                        onChange={this.handleChange}
-                                        name="text"
-                                        className="memo-input"
-                                    >
+                                </div>
+                                :
+                                <textarea
+                                    onChange={this.handleChange}
+                                    name="text"
+                                    className="memo-input"
+                                >
                                     {this.state.text}
                                     </textarea>
                             :
@@ -142,4 +143,5 @@ class MemoInput extends Component {
         );
     }
 }
+
 export default MemoInput;

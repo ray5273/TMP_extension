@@ -1,5 +1,5 @@
 /*global chrome*/
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 //import { makeStyles } from '@material-ui/styles';
 import firebase from '../../Firebase';
 import {Category} from "./BookmarkStructures";
@@ -14,9 +14,9 @@ class Bookmark_Add_Form extends Component {
             categoryName: '',
             categories: [],
             title: '',
-            url:  this.props.url,
-            summary:'',
-            tag:'',
+            url: this.props.url,
+            summary: '',
+            tag: '',
             html: '',
         };
 
@@ -59,10 +59,10 @@ class Bookmark_Add_Form extends Component {
 
         var db = firebase.firestore();
 
-        db.collection("User").doc(this.state.uid).collection("Bookmark").onSnapshot( snapshot => {
-            var categoryList= [];
-            snapshot.forEach( doc => {
-                if(doc.id !== "C_Info") {
+        db.collection("User").doc(this.state.uid).collection("Bookmark").onSnapshot(snapshot => {
+            var categoryList = [];
+            snapshot.forEach(doc => {
+                if (doc.id !== "C_Info") {
                     categoryList.push(new Category(doc.id, doc.data()['categoryName'], ''));
                 }
                 this.setState({
@@ -79,36 +79,36 @@ class Bookmark_Add_Form extends Component {
 
     handleSubmit = async () => {
         var bookMark_popup = document.getElementById('bookmark_popup');
-        bookMark_popup.style.display='none';
+        bookMark_popup.style.display = 'none';
 
         var db = firebase.firestore().collection("User").doc(this.state.uid).collection("Bookmark");
 
         //const sel = document.getElementById("categoryName");
         const default_category = 'category0';
-        console.log("default name:",default_category);
+        console.log("default name:", default_category);
         let cur_categoryName = this.state.categoryName;
-        console.log("categoryname:"+cur_categoryName);
-        if(cur_categoryName==='') {
+        console.log("categoryname:" + cur_categoryName);
+        if (cur_categoryName === '') {
             cur_categoryName = default_category;
             var bookmarkNum = 'not';
-            await db.doc(cur_categoryName).get().then( doc => {
+            await db.doc(cur_categoryName).get().then(doc => {
                 bookmarkNum = doc.data().bookmarkCount;
 
                 db.doc(cur_categoryName).update({
                     bookmarkCount: bookmarkNum + 1
                 });
             });
-            var newId = 'bookmark'+bookmarkNum;
+            var newId = 'bookmark' + bookmarkNum;
 
             db.doc(cur_categoryName).set({
                 [newId]: {
                     url: this.state.url,
                     title: this.state.title,
                     html: this.state.html,
-                    summary:this.state.summary
+                    summary: this.state.summary
                 }
             }, {merge: true});
-        }else {
+        } else {
             var bookmarkNum = 'not';
             await db.doc(this.state.categoryName).get().then(doc => {
                 bookmarkNum = doc.data().bookmarkCount;
@@ -143,9 +143,9 @@ class Bookmark_Add_Form extends Component {
                 <label>Select categories</label>
                 <select id='categoryName' name="categoryName" placeholder="Categories" onChange={this.handleChange}>
                     {
-                        this.state.categories.map( data => {
-                        return <option value={data.id}> {data.categoryName} </option>
-                    })}
+                        this.state.categories.map(data => {
+                            return <option value={data.id}> {data.categoryName} </option>
+                        })}
                 </select>
                 <input id="title" placeholder="BookMark Title" value={this.state.title} onChange={this.handleChange}/>
                 <input id="summary" placeholder="Summary" value={this.state.summary} onChange={this.handleChange}/>
@@ -156,4 +156,5 @@ class Bookmark_Add_Form extends Component {
         );
     };
 }
+
 export default Bookmark_Add_Form;

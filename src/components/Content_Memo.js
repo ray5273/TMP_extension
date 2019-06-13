@@ -1,33 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Item from './Item';
+import ContentMemoItem from './ContentMemoItem';
 import firebase from '../Firebase';
 import 'firebase/firestore';
 import PageFirstIcon from '../assets/memo_page_first.png';
 import PagePrevIcon from '../assets/memo_page_prev.png';
 import PageNextIcon from '../assets/memo_page_next.png';
 import PageLastIcon from '../assets/memo_page_last.png';
-
-
-
-import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
-import Collapse from "@material-ui/core/Collapse";
-import List from "@material-ui/core/List";
-
-
-
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import BookmarkBorder from "@material-ui/core/SvgIcon/SvgIcon";
-import DeleteIcon from '@material-ui/icons/Delete';
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-
-
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 
 
 const styles = theme => ({
@@ -222,7 +202,7 @@ class Memos extends Component {
             
             const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage, this.state.currentPage*datasPerPage).map(
                 ({url, title, content, fid}) => (
-                <Item
+                <ContentMemoItem
                     url={url}
                     name={title}
                     content={content}
@@ -236,7 +216,7 @@ class Memos extends Component {
                 x => x.content.indexOf(this.props.keyword) > -1
               ).slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
                 ({url, title, content, fid}) => (
-                <Item
+                <ContentMemoItem
                     url={url}
                     name={title}
                     content={content}

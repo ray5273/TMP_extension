@@ -1,25 +1,14 @@
 import React from 'react';
-import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import {Link, BrowserRouter as Router, Route, Switch  } from 'react-router-dom';
+import {withStyles} from '@material-ui/core/styles';
 import Content_Memo from "./Content_Memo";
 import Content_Bookmark from "./Content_Bookmark"
 import Content_Pdf from "./Content_Pdf"
-import Signin from "./Signin";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import SwipeableViews from 'react-swipeable-views';
-import SearchBar from 'material-ui-search-bar'
 import '../content.css';
 import firebase from '../Firebase';
 import 'firebase/firestore';
@@ -28,10 +17,9 @@ import 'firebase/firestore';
 //material-ui appbar로 검색하면 될듯
 
 
-
-function TabContainer({ children, dir }) {
+function TabContainer({children, dir}) {
     return (
-        <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
+        <Typography component="div" dir={dir} style={{padding: 8 * 3}}>
             {children}
         </Typography>
     );
@@ -49,7 +37,7 @@ const styles = theme => ({
         backgroundColor: '#F9F9F9',
     },
     tabsRoot: {
-    //    borderBottom: '1px solid #e2315a',
+        //    borderBottom: '1px solid #e2315a',
         borderBottom: '1px solid #5d84af',
 
     },
@@ -60,8 +48,8 @@ const styles = theme => ({
         textTransform: 'initial',
         minWidth: 100,
         fontWeight: theme.typography.fontWeightMedium,
-       // background: '#e2315a',
-        background:'#83b8f4',
+        // background: '#e2315a',
+        background: '#83b8f4',
         fontFamily: [
             '-apple-system',
             'BlinkMacSystemFont',
@@ -99,77 +87,79 @@ class CustomizedTabs extends React.Component {
     state = {
         value: 0,
         search_val: "Search",
-        keyword:"",
+        keyword: "",
         uid: null
     };
 
     handleChange = (event, value) => {
-        this.setState({ value });
+        this.setState({value});
     };
     handleChangeIndex = index => {
-        this.setState({ value: index });
+        this.setState({value: index});
     };
 
     componentDidMount(): void {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.setState({ user: user });
+                this.setState({user: user});
             } else {
-                this.setState({ user: user });
+                this.setState({user: user});
             }
         });
     }
-    handleKeywordChange=(e)=>{
+
+    handleKeywordChange = (e) => {
         this.setState({
-          [e.target.name] : e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
 
     render() {
-        const { classes,theme } = this.props;
-        const { value } = this.state;
+        const {classes, theme} = this.props;
+        const {value} = this.state;
 
         return (
             <MuiThemeProvider>
-             <div className={classes.root}>
-                <Tabs
-                    value={value}
-                    onChange={this.handleChange}
-                    classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
-                    variant="fullWidth"
-                    className="header-button-div"
-                >
-                    <Tab
-                        disableRipple
-                        classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-                        label="MEMO"
-                        className="header-button"
-                        
-                    />
-                    <Tab
-                        disableRipple
-                        classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-                        label="BOOKMARK"
-                        className="header-button"
-                    />
-                    <Tab
-                        disableRipple
-                        classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
-                        label="PDF"
-                        className="header-button"
-                    />
-                </Tabs>
-                <SwipeableViews
-                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                    index={this.state.value}
-                    onChangeIndex={this.handleChangeIndex}
-                >
-                    <TabContainer dir={theme.direction}><Content_Memo keyword={this.state.keyword}/></TabContainer>
-                    <TabContainer dir={theme.direction}><Content_Bookmark keyword={this.state.keyword}/></TabContainer>
-                    <TabContainer dir={theme.direction}><Content_Pdf keyword={this.state.keyword}/></TabContainer>
-                </SwipeableViews>
-                 {/*<SearchBar
+                <div className={classes.root}>
+                    <Tabs
+                        value={value}
+                        onChange={this.handleChange}
+                        classes={{root: classes.tabsRoot, indicator: classes.tabsIndicator}}
+                        variant="fullWidth"
+                        className="header-button-div"
+                    >
+                        <Tab
+                            disableRipple
+                            classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                            label="MEMO"
+                            className="header-button"
+
+                        />
+                        <Tab
+                            disableRipple
+                            classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                            label="BOOKMARK"
+                            className="header-button"
+                        />
+                        <Tab
+                            disableRipple
+                            classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                            label="PDF"
+                            className="header-button"
+                        />
+                    </Tabs>
+                    <SwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={this.state.value}
+                        onChangeIndex={this.handleChangeIndex}
+                    >
+                        <TabContainer dir={theme.direction}><Content_Memo keyword={this.state.keyword}/></TabContainer>
+                        <TabContainer dir={theme.direction}><Content_Bookmark
+                            keyword={this.state.keyword}/></TabContainer>
+                        <TabContainer dir={theme.direction}><Content_Pdf keyword={this.state.keyword}/></TabContainer>
+                    </SwipeableViews>
+                    {/*<SearchBar
                      // value={this.state.search_val}
                      onChange={() => console.log('onChange')}
                      onRequestSearch={() => console.log('onRequestSearch')}
@@ -184,15 +174,15 @@ class CustomizedTabs extends React.Component {
                      onChange={(keyword) => this.setState({ keyword })}
                      // onRequestSearch={() => doSomethingWith(this.state.value)}
                     />*/}
-                 <input
-                    name="keyword"
-                    onChange={this.handleKeywordChange}
-                    placeholder="검색하세요.."
-                    className="search-input"
+                    <input
+                        name="keyword"
+                        onChange={this.handleKeywordChange}
+                        placeholder="검색하세요.."
+                        className="search-input"
                     />
 
-             </div>
-           </MuiThemeProvider>
+                </div>
+            </MuiThemeProvider>
         );
     }
 }
@@ -200,4 +190,4 @@ class CustomizedTabs extends React.Component {
 CustomizedTabs.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles ,{ withTheme: true })(CustomizedTabs);
+export default withStyles(styles, {withTheme: true})(CustomizedTabs);

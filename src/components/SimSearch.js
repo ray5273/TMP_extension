@@ -1,9 +1,8 @@
 /*global chrome*/
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import firebase from '../Firebase';
 import 'firebase/firestore';
-import MenuBar from "./MenuBar";
 
 class SimSearch extends Component {
     constructor(props) {

@@ -1,5 +1,5 @@
 /*global chrome*/
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import DomMemo from './Memo/DomMemo';
 import HighLight from './Highlight/Tooltip';
 import DrawingTool from './Memo/DrawingTool'
@@ -18,8 +18,8 @@ import right_arrow_icon from '../assets/menuBar/right_arrow.png';
 import DragText from './Memo/DragText';
 import * as rangy from 'rangy'
 import "rangy/lib/rangy-serializer";
-import Palette from "./Highlight/Palette";
 import HighlightMenu from "./Highlight/HighlightMenu";
+
 //const URL = "https://tmp-test-1a336.firebaseio.com/";
 
 class MenuBar extends Component {

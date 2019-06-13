@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import {css} from 'styled-components';
 
 // 미디어 쿼리 헬퍼: https://www.styled-components.com/docs/advanced#media-templates 참조
 export const sizes = {
