@@ -4,6 +4,10 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Item from './Item';
 import firebase from '../Firebase';
 import 'firebase/firestore';
+import PageFirstIcon from '../assets/memo_page_first.png';
+import PagePrevIcon from '../assets/memo_page_prev.png';
+import PageNextIcon from '../assets/memo_page_next.png';
+import PageLastIcon from '../assets/memo_page_last.png';
 
 
 
@@ -294,18 +298,30 @@ class Memos extends Component {
                         
                       
                     {this.state.data.length ?
-                        <div className="pagination">
+                        <div className="iframe-pagination">
                             <div className="prev">
-                                <a onClick={this.goLowest} className="prev02"> &lt;&lt; </a> &nbsp;
-                                <a onClick={this.handlePrevClick} className="prev01"> &lt; </a>
+                                <img src={PageFirstIcon} alt="" onClick={
+                                    this.goLowest
+                                } className="iframe-memo-page-button" style={{margin: 5 + "px"}}
+                                />
+                                <img src={PagePrevIcon} alt="" onClick={
+                                    this.handlePrevClick
+                                } className="iframe-memo-page-button" style={{margin: 5 + "px"}}
+                                />
                             </div>
                         
                             <div className="page-numbers-container">
                                 {renderPageNumbers}
                             </div>
                             <div className="next">
-                                <a onClick={this.handleNextClick} className="next02"> &gt;</a> &nbsp;
-                                <a onClick={this.goHighest} className="next01"> &gt;&gt; </a>
+                                <img src={PageNextIcon} alt="" onClick={
+                                    this.handleNextClick
+                                } className="iframe-memo-page-button" style={{margin: 5 + "px"}}
+                                />
+                                <img src={PageLastIcon} alt="" onClick={
+                                    this.goHighest
+                                } className="iframe-memo-page-button" style={{margin: 5 + "px"}}
+                                />
                             </div>
                         </div>
                         :
