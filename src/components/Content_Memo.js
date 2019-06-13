@@ -97,7 +97,25 @@ class Memos extends Component {
     componentDidUpdate(oldProps) {
    
         //this.showAllMemos();
-      }
+        if (oldProps.keyword != this.props.keyword) {
+            console.log("바꼈다!!!!!!!!!!!!!!")
+            this.setState({
+                searched :this.state.data.filter(
+                x => x.content.indexOf(this.props.keyword) > -1
+            ).slice((this.state.currentPage-1)*this.state.datasPerPage+1, this.state.currentPage*this.state.datasPerPage).map(
+                ({url, title, content, fid}) => (
+                <ContentMemoItem
+                    url={url}
+                    name={title}
+                    content={content}
+                    fid={fid}
+                    handleRemove={this.handleRemove}
+                />
+                )
+            )
+            })
+        }
+    }
 
       handleChange = (e) => {
           this.setState({
@@ -106,14 +124,14 @@ class Memos extends Component {
       }
   
       handleRemove= (fid, url) => {
-        console.log("UUUURRRRLLLLL:",url);
+        
           const encodedUrl = encodeURIComponent(url);
           
           const ask = window.confirm("Are you sure you want to delete this memo?");
 
           if(ask) {
             var db = firebase.firestore();
-            console.log("eeeeencodedUUUURRRRLLLLL:",encodedUrl);
+            
             db.collection("User").doc(this.state.uid).collection("Url").doc(encodedUrl).collection("Memos").doc(fid).delete();
             const {data} = this.state;
             this.setState({
@@ -143,7 +161,7 @@ class Memos extends Component {
         //사이트 개수가 추가되는경우 tracking
         db.collection("User").doc(this.state.uid).collection("Url").doc("list").onSnapshot(doc=>{
                 //console.log("doc data"+doc.data().list.length);
-                console.log("doc data ddd");
+                
                 sites = doc.data().list;
                 var component = this;
                 for(let i=0;i<sites.length;i++) {
@@ -169,7 +187,7 @@ class Memos extends Component {
                             }
                         });
                         let data = Array.from(component.state.map.values());
-                        console.log("data values"+data);
+                      
                         component.setState({
                             data :data
                         });
@@ -197,9 +215,7 @@ class Memos extends Component {
     render() {
 
         const { datasPerPage } = this.state;
-            console.log("RENDERREDENRDERENDERNERDNERN", this.state.reports);
-            
-            
+           
             const datas = this.state.data.slice((this.state.currentPage-1)*datasPerPage, this.state.currentPage*datasPerPage).map(
                 ({url, title, content, fid}) => (
                 <ContentMemoItem
@@ -211,20 +227,13 @@ class Memos extends Component {
                 />
                 )
             );
+            /* 
+            for (let item of this.state.map) {
+                console.log(item[1].content);
+              }
+              */
+           
 
-            const searched=this.state.data.filter(
-                x => x.content.indexOf(this.props.keyword) > -1
-              ).slice((this.state.currentPage-1)*datasPerPage+1, this.state.currentPage*datasPerPage).map(
-                ({url, title, content, fid}) => (
-                <ContentMemoItem
-                    url={url}
-                    name={title}
-                    content={content}
-                    fid={fid}
-                    handleRemove={this.handleRemove}
-                />
-                )
-            );
 
             const highest = Math.ceil(this.state.data.length / datasPerPage);
             const pageNumbers = [];
@@ -262,11 +271,17 @@ class Memos extends Component {
                         {this.state.data.length ?
                             
                             (this.props.keyword === "" ?
-                            datas : 
+                            
+                            datas
+                            
+                            : 
                             
                             (this.state.data.filter(
                                 x => x.url.indexOf(this.props.keyword) > -1
-                            ).length ? searched :
+                            ).length ? 
+                            this.state.searched
+                            
+                            :
                             <div className="memo-none">
                                 <p>검색 결과가 없습니다.</p>
                             </div>))
