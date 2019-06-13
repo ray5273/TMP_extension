@@ -158,9 +158,9 @@
 .iframe-memo-buttons-container {
     display:flex;
 }
-.max-icon {
-    width:15px;
-    height:15px;
+.iframe-memo-max-button {
+    width:10px;
+    height:10px;
 }
 .url-container {
     display:flex;
@@ -171,9 +171,20 @@
     margin-top: 3px;
 }
 
-.iframe-memo-xbutton {    
-    width:16px;
-    height:16px;
+.iframe-memo-x-button {
+    width:10px;
+    height:10px;
+}
+
+.iframe-pagination {
+    width: fit-content;
+    margin: 10px auto 0;
+    display: flex;
+}
+
+.iframe-memo-page-button {
+    width:10px;
+    height:10px;
 }
 
 div.jss45.jss54 {

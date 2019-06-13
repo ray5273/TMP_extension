@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener(
 var iframe = document.createElement('iframe');
 iframe.style.background = "white";
 iframe.style.height = "100%";
-iframe.style.width = "350px";
+iframe.style.width = "335px";
 iframe.style.position = "fixed";
 
 //top , right 조건을 통하여 옆의 화면을 꽉채울것인지 띄울것인지 수정가능
