@@ -206,7 +206,8 @@ class Memos extends Component {
         );
 
 
-        const highest = Math.ceil(this.state.data.length / datasPerPage);
+        var highest = Math.ceil(this.state.data.length / datasPerPage);
+        if (this.props.keyword != '' ) highest = Math.ceil(this.state.searched.length / datasPerPage);
         const pageNumbers = [];
         for (let i = 1; i <= highest; i++) {
             pageNumbers.push(i);
