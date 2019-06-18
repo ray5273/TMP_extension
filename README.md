@@ -1,5 +1,5 @@
 # Trendy Memo Project 
-Chrome extension for live memo including text memo and drawing memo on every websites. Also, combined with bookmark function including taking a snapshot and PDF export function can track files on Firebase server.
+Chrome extension for live memo including text memo, highlight and drawing memo on every websites. Also, combined with bookmark function including taking a snapshot and PDF export function can track files on Firebase server.
 
 ![DEMO](./demo/demo.png)
 
@@ -14,11 +14,16 @@ Chrome extension for live memo including text memo and drawing memo on every web
 ## Libraries
 
 * [Pdfcrowd](https://pdfcrowd.com/)
-* [Material-UI](https://material-ui.com/getting-started/installation/)
+* [Rangy](https://github.com/timdown/rangy)
 * [Painterro](https://github.com/ray5273/painterro)
-* [Firebase](https://firebase.google.com/?hl=ko)
-* [React.js](https://reactjs.org/)
 * [React-draggable](https://github.com/mzabriskie/react-draggable)
 
+## Documents
+
+* [Material-UI](https://material-ui.com/getting-started/installation/)
+* [Firebase](https://firebase.google.com/?hl=ko)
+* [React.js](https://reactjs.org/)
+
 ## Issue
+
 Cross-Origin Read Blocking Issue not solved yet.
