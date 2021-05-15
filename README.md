@@ -23,7 +23,3 @@ Chrome extension for live memo including text memo, highlight and drawing memo o
 * [Material-UI](https://material-ui.com/getting-started/installation/)
 * [Firebase](https://firebase.google.com/?hl=ko)
 * [React.js](https://reactjs.org/)
-
-## Issue
-
-Cross-Origin Read Blocking Issue not solved yet.
